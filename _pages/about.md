@@ -2,11 +2,11 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
+subtitle: Who am I ?
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: bender.jpg
   image_cicular: false # crops the image to make it circular
   address: >
     <p>555 your office number</p>
@@ -17,6 +17,8 @@ news: true  # includes a list of news items
 selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
+I am a french cybersecurity engineer, and I like continuously learning stuff.
+I like to automate, develop, script, document, and participate to the security community do proper things. My profesionnal experience lead me on the Cloud, altough I had no knowledge. For this reason
 
 Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
 
