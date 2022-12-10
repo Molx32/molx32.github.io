@@ -13,9 +13,9 @@ profile:
     <p>123 your address street</p>
     <p>Your City, State 12345</p>
 
-news: true  # includes a list of news items
-selected_papers: true # includes a list of papers marked as "selected={true}"
-social: true  # includes social icons at the bottom of the page
+news: false  # includes a list of news items
+selected_papers: false # includes a list of papers marked as "selected={true}"
+social: false  # includes social icons at the bottom of the page
 ---
 I am a french cybersecurity engineer, and I like continuously learning stuff.
 I like to automate, develop, script, document, and participate to the security community do proper things. My profesionnal experience lead me on the Cloud, altough I had no knowledge. For this reason
