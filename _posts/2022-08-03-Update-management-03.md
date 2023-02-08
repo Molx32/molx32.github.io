@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Azure Update Management - Part 4 - Log Analytics agents
-date: 2023-03-02 10:00:00
+date: 2022-03-02 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
 authors:

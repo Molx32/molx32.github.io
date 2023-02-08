@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Azure Update Management - Part 6 - Monitoring
-date: 2023-03-02 10:00:00
+date: 2022-03-02 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
 authors:
@@ -32,3 +32,4 @@ Hello there, the goal of this serie is to describe a real world implementation o
 - [Part 5 - Automation accounts](/blog/2021/Update-management-04/)
 - <b>[Part 6 - Monitoring (you're here)](/blog/2021/Update-management-05/)</b>
 
+This article is currently being written.
