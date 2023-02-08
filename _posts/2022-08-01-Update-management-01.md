@@ -41,4 +41,39 @@ In this guide to Azure Update Management, we are going to dig into the details o
 3. <b>Monitoring with workbooks</b> - In order to monitor service health, update status, and some other information, we can create an Azure Workbook, which is a dashboard. The workbook is based on the Log Analytics workspace that will collect all the update information from all VMs.
 4. <b>Updating with Automation Accounts.</b> - The core service of Update Management in Azure is <b>Automation Account</b>. This is the service where we can configure our update policy i.e. the machines we want to update, whether machines should reboot or not, what the update frequency should be, etc. In order to know which updates should be applied, the Automation Account is <u>linked</u> to our Log Analytics so that it can monitor missing updates reported accross all our VMs. If the Automation Accounts sees a VM with a missing patch, it will update it based on the configuration we set up.
 
+## Resources organization
+Let's dive into the management of resources in my environment.
+A first design decision was to split our architecture based on the different Cloud Service Providers (CSP) we use, which are Azure, GCP, OCI and OVH.
+- The first reason why we made this choice is that we wanted to sort machines by CSP as shown on the scheme below. Of course, Azure VMs being already deployed in resource groups, the only resources we deployed in the Azure RG are Log Analytics and Automation Account.
+- The second reason why we made this choice is that Azure has some limitation in deploying resources. For example, you can't deploy as much VM as you want. To prevent this kind of limitation, we split the architecture as discussed, but we also split production and non production environnement, altough their organization remains the same.
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/arch_2.png" class="img-fluid rounded z-depth-1" %}
+</div>
 
+Let's go back to our Azure Policy service. Our goal here is to create the following rules :
+- Enforce the Log Analytics agent to be installed on all Azure VMs, and make them report to ari-loga-azure-001
+- Enforce the Log Analytics agent to be installed on all OVH Azure ARC VMs, and make them report to ari-loga-ovh-001
+- Enforce the Log Analytics agent to be installed on all GCP Azure ARC VMs, and make them report to ari-loga-gcp-001
+- Enforce the Log Analytics agent to be installed on all OCI Azure ARC VMs, and make them report to ari-loga-oci-001
+By doing this, we ensure that any newly created Azure VM, or any newly onboarded Azure ARC VM will be integrated with the appropriate Log Analytics. In the end, this allows us to fully automate onboarding and update monitoring.
+
+## Azure Policy deployment
+Our goal is to have something that looks like the scheme below. To explain this, I'll repeat what I described earlier, but with more specific words. We create four policy assignments<i>policy assignments</i>:
+  1. An assignment at the subscription level, that must apply to all Azure VMs, that enforces all Azure VMs to report to ari-loga-azure-001 Log Analytics.
+  2. An assignment at the ari_rg_ovh_001 resource group, that must apply to all OVH Azure ARC VMs Azure VMs, that enforces all OVH Azure ARC VMs to report to ari-loga-ovh-001 Log Analytics.
+  3. An assignment at the ari_rg_oci_001 resource group, that must apply to all OCI Azure ARC VMs Azure VMs, that enforces all OCI Azure ARC VMs to report to ari-loga-oci-001 Log Analytics.
+  4. An assignment at the ari_rg_gcp_001 resource group, that must apply to all GCP Azure ARC VMs Azure VMs, that enforces all GCP Azure ARC VMs to report to ari-loga-gcp-001 Log Analytics.
+
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/arch_3.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+### Create the policy definitions
+We actually need to create multiple policy definitions.
+
+#### Policy definition for Azure Windows VMs
+
+
+#### Policy definition for Azure Linux VMs
+#### Policy definition for Azure ARC Windows VMs
+#### Policy definition for Azure ARC Linux VMs
