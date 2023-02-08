@@ -2,9 +2,9 @@
   type: map
   contents:
     - name: Full Name
-      value: No need to know
+      value: -
     - name: Date of Birth
-      value: No need to know
+      value: -
     - name: Languages
       value: English, French
 
@@ -15,25 +15,22 @@
       institution: University of Paul Sabatier, Toulouse, France
       year: 2018
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
+        #- Description 1.
+        #- Description 2.
+        #- title: Description 3.
+        #  contents:
+        #    - Sub-description 1.
+        #    - Sub-description 2.
     - title: Bachelor’s degree in computer science
       institution: University of Paul Sabatier, Toulouse, France
       year: 2016
-      description:
-        - Description 1.
-        - Description 2.
 
 - title: Experience
   type: time_table
   contents:
     - title: Operational security engineer
       institution: Auchan
-      year: 1933 - 1955
+      year: 2021 - 2023
       description:
         - Architect of cybersecurity solutions
         - Integrator of EDR, SOC, Vulnerability scanning, CSPM solutions
@@ -41,7 +38,7 @@
           contents:
             - Management of workforces for remediation
             - Technical remediation on affected scopes
-    - title: Pentesting - Auchan
+    - title: Pentesting
       year: 2019-2022
       description:
         - LeTrot - Web and Active Directory-based infrastrucre
@@ -66,7 +63,6 @@
   contents:
     - title: CISSP Certified
       year: 2021
-      description: One of the most interesing cybersecurity certification so far
     - title: AZ-900
       year: 2020
       description: Microsoft Azure Fundamentals
@@ -77,7 +73,7 @@
   contents:
     - title: Microsoft MVP 
       year: 2020-2023
-      description: One of the most interesing cybersecurity certification so far
+      # description: One of the most interesing cybersecurity certification so far
 
 - title: Bug bounty
   type: time_table
@@ -87,12 +83,30 @@
       description:
         - Critical data exposure
         - Sensitive data exposure
-    - title: Andfrancky
+    - title: Andfranckly
       year: 2021
       items:
         - Bypass all paid features.
+        - Profile pic. GDPR non compliance
+    - title: VSActivity
+      year: 2021
+      items:
+        - IDOR, access to sensitive information
+        - Profile pic. GDPR non compliance
+    - title: Workelo
+      year: 2022
+      items:
+        - Profile pic. GDPR non compliance
+    - title: Microsoft
+      year: 2023
+      items:
+        - Access control bypass on Identity platform.
+    - title: Coviu
+      year: 2023
+      items:
+        - Profile pic. GDPR non compliance (duplicate)
 
-- title: Other Interests
-  type: list
-  contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+# - title: Other Interests
+#   type: list
+#   contents:
+#     - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
