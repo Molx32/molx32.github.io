@@ -2,9 +2,9 @@
   type: map
   contents:
     - name: Full Name
-      value: -
+      value: /
     - name: Date of Birth
-      value: -
+      value: /
     - name: Languages
       value: English, French
 
