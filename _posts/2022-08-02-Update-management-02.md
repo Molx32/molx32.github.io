@@ -174,7 +174,16 @@ When deploying from the portal, Microsoft provides a script to run on your serve
 - <b>Location</b> - This is the Azure region (e.g. westeu) where the Azure ARC machines will be deployed.
 - <b>Tags</b> - If you want to assign tags to your machines when deploying, use the <b>--tags</b> option and pass it key=value arguments e.g. "Datacenter='02/21/2022 15:21:12'".
 
+### Run the scripts
+In order to run the scripts provided by Azure, you need to open flow to the following URLs. Unfortunately, the <i>aka.ms</i> URL are not predictable since the response you receive is an HTTP 302 Redirect that may change in the future.
+- https://aka.ms/azcmagent-windows, which currently redirects to https://gbl.his.arc.azure.com
+- https://aka.ms/AzureConnectedMachineAgent, which currently redirects to https://download.microsoft.com
+- https://packages.microsoft.com/*
+For this reason, I'll describe the procedure both with and without Internet access on the server, so that you can install it offiline, as I had to do.
 
+
+#### Deploy with Internet access
+Depending whether the server is running Windows or Linux, run the following scripts.
 <u>Script for Windows</u>
 {% highlight powershell %}
 try {
@@ -238,4 +247,76 @@ sudo azcmagent connect --service-principal-id "$servicePrincipalClientId" --serv
 {% endhighlight %}
 
 
-### Deploy without Internet access on the servers
+#### Deploy without Internet access
+##### Install azcmagent
+The first step for Windows machines is to [download the AzureConnectedMachineAgent MSI file](https://aka.ms/AzureConnectedMachineAgent) from a machine that has Internet. Then you can push it to your machines and install it using the Microsoft script I adapted for offline install, [available on my Github](https://github.com/Molx32/AzureUpdateManagement/blob/main/install_windows_azcmagent.ps1), that you must run in the directory where the MSI file is located.
+
+The first step for Linux machines is to download the AzureConnectedMachineAgent .deb or .rpm files based on your OS. You can retrieve them at https://packages.microsoft.com. Here are some examples :
+- For CentOS : https://packages.microsoft.com/centos/8/prod/Packages/a/azcmagent-1.9.21208-007.x86_64.rpm
+- For Debian : https://packages.microsoft.com/debian/10/prod/pool/main/a/azcmagent/azcmagent_1.26.02210.615_amd64.deb
+- For Ubuntu : https://packages.microsoft.com/ubuntu/20.04/prod/pool/main/a/azcmagent/azcmagent_1.26.02210.615_amd64.deb
+Then you can push it to your machines and install it using the Microsoft script I adapted for offline install, [available on my Github](https://github.com/Molx32/AzureUpdateManagement/blob/main/install_linux_azcmagent.sh), that you must run in the directory where the MSI file is located. <u>Note</u>: you can tweak the script to change the version number of azcmagent :
+{% highlight bash %}
+# Install the azcmagent
+if [ $apt -eq 1 ]; then
+	sudo -E apt install -y ./packages/azcmagent_1.17.01931.118_amd64.deb
+elif [ $zypper -eq 1 ]; then
+	sudo -E zypper install -y ./packages/azcmagent-1.17.01931-135.x86_64.rpm
+else
+    sudo -E yum -y localinstall ./packages/azcmagent-1.17.01931-135.x86_64.rpm
+fi
+{% endhighlight %}
+
+##### Deploy Azure ARC
+Once the machine is deployed, all you need to do is to run the azcmagent command as shown below.
+<u>For Windows machines</u>
+{% highlight powershell %}
+try {
+    # Add the service principal application ID and secret here
+    $servicePrincipalClientId="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+    $servicePrincipalSecret="supersecret";
+
+    $env:SUBSCRIPTION_ID = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+    $env:RESOURCE_GROUP = "<YOUR RESOURCE GROUP NAME>";
+    $env:TENANT_ID = "zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz";
+    $env:LOCATION = "<YOUR REGION>";
+    $env:AUTH_TYPE = "principal";
+    $env:CORRELATION_ID = "6b777709-0403-4e37-b05c-da346249ffaf";
+    $env:CLOUD = "AzureCloud";
+
+    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072;
+
+    # Run connect command
+    & "$env:ProgramW6432\AzureConnectedMachineAgent\azcmagent.exe" connect --service-principal-id "$servicePrincipalClientId" --service-principal-secret "$servicePrincipalSecret" --resource-group "$env:RESOURCE_GROUP" --tenant-id "$env:TENANT_ID" --location "$env:LOCATION" --subscription-id "$env:SUBSCRIPTION_ID" --cloud "$env:CLOUD" --correlation-id "$env:CORRELATION_ID" --tags "Datacenter='02/21/2022 15:21:12'";
+}
+catch {
+    $logBody = @{subscriptionId="$env:SUBSCRIPTION_ID";resourceGroup="$env:RESOURCE_GROUP";tenantId="$env:TENANT_ID";location="$env:LOCATION";correlationId="$env:CORRELATION_ID";authType="$env:AUTH_TYPE";operation="onboarding";messageType=$_.FullyQualifiedErrorId;message="$_";};
+    Invoke-WebRequest -UseBasicParsing -Uri "https://gbl.his.arc.azure.com/log" -Method "PUT" -Body ($logBody | ConvertTo-Json) | out-null;
+    Write-Host  -ForegroundColor red $_.Exception;
+}
+{% endhighlight %}
+
+<u>For Linux machines</u>
+{% highlight bash %}
+# Add the service principal application ID and secret here
+servicePrincipalClientId="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+servicePrincipalSecret="supersecret";
+
+
+export subscriptionId="yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+export resourceGroup="<YOUR RESOURCE GROUP NAME>";
+export tenantId="zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz";
+export location="<YOUR REGION>";
+export authType="principal";
+export correlationId="6b777709-0403-4e37-b05c-da346249ffaf";
+export cloud="AzureCloud";
+
+# Run connect command
+sudo azcmagent connect --service-principal-id "$servicePrincipalClientId" --service-principal-secret "$servicePrincipalSecret" --resource-group "$resourceGroup" --tenant-id "$tenantId" --location "$location" --subscription-id "$subscriptionId" --cloud "$cloud" --tags "Datacenter='02/21/2022 15:21:12'" --correlation-id "$correlationId";
+{% endhighlight %}
+
+## Validation
+You can ensure Azure ARC is deployed by taking a look at the Azure portal.
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/azure_arc_01.png" class="img-fluid rounded z-depth-1" %}
+</div>
