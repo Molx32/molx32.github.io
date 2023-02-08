@@ -56,6 +56,75 @@ Unfortunately, not all OSs are supported by Azure ARC. According to the Microsof
   - Amazon Linux 2
 
 ### Network requirements
+According to [Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-arc/servers/network-requirements?tabs=azure-cloud), there are several network flows to open. To achieve this, we can identify three cases :
+1. Your network devices are on Azure - In that case, you can leverage service tags in NSGs to open flows easily.
+2. If your network devices support domain-based filtering, you can configure them directly.
+3. Finally, if your network devices do not match the previous criteria, this means that you need to open flows based on IPs. In order to achieve this, you can [download](https://www.microsoft.com/download/details.aspx?id=56519) the list of all IPs associated service tags. Here is a script that defines a list of needed service tags, that parses the Microsoft JSON file, and gives you a CSV with all IPs to whitelist. You can add automation to run this script every two weekd and interact with your network devices to update them directly with the appropriate IPs.
+
+{% highlight python %}
+import json
+import re
+
+def is_ipv4(ip):
+    regex = re.compile(r"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")
+    return regex.search(ip)
+
+tags = [
+    'GuestAndHybridManagement',
+    # Storage
+    'Storage.WestEurope',
+    'Storage.FranceCentral',
+    'Storage.FranceSouth',
+    'Storage.UKSouth',
+    'Storage.SouthCentralUS',
+
+    # AzureMonitor 
+    'AzureMonitor.WestEurope',
+    'AzureMonitor.FranceCentral',
+    'AzureMonitor.FranceSouth',
+    'AzureMonitor.UKSouth',
+
+    # ServiceBus
+    'ServiceBus.WestEurope',
+    'ServiceBus.FranceCentral',
+    'ServiceBus.FranceSouth',
+    'ServiceBus.UKSouth',
+
+    # AzureResourceManager
+    'AzureResourceManager',
+
+    # AzureActiveDirectory
+    'AzureActiveDirectory',
+
+    # AzureArcInfrastructure
+    'AzureArcInfrastructure.WestEurope',
+    'AzureArcInfrastructure.FranceCentral',
+    'AzureArcInfrastructure.FranceSouth',
+    'AzureArcInfrastructure.UKSouth',
+
+    # AzureFrontDoor.FirstParty
+    'AzureFrontDoor.FirstParty'
+]
+
+
+f = open('ServiceTags_Public_20220808.json')
+csv = open('updtmgmt_ips.csv', "w")
+csv.write('tag,ip\n')
+data = json.loads(f.read())
+
+
+for tag in data['values']:
+    if tag['name'] in tags:
+        for ip in tag['properties']['addressPrefixes']:
+            # Remove / if it is range
+            ip_to_test = ip.split('/')[0]
+            if is_ipv4(ip_to_test):
+                csv.write(tag['name'] + ',' + ip + "\n")
+f.close()
+csv.close()
+{% endhighlight %}
+
+
 
 
 ### System requirements
@@ -84,6 +153,89 @@ Register-AzResourceProvider -ProviderNamespace Microsoft.GuestConfiguration
 Register-AzResourceProvider -ProviderNamespace Microsoft.HybridConnectivity
 {% endhighlight %}
 
+{% highlight bash %}
+az login
+az account set --subscription "{Your Subscription Name}"
+az provider register --namespace 'Microsoft.HybridCompute'
+az provider register --namespace 'Microsoft.GuestConfiguration'
+az provider register --namespace 'Microsoft.HybridConnectivity'
+{% endhighlight %}
+
 ## Deployment
 ### Create a service principal
-In order for the VMs to be onboarded, we need to use a service principal.
+In order for the VMs to be onboarded, we need to use a service principal that will authenticate using a secret. This service principal need the <b>Azure Connected Machine Contributor</b> role on every subscription where you want to deploy Azure ARC machines. Here is the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal) that describes how to create a service principal from the portal.
+
+### Set up deployment script
+When deploying from the portal, Microsoft provides a script to run on your servers. You need to specify a few arguments for this script :
+- <b>Service principal client ID and secret</b> - From the service principal previously created
+- <b>TenantId</b> - You can retrieve it from Azure AD
+- <b>SubscriptionId</b> - This is the subscription where you will deploy Azure ARC machines.
+- <b>ResourceGroup</b> - This is the resource group where you will deploy Azure ARC machines.
+- <b>Location</b> - This is the Azure region (e.g. westeu) where the Azure ARC machines will be deployed.
+- <b>Tags</b> - If you want to assign tags to your machines when deploying, use the <b>--tags</b> option and pass it key=value arguments e.g. "Datacenter='02/21/2022 15:21:12'".
+
+
+<u>Script for Windows</u>
+{% highlight powershell %}
+try {
+    # Add the service principal application ID and secret here
+    $servicePrincipalClientId="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+    $servicePrincipalSecret="supersecret";
+
+    $env:SUBSCRIPTION_ID = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+    $env:RESOURCE_GROUP = "<YOUR RESOURCE GROUP NAME>";
+    $env:TENANT_ID = "zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz";
+    $env:LOCATION = "<YOUR REGION>";
+    $env:AUTH_TYPE = "principal";
+    $env:CORRELATION_ID = "6b777709-0403-4e37-b05c-da346249ffaf";
+    $env:CLOUD = "AzureCloud";
+
+    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor 3072;
+
+    # Download the installation package
+    Invoke-WebRequest -UseBasicParsing -Uri "https://aka.ms/azcmagent-windows" -TimeoutSec 30 -OutFile "$env:TEMP\install_windows_azcmagent.ps1";
+
+    # Install the hybrid agent
+    & "$env:TEMP\install_windows_azcmagent.ps1";
+    if ($LASTEXITCODE -ne 0) { exit 1; }
+
+    # Run connect command
+    & "$env:ProgramW6432\AzureConnectedMachineAgent\azcmagent.exe" connect --service-principal-id "$servicePrincipalClientId" --service-principal-secret "$servicePrincipalSecret" --resource-group "$env:RESOURCE_GROUP" --tenant-id "$env:TENANT_ID" --location "$env:LOCATION" --subscription-id "$env:SUBSCRIPTION_ID" --cloud "$env:CLOUD" --correlation-id "$env:CORRELATION_ID" --tags "Datacenter='02/21/2022 15:21:12'";
+}
+catch {
+    $logBody = @{subscriptionId="$env:SUBSCRIPTION_ID";resourceGroup="$env:RESOURCE_GROUP";tenantId="$env:TENANT_ID";location="$env:LOCATION";correlationId="$env:CORRELATION_ID";authType="$env:AUTH_TYPE";operation="onboarding";messageType=$_.FullyQualifiedErrorId;message="$_";};
+    Invoke-WebRequest -UseBasicParsing -Uri "https://gbl.his.arc.azure.com/log" -Method "PUT" -Body ($logBody | ConvertTo-Json) | out-null;
+    Write-Host  -ForegroundColor red $_.Exception;
+}
+{% endhighlight %}
+
+<u>Script for Linux</u>
+
+{% highlight bash %}
+# Add the service principal application ID and secret here
+servicePrincipalClientId="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
+servicePrincipalSecret="supersecret";
+
+
+export subscriptionId="yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
+export resourceGroup="<YOUR RESOURCE GROUP NAME>";
+export tenantId="zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz";
+export location="<YOUR REGION>";
+export authType="principal";
+export correlationId="6b777709-0403-4e37-b05c-da346249ffaf";
+export cloud="AzureCloud";
+
+# Download the installation package
+output=$(wget https://aka.ms/azcmagent -O ~/install_linux_azcmagent.sh 2>&1);
+if [ $? != 0 ]; then wget -qO- --method=PUT --body-data="{\"subscriptionId\":\"$subscriptionId\",\"resourceGroup\":\"$resourceGroup\",\"tenantId\":\"$tenantId\",\"location\":\"$location\",\"correlationId\":\"$correlationId\",\"authType\":\"$authType\",\"operation\":\"onboarding\",\"messageType\":\"DownloadScriptFailed\",\"message\":\"$output\"}" "https://gbl.his.arc.azure.com/log" &> /dev/null || true; fi;
+echo "$output";
+
+# Install the hybrid agent
+bash ~/install_linux_azcmagent.sh;
+
+# Run connect command
+sudo azcmagent connect --service-principal-id "$servicePrincipalClientId" --service-principal-secret "$servicePrincipalSecret" --resource-group "$resourceGroup" --tenant-id "$tenantId" --location "$location" --subscription-id "$subscriptionId" --cloud "$cloud" --tags "Datacenter='02/21/2022 15:21:12'" --correlation-id "$correlationId";
+{% endhighlight %}
+
+
+### Deploy without Internet access on the servers
