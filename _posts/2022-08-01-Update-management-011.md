@@ -56,7 +56,7 @@ Our goal is to have something that looks like the scheme below. To explain this,
 
 ### Create the policy definitions
 We actually need to create multiple policy definitions. Before sharing the policies to implement, let's take a look at the policy definition code. This first part shows two parameters :
-- PolicyRule - It defines in which conditions the policy will be applied. In that case, the policy will be applied to resources with <i>Microsoft.HybridCompute/machines</i> type (i.e. Azure ARC resources), and to resources which run Linux.
+- <b>policyRule</b> - It defines in which conditions the policy will be applied. In that case, the policy will be applied to resources with <i>Microsoft.HybridCompute/machines</i> type (i.e. Azure ARC resources), and to resources which run Linux.
 {% highlight json %}
 {
     "if": {
@@ -74,8 +74,8 @@ We actually need to create multiple policy definitions. Before sharing the polic
 {% endhighlight %}
 
 This second part describes the effect to apply when resources match the conditions aforementioned.
-- effect : this setting is parametrized. This means we can set the value when assigning the policy. The effect we will choose is DeployIfNotExists, which will deploy the agent on the machine when not detected.
-- existenceConditions : this setting is used to say that if resources already have the agent installed, then we do nothing. So it is important to ensure that machines have no agent installed before deployment (you can check this in extensions).
+- <b>effect</b> : this setting is parametrized. This means we can set the value when assigning the policy. The effect we will choose is DeployIfNotExists, which will deploy the agent on the machine when not detected.
+- <b>existenceConditions</b> : this setting is used to say that if resources already have the agent installed, then we do nothing. So it is important to ensure that machines have no agent installed before deployment (you can check this in extensions).
 {% highlight json %}
     "then": {
       "effect": "[parameters('effect')]",
@@ -145,36 +145,88 @@ Finally, this last part describes what will be deployed. To make it short, the a
                   }
                 }
               ],
+            }
+        }
+    }
+}
 {% endhighlight %}
 
 #### Policy definition for Azure ARC Windows VMs
 You'll find the necessary files below :
 - [policy_arc_windows.rules.json](https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_arc_windows.rules.json)
 - [policy_arc_windows.param.json](https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_arc_windows.param.json)
-$text = "Enforce Log Analytics agent install on Azure ARC Windows VMs"
+{% highlight bash %}
+text="Enforce Log Analytics agent install on Azure ARC Windows VMs"
 az policy definition create --name "$text" --display-name "$text" --description "$text" --rules policy_arc_windows.rules.json --params policy_arc_windows.param.json --mode Indexed
+{% endhighlight %}
 
 #### Policy definition for Azure ARC Linux VMs
 You'll find the necessary files below :
 - [policy_arc_windows.rules.json](https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_arc_linux.rules.json)
 - [policy_arc_windows.param.json](https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_arc_linux.param.json)
-$text = "Enforce Log Analytics agent install on Azure ARC Linux VMs"
+{% highlight bash %}
+text="Enforce Log Analytics agent install on Azure ARC Linux VMs"
 az policy definition create --name "$text" --display-name "$text" --description "$text" --rules policy_arc_linux.rules.json --params policy_arc_linux.param.json --mode Indexed
+{% endhighlight %}
 
 #### Policy definition for Azure Windows VMs
 You'll find the necessary files below :
 - [policy_arc_windows.rules.json](https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_windows.rules.json)
 - [policy_arc_windows.param.json](https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_windows.param.json)
-$text = "Enforce Log Analytics agent install on Azure Windows VMs"
+{% highlight bash %}
+text="Enforce Log Analytics agent install on Azure Windows VMs"
 az policy definition create --name "$text" --display-name "$text" --description "$text" --rules policy_windows.rules.json --params policy_windows.param.json --mode Indexed
+{% endhighlight %}
 
 #### Policy definition for Azure Linux VMs
 You'll find the necessary files below :
 - [policy_arc_windows.rules.json](https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_linux.rules.json)
 - [policy_arc_windows.param.json](https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_linux.param.json)
-$text = "Enforce Log Analytics agent install on Azure Linux VMs"
+{% highlight bash %}
+text="Enforce Log Analytics agent install on Azure Linux VMs"
 az policy definition create --name "$text" --display-name "$text" --description "$text" --rules policy_linux.rules.json --params policy_linux.param.json --mode Indexed
+{% endhighlight %}
 
 
 ### Assign policies
+We can now assign our policies to different scopes. According to the scheme, we first need to assign the following policies at the subscription level : 
+- <b>Enforce Log Analytics agent install on Azure Windows VMs</b>
+- <b>Enforce Log Analytics agent install on Azure Linux VMs</b>
+{% highlight bash %}
+policy="Enforce Log Analytics agent install on Azure Windows VMs"
+name="Update management onboarding for Azure Windows VMs"
+az policy assignment create --name "$name" --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' --policy "$policy"
 
+policy="Enforce Log Analytics agent install on Azure Linux VMs"
+name="Update management onboarding for Azure Linux VMs"
+az policy assignment create --name "$name" --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' --policy "$policy"
+{% endhighlight %}
+
+Then, we can assign policies on OVH, OCI and GCP resource groups.
+- <b>Enforce Log Analytics agent install on Azure ARC Windows VMs</b>
+- <b>Enforce Log Analytics agent install on Azure ARC Linux VMs</b>
+{% highlight bash %}
+# For Windows machines
+policy="Enforce Log Analytics agent install on Azure ARC Windows VMs"
+# OVH
+name="Enforce Log Analytics agent install on Azure ARC Windows VMs - OVH"
+az policy assignment create --name "$name" --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' --policy "$policy"
+# OCI
+name="Enforce Log Analytics agent install on Azure ARC Windows VMs - OCI"
+az policy assignment create --name "$name" --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' --policy "$policy"
+# GCP
+name="Enforce Log Analytics agent install on Azure ARC Windows VMs - GCP"
+az policy assignment create --name "$name" --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx' --policy "$policy"
+
+# For Linux machines
+policy="Enforce Log Analytics agent install on Azure ARC Linux VMs"
+# OVH
+name="Enforce Log Analytics agent install on Azure ARC Linux VMs - OVH"
+az policy assignment create --name "$name" --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myGroup' --policy "$policy"
+# OCI
+name="Enforce Log Analytics agent install on Azure ARC Linux VMs - OCI"
+az policy assignment create --name "$name" --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myGroup' --policy "$policy"
+# GCP
+name="Enforce Log Analytics agent install on Azure ARC Linux VMs - GCP"
+az policy assignment create --name "$name" --scope '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myGroup' --policy "$policy"
+{% endhighlight %}
