@@ -26,10 +26,11 @@ Hello there, the goal of this serie is to describe a real world implementation o
 #### Plan
 - [Part 0 - Introduction](/blog/2021/Update-management-00/)
 - <b>[Part 1 - Architecture (you're here)](/blog/2021/Update-management-01/)</b>
-- [Part 2 - Azure ARC](/blog/2021/Update-management-02/)
-- [Part 3 - Log Analytics agents](/blog/2021/Update-management-03/)s
-- [Part 4 - Automation accounts](/blog/2021/Update-management-04/)
-- [Part 5 - Monitoring](/blog/2021/Update-management-05/)
+- [Part 2 - Azure Policy](/blog/2021/Update-management-011/)
+- [Part 3 - Azure ARC](/blog/2021/Update-management-02/)
+- [Part 4 - Log Analytics agents](/blog/2021/Update-management-03/)
+- [Part 5 - Automation accounts](/blog/2021/Update-management-04/)
+- [Part 6 - Monitoring](/blog/2021/Update-management-05/)
 
 ## Architecture
 In this guide to Azure Update Management, we are going to dig into the details of the service. Azure Update Management is composed of multiple Azure services.
@@ -56,24 +57,3 @@ Let's go back to our Azure Policy service. Our goal here is to create the follow
 - Enforce the Log Analytics agent to be installed on all GCP Azure ARC VMs, and make them report to ari-loga-gcp-001
 - Enforce the Log Analytics agent to be installed on all OCI Azure ARC VMs, and make them report to ari-loga-oci-001
 By doing this, we ensure that any newly created Azure VM, or any newly onboarded Azure ARC VM will be integrated with the appropriate Log Analytics. In the end, this allows us to fully automate onboarding and update monitoring.
-
-## Azure Policy deployment
-Our goal is to have something that looks like the scheme below. To explain this, I'll repeat what I described earlier, but with more specific words. We create four policy assignments<i>policy assignments</i>:
-  1. An assignment at the subscription level, that must apply to all Azure VMs, that enforces all Azure VMs to report to ari-loga-azure-001 Log Analytics.
-  2. An assignment at the ari_rg_ovh_001 resource group, that must apply to all OVH Azure ARC VMs Azure VMs, that enforces all OVH Azure ARC VMs to report to ari-loga-ovh-001 Log Analytics.
-  3. An assignment at the ari_rg_oci_001 resource group, that must apply to all OCI Azure ARC VMs Azure VMs, that enforces all OCI Azure ARC VMs to report to ari-loga-oci-001 Log Analytics.
-  4. An assignment at the ari_rg_gcp_001 resource group, that must apply to all GCP Azure ARC VMs Azure VMs, that enforces all GCP Azure ARC VMs to report to ari-loga-gcp-001 Log Analytics.
-
-<div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/arch_3.png" class="img-fluid rounded z-depth-1" %}
-</div>
-
-### Create the policy definitions
-We actually need to create multiple policy definitions.
-
-#### Policy definition for Azure Windows VMs
-
-
-#### Policy definition for Azure Linux VMs
-#### Policy definition for Azure ARC Windows VMs
-#### Policy definition for Azure ARC Linux VMs

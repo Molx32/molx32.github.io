@@ -26,10 +26,11 @@ Hello there, the goal of this serie is to describe a real world implementation o
 #### Plan
 - <b>[Part 0 - Introduction (you're here)](/blog/2021/Update-management-00/)</b>
 - [Part 1 - Architecture](/blog/2021/Update-management-01/)
-- [Part 2 - Azure ARC](/blog/2021/Update-management-02/)
-- [Part 3 - Log Analytics agents](/blog/2021/Update-management-03/)
-- [Part 4 - Automation accounts](/blog/2021/Update-management-04/)
-- [Part 5 - Monitoring](/blog/2021/Update-management-05/)
+- [Part 2 - Azure Policy](/blog/2021/Update-management-011/)
+- [Part 3 - Azure ARC](/blog/2021/Update-management-02/)
+- [Part 4 - Log Analytics agents](/blog/2021/Update-management-03/)
+- [Part 5 - Automation accounts](/blog/2021/Update-management-04/)
+- [Part 6 - Monitoring](/blog/2021/Update-management-05/)
 
 ## <b>Scenario</b>
 This scenario may differ from your use cases, but keep in mind that this is a real world scenario ! Thus, you may find interesting tips and information to build a service that fits your needs.
