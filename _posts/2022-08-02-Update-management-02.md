@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Azure Update Management - Part 2 - Deploy Azure ARC
+title: Azure Update Management - Part 3 - Deploy Azure ARC
 date: 2021-08-02 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
