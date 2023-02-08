@@ -24,10 +24,10 @@ toc:
 Hello there, the goal of this serie is to describe a real world implementation of Azure Update Management. This is a service designed to update any machine in your infrastructure, whether they are hosted on Azure or elsewhere, provided your OSs are technically supported. I'll try to give a comprehensive feedback and drop advices here and there. Have a nice reading.
 
 #### Plan
-- [Part 0 - Introduction](/al-folio/blog/2021/Update-management-00/)
-- [Part 1 - Architecture](/al-folio/blog/2021/Update-management-01/)
-- [Part 2 - Azure ARC](/al-folio/blog/2021/Update-management-02/)
-- [Part 3 - Log Analytics agents](/al-folio/blog/2021/Update-management-03/)
-- [Part 4 - Automation accounts](/al-folio/blog/2021/Update-management-04/)
-- <b>[Part 5 - Monitoring (you're here)](/al-folio/blog/2021/Update-management-05/)</b>
+- [Part 0 - Introduction](/blog/2021/Update-management-00/)
+- [Part 1 - Architecture](/blog/2021/Update-management-01/)
+- [Part 2 - Azure ARC](/blog/2021/Update-management-02/)
+- [Part 3 - Log Analytics agents](/blog/2021/Update-management-03/)
+- [Part 4 - Automation accounts](/blog/2021/Update-management-04/)
+- <b>[Part 5 - Monitoring (you're here)](/blog/2021/Update-management-05/)</b>
 
