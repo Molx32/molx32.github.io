@@ -45,6 +45,7 @@ It is important that you define an update policy in the early stage of the proje
   - For a vulnerability with CVSS >= 7, remediate within 3 months
   - For a vulnerability with CVSS < 7, remediate within 6 months
 3. <b>We want to reboot only if needed.</b> One of the major constraints regarding patches is the need to reboot the VM to apply patches, because servers may host critical business applications and must provide a service continuity. Altough security patches usually don't require to reboot servers, it is still necessary to define maintenance schedules i.e. a timeframe when we can reboot the server. In our case the maintenance schedule will last 2 hours. If the machine can't update during this timeframe, then the patching process is stopped.
+4. <b>We want to update only backuped machines.</b> In the case the applied updates have a side effect, we want to make sure that all the machines are backuped, so we can rollback any time. A concrete example on Windows Server 2016 is the <b>[C01A001D](https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-machines/unresponsive-vm-apply-windows-update#resolution).
 
 <u>Note</u> : it is important to keep in mind that update management is not the one and only solution to keep your VMs safe. Indeed, OS may no longer be supported, and vulnerabilities must sometimes be mitigated by configuring specific settings rather than updating.
 
@@ -58,7 +59,7 @@ In this scenario, we assume we have a thousand servers distributed across Azure 
 * Etc.
 
 Since Update management is an Azure service, you may think that this is easier to set up for Azure VM, and this is true.
-* For Azure VMs, we only need to deploy an agent, the <i>Log Analytics agent</i> on the machine to collect its logs and know which updates are missing
+* For Azure VMs, we only need to deploy an agent, the <i>Log Analytics agent</i> on the machine to collect its logs and know which updates are missing.
 * For non Azure VMs, we first need to establish a link between the VM and Azure using the Azure ARC agent, so that it can be managed like any other resource from Azure. Once this is done, the we only also to deploy the <i>Log Analytics agent</i>, just like Azure VMs.
 
 ### Operating systems
