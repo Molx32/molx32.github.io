@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Bug bounty - Azure - Enumerate groups-related resources
-date: 2023-15-02 10:00:00
+date: 2023-02-02 10:00:00
 description: Non critical lack of access control in Azure Identity API
 tags: bugbounty
 authors:
