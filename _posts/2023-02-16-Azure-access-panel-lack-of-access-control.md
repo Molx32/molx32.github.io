@@ -23,34 +23,35 @@ toc:
 ---
 I recently reported an issue that could be regarded as a vulnerability, but Microsoft acknowledged telling me this is the expected behavior.
 
-# Context
+## Context
 When configuring an Azure AD, there are common features and settings that are usually hardened to restrict users' permissions. One of these settings is <b>Restrict user ability to access groups features in the Access Panel</b>. Configuring this setting should apply access control and prevent users from accessing this data from the Access Panel API : as you may think, there is not access control applied and any user member of the organization (i.e. does not apply to Guest users) can access this data.
 
-## Setting set on No (permissive)
+### Setting set on No (permissive)
 When the setting is configured to be permissive, any non-privileged user can access the following data :
 - List of groups
 - List of resources associated to groups : Outlook, SharePoint, Yammer, Teams
 - List of people member of groups
+
 Administrators may want to disable this feature to prevent users seing this data. <u>Note</u> : Guest users can not see this.
 <div class="col-sm mt-3 mt-md-0">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/O8qMV-Besw8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
-## Setting set on Yes (restrictive)
+### Setting set on Yes (restrictive)
 When the setting is configured to be restrictive, there is an error page that prevents group and group resource enumeration.
 <div class="col-sm mt-3 mt-md-0">
   {% include figure.html path="assets/img/MS_vuln_01.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
-# The vulnerability
-## What is the goal?
+## The vulnerability
+### What is the goal?
 The goal is not enumerate groups-related resources :
 - SharePoint
 - Yammer
 - Outlook
 - Teams
 
-## Reproduction steps
+### Reproduction steps
 To reproduce the issue :
 1. As an administrator, set the <b>Restrict user ability to access groups features in the Access Panel</b> setting on Yes
 2. Authenticate as a non-privileged user
@@ -61,7 +62,8 @@ To reproduce the issue :
   <iframe width="560" height="315" src="https://www.youtube.com/embed/NgG_SMecn9k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
-## Automation
+### Automation
+Here is a probably not optimized piece of code that takes a cookie as input, and generates a CSV with all group resources URLs.
 {% highlight python %}
 import subprocess
 import sys
@@ -153,9 +155,16 @@ if __name__ == '__main__':
 
     print("*** FILE results.csv CREATED ***")
 {% endhighlight %}
+See the video to look at how to use it easily. 
+<div class="col-sm mt-3 mt-md-0">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/vKPkMWrkkf8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+</div>
 
-# Detect and remediate
-## Detection
-## Mitigation
+## Remediate and detect
+### Mitigation
+To be clear, there's no reliable mitigation, and as MSRC Team responded, there may never be a mitigation as it is not regarded as a vulnerability.
+Now, there is only one way to mitigate this, but you shouldn't do this in production.
+
+### Detection
 
 
