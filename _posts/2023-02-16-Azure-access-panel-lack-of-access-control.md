@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Azure Update Management - Part 6 - Monitoring
-date: 2022-03-02 10:00:00
-description: This post is describes the architecture of the solution
-tags: updatemanagement
+title: Bug bounty - Azure - Enumerate groups-related resources
+date: 2022-15-02 10:00:00
+description: Non critical lack of access control in Azure Identity API
+tags: bugbounty
 authors:
   - name: Molx32
 
@@ -33,7 +33,7 @@ When the setting is configured to be permissive, any non-privileged user can acc
 - List of people member of groups
 Administrators may want to disable this feature to prevent users seing this data. <u>Note</u> : Guest users can not see this.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/MS_vuln_02.gif" class="img-fluid rounded z-depth-1" %}
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/O8qMV-Besw8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
 ## Setting set on Yes (restrictive)
@@ -58,7 +58,7 @@ To reproduce the issue :
 4. Access https://account.activedirectory.windowsazure.com/r#/manageMembership?objectType=Group&objectId=<GUID>
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/MS_vuln_03.gif" class="img-fluid rounded z-depth-1" %}
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/NgG_SMecn9k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
 ## Automation
