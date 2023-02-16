@@ -195,8 +195,8 @@ See the video to look at how to use it easily.
 
 ***
 
-## Remediate and detect
-### Mitigation
+### Remediate and detect
+#### Mitigation
 To be clear, there's no reliable mitigation. The only thing I identified is the configuration of the <b>UsersPermissionToReadOtherUsersEnabled</b> feature to <b>false</b>, using the command below. According to Microsoft documentation, this settings <i>“Indicates whether to allow users to view the profile info of other users in their company. This setting is applied company-wide. Set to $False to disable users' ability to use the Azure AD module for Windows PowerShell to access user information for their organization.”</i>.
 {% highlight powershell %}
 Set-MsolCompanySettings -UsersPermissionToReadOtherUsersEnabled $false
@@ -207,15 +207,8 @@ Also, you may have noticed that non privileged users are allowed to use tools su
 Disable-AADIntTenantMsolAccess
 {% endhighlight %}
 
-### Detection
+#### Detection
 Altough this can't be mitigated, you can still detect it though Azure AD non-interactive signin logs to the <b>Microsoft App Access Panel</b> application. Just send this to Microsoft Sentinel, and create a detection rule to raise an alert when multiple attempts are performed from the same user in a short timeframe.
 <div class="col-sm mt-3 mt-md-0">
     {% include figure.html path="assets/img/MS_vuln_06.png" class="img-fluid rounded z-depth-1" %}
 </div>
-
-## MSRC Response
-In the first place, Microsoft answered the following.
-<i>We determined that this behavior is considered to be 'by design'. Please find the notes below.
-The tenant wide setting, "Restrict user ability to access groups features in the Access Panel" controls users access to the My Groups UI. It does not control their access to groups via Graph, Powershell, APIs etc.  When the setting is set to 'Yes', users in the customers tenant can still access group information using Azure CLI. Hence the reported behavior is expected.</i>
-
-This answer do not highliht the fact that groups-related resources can be enumerated by any Member authenticated user only through this API.
