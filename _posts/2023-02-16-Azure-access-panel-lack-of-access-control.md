@@ -23,12 +23,12 @@ toc:
 ---
 I recently reported to Microsoft MSRC an issue that is, from my point of view, a low-severity vulnerability that allows 'Members' of Azure AD tenant to enumerate group-related resources, despite hardening Azure AD settings. This could be leveraged by an attacker during internal recon phase.
 
-## Context
-### Azure AD setting
+### Context
+#### Azure AD setting
 When configuring Azure AD, there are common features and settings that are usually hardened to restrict users permissions. One of these settings is <b>Restrict user ability to access groups features in the Access Panel</b>. This is used to prevent the access to the [Access Panel groups feature](https://account.activedirectory.windowsazure.com/r#/groups), and thus prevent them from enumerating groups, send request to join groups, and access groups-related information. As MSRC answered when I reported the issue : <i>The tenant wide setting, "Restrict user ability to access groups features in the Access Panel" controls users access to the My Groups UI.</i>. This is what we can leverage to improve Azure recon.
 
 
-### About groups in Azure AD
+#### About groups in Azure AD
 But first of all, a small talk about groups in Azure AD. There are multiple, and here are their description (I have shamelessly copied from [MS docs](https://learn.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide)) :
 - <b>Security groups</b> - <i>Used for granting access to resources such as SharePoint sites.</i>
 - <b>M365 Groups</b> - <i>Used for collaboration between users, both inside and outside your company. They include collaboration services such as SharePoint and Planner.</i>
@@ -58,7 +58,7 @@ As shown on the scheme, based on the Azure AD configuration, an attacker could e
 </div>  
 
 
-### Setting set on No (permissive)
+#### Setting set on No (permissive)
 When the setting is configured to be permissive, any non-privileged user can access the following data :
 - List of groups
 - List of resources associated to groups : Outlook, SharePoint, Yammer, Teams
@@ -70,7 +70,7 @@ Administrators may want to disable this feature to prevent users seing this data
 </div>
 
 
-### Setting set on Yes (restrictive)
+#### Setting set on Yes (restrictive)
 When the setting is configured to be restrictive, there is an error page that prevents group and group resource enumeration.
 <div class="col-sm mt-3 mt-md-0">
   {% include figure.html path="assets/img/MS_vuln_01.png" class="img-fluid rounded z-depth-1" %}
@@ -82,8 +82,8 @@ When the setting is configured to be restrictive, there is an error page that pr
 
 ***
 
-## The vulnerability
-### POC
+### The vulnerability
+#### POC
 To reproduce the issue :
 1. As an administrator, set the <b>Restrict user ability to access groups features in the Access Panel</b> setting on <b>Yes</b>
 2. Authenticate as a non-privileged user
@@ -95,7 +95,7 @@ To reproduce the issue :
 </div>
 
 
-### Automation
+#### Automation
 Here is a probably not optimized piece of code that takes a cookie as input, and generates a CSV with all group resources URLs.
 {% highlight python %}
 import subprocess
