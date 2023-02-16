@@ -38,7 +38,7 @@ But first of all, a small talk about groups in Azure AD. There are multiple, and
 - <b>Distribution groups</b> - <i>Used for sending email notifications to a group of people</i>
 Note that when a Microsoft 365 Group is created, associated resources usually come with it.
 
-There are multiple common methods to create a group, and depending on how you do, visibility could be set on 'Public' because of an error, or because of default configuration :
+There are multiple common methods to create a group, and depending on how you do, visibility could be set on 'Public' :
 - Using the [Azure portal](https://portal.azure.com), you can create both security and M365 groups. Note that using this will cause M365 groups to be private, which is a good thing.
 - Using the Azure CLI command <b>az group create</b> only allows you to create private security groups.
 - Using the <b>New-MsolGroup</b> only allows you to create private security groups.
