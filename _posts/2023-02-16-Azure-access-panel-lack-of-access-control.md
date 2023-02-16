@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Bug bounty - Azure - Enumerate groups-related resources
+title: Azure security - Internal recon leveraging lack of access control
 date: 2023-02-02 10:00:00
-description: Non critical lack of access control in Azure Identity API
-tags: bugbounty
+description: A non critical lack of access control in Azure Identity API makes easier SharePoint sites enumeration.
+tags: pentest azure
 authors:
   - name: Molx32
 
@@ -21,10 +21,39 @@ toc:
   - name: Layouts
   - name: Other Typography?
 ---
-I recently reported an issue that could be regarded as a vulnerability, but Microsoft acknowledged telling me this is the expected behavior.
+I recently reported to Microsoft MSRC an issue that is, from my point of view, a low-severity vulnerability that allows 'Members' of Azure AD tenant to enumerate group-related resources, despite hardening Azure AD settings. This could be leveraged by an attacker during internal recon phase.
 
 ## Context
-When configuring an Azure AD, there are common features and settings that are usually hardened to restrict users' permissions. One of these settings is <b>Restrict user ability to access groups features in the Access Panel</b>. Configuring this setting should apply access control and prevent users from accessing this data from the Access Panel API : as you may think, there is not access control applied and any user member of the organization (i.e. does not apply to Guest users) can access this data.
+### Azure AD setting
+When configuring Azure AD, there are common features and settings that are usually hardened to restrict users permissions. One of these settings is <b>Restrict user ability to access groups features in the Access Panel</b>. This is used to prevent the access to the [Access Panel groups feature](https://account.activedirectory.windowsazure.com/r#/groups), and thus prevent them from enumerating groups, send request to join groups, and access groups-related information. As MSRC answered when I reported the issue : <i>The tenant wide setting, "Restrict user ability to access groups features in the Access Panel" controls users access to the My Groups UI.</i>. This is what we can leverage to improve Azure recon.
+
+### About groups in Azure AD
+But first of all, a small talk about groups in Azure AD. There are multiple, and here are their description (I have shamelessly from [MS docs](https://learn.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide)) :
+- <b>Security groups</b> - <i>Used for granting access to resources such as SharePoint sites.</i>
+- <b>M365 Groups</b> - <i>Used for collaboration between users, both inside and outside your company. They include collaboration services such as SharePoint and Planner.</i>
+- <b>Mail-enabled security groups</b> - <i>Used for granting access to resources such as SharePoint, and emailing notifications to those users.</i>
+- <b>Shared mailboxes</b> - <i>Used when multiple people need access to the same mailbox, such as a company information or support email address.</i>
+- <b>Dynamic distribution groups</b> - <i>Created to expedite the mass sending of email messages and other information within an organization.</i>
+- <b>Distribution groups</b> - <i>Used for sending email notifications to a group of people</i>
+Note that when a Microsoft 365 Group is created, associated resources usually come with it.
+
+There are multiple common methods to create a group, and depending on how you do, visibility could be set on 'Public' because of an error, or because of default configuration :
+- Using the [Azure portal](https://portal.azure.com), you can create both security and M365 groups. Note that using this will cause M365 groups to be private, which is a good thing.
+- Using the Azure CLI command <b>az group create</b> only allows you to create private security groups.
+- Using the <b>New-MsolGroup</b> only allows you to create private security groups.
+- Using <b>New-AzADGroup</b> command allows to create all kinds of groups with the specified visibility for M365 groups
+
+The last common method is using the [M365 Admin portal](https://admin.microsoft.com). As shown on the picture below, the default visibility is Public. The truth is administrator should properly configure this, but they sometimes don't, especially when groups were created a few years ago, when security was not one of the biggest concerns for companies.
+
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/MS_vuln_05.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+### Why is it interesting for an attacker?
+As shown on the scheme, based on the Azure AD configuration, an attacker could enumerate interesting resources (SharePoint, Yammer, Teams, Outlook group email) and add themselves to public groups without requiring access in order to receive emails sent to the associated email address.
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/MS_vuln_04.png" class="img-fluid rounded z-depth-1" %}
+</div>
 
 ### Setting set on No (permissive)
 When the setting is configured to be permissive, any non-privileged user can access the following data :
@@ -32,7 +61,7 @@ When the setting is configured to be permissive, any non-privileged user can acc
 - List of resources associated to groups : Outlook, SharePoint, Yammer, Teams
 - List of people member of groups
 
-Administrators may want to disable this feature to prevent users seing this data. <u>Note</u> : Guest users can not see this.
+Administrators may want to disable this feature to prevent users seing this data. <u>Note</u> : Guest users can not see this by default.
 <div class="col-sm mt-3 mt-md-0">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/O8qMV-Besw8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
@@ -44,16 +73,9 @@ When the setting is configured to be restrictive, there is an error page that pr
 </div>
 
 ## The vulnerability
-### What is the goal?
-The goal is not enumerate groups-related resources :
-- SharePoint
-- Yammer
-- Outlook
-- Teams
-
-### Reproduction steps
+### POC
 To reproduce the issue :
-1. As an administrator, set the <b>Restrict user ability to access groups features in the Access Panel</b> setting on Yes
+1. As an administrator, set the <b>Restrict user ability to access groups features in the Access Panel</b> setting on <b>Yes</b>
 2. Authenticate as a non-privileged user
 3. Get a group GUID
 4. Access https://account.activedirectory.windowsazure.com/r#/manageMembership?objectType=Group&objectId=<GUID>
@@ -162,9 +184,25 @@ See the video to look at how to use it easily.
 
 ## Remediate and detect
 ### Mitigation
-To be clear, there's no reliable mitigation, and as MSRC Team responded, there may never be a mitigation as it is not regarded as a vulnerability.
-Now, there is only one way to mitigate this, but you shouldn't do this in production.
+To be clear, there's no reliable mitigation. The only thing I identified is the configuration of the <b>UsersPermissionToReadOtherUsersEnabled</b> feature to <b>false</b>, using the command below. According to Microsoft documentation, this settings <i>“Indicates whether to allow users to view the profile info of other users in their company. This setting is applied company-wide. Set to $False to disable users' ability to use the Azure AD module for Windows PowerShell to access user information for their organization.”</i>.
+{% highlight powershell %}
+Set-MsolCompanySettings -UsersPermissionToReadOtherUsersEnabled $false
+{% endhighlight %}
+
+Also, you may have noticed that non privileged users are allowed to use tools such as Azure CLI. This can't be mitigated for Azure CLI, however you can disable the use of Msol module using this command.
+{% highlight powershell %}
+Disable-AADIntTenantMsolAccess
+{% endhighlight %}
 
 ### Detection
+Altough this can't be mitigated, you can still detect it though Azure AD non-interactive signin logs to the <b>Microsoft App Access Panel</b> application. Just send this to Microsoft Sentinel, and create a detection rule to raise an alert when multiple attempts are performed from the same user in a short timeframe.
+<div class="col-sm mt-3 mt-md-0">
+    {% include figure.html path="assets/img/MS_vuln_06.png" class="img-fluid rounded z-depth-1" %}
+</div>
 
+## MSRC Response
+In the first place, Microsoft answered the following.
+<i>We determined that this behavior is considered to be 'by design'. Please find the notes below.
+The tenant wide setting, "Restrict user ability to access groups features in the Access Panel" controls users access to the My Groups UI. It does not control their access to groups via Graph, Powershell, APIs etc.  When the setting is set to 'Yes', users in the customers tenant can still access group information using Azure CLI. Hence the reported behavior is expected.</i>
 
+This answer do not highliht the fact that groups-related resources can be enumerated by any Member authenticated user only through this API.
