@@ -58,7 +58,7 @@ As shown on the scheme, based on the Azure AD configuration, an attacker could e
 </div>  
 
 
-#### Setting set on No (permissive)
+#### Behavior when configured on No (permissive)
 When the setting is configured to be permissive, any non-privileged user can access the following data :
 - List of groups
 - List of resources associated to groups : Outlook, SharePoint, Yammer, Teams
@@ -70,25 +70,29 @@ Administrators may want to disable this feature to prevent users seing this data
 </div>
 
 
-#### Setting set on Yes (restrictive)
-When the setting is configured to be restrictive, there is an error page that prevents group and group resource enumeration.
+#### Behavior when configured on Yes (restrictive)
+When the setting is configured to be restrictive, there is an error page that prevents group and group resource enumeration. The first picture shows Azure AD with the setting set on Yes.
 <div class="col-sm mt-3 mt-md-0">
   {% include figure.html path="assets/img/MS_vuln_01.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
+This second picture shows the user who can no longer access to the group feature in the Access Panel.
 <div class="col-sm mt-3 mt-md-0">
   {% include figure.html path="assets/img/MS_vuln_02.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ***
 
-### The vulnerability
+### The issue
 #### POC
 To reproduce the issue :
 1. As an administrator, set the <b>Restrict user ability to access groups features in the Access Panel</b> setting on <b>Yes</b>
 2. Authenticate as a non-privileged user
 3. Get a group GUID
-4. Access [https://account.activedirectory.windowsazure.com/r#/manageMembership?objectType=Group&objectId=<GUID>](https://account.activedirectory.windowsazure.com/r#/manageMembership?objectType=Group&objectId=)
+4. Access the following URL : 
+```
+https://account.activedirectory.windowsazure.com/r#/manageMembership?objectType=Group&objectId=<GUID>
+```
 
 <div class="col-sm mt-3 mt-md-0">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/NgG_SMecn9k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
