@@ -27,8 +27,9 @@ I recently reported to Microsoft MSRC an issue that is, from my point of view, a
 ### Azure AD setting
 When configuring Azure AD, there are common features and settings that are usually hardened to restrict users permissions. One of these settings is <b>Restrict user ability to access groups features in the Access Panel</b>. This is used to prevent the access to the [Access Panel groups feature](https://account.activedirectory.windowsazure.com/r#/groups), and thus prevent them from enumerating groups, send request to join groups, and access groups-related information. As MSRC answered when I reported the issue : <i>The tenant wide setting, "Restrict user ability to access groups features in the Access Panel" controls users access to the My Groups UI.</i>. This is what we can leverage to improve Azure recon.
 
+
 ### About groups in Azure AD
-But first of all, a small talk about groups in Azure AD. There are multiple, and here are their description (I have shamelessly from [MS docs](https://learn.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide)) :
+But first of all, a small talk about groups in Azure AD. There are multiple, and here are their description (I have shamelessly copied from [MS docs](https://learn.microsoft.com/en-us/microsoft-365/admin/create-groups/compare-groups?view=o365-worldwide)) :
 - <b>Security groups</b> - <i>Used for granting access to resources such as SharePoint sites.</i>
 - <b>M365 Groups</b> - <i>Used for collaboration between users, both inside and outside your company. They include collaboration services such as SharePoint and Planner.</i>
 - <b>Mail-enabled security groups</b> - <i>Used for granting access to resources such as SharePoint, and emailing notifications to those users.</i>
@@ -49,11 +50,13 @@ The last common method is using the [M365 Admin portal](https://admin.microsoft.
   {% include figure.html path="assets/img/MS_vuln_05.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
+
 ### Why is it interesting for an attacker?
 As shown on the scheme, based on the Azure AD configuration, an attacker could enumerate interesting resources (SharePoint, Yammer, Teams, Outlook group email) and add themselves to public groups without requiring access in order to receive emails sent to the associated email address.
 <div class="col-sm mt-3 mt-md-0">
   {% include figure.html path="assets/img/MS_vuln_04.png" class="img-fluid rounded z-depth-1" %}
-</div>
+</div>  
+
 
 ### Setting set on No (permissive)
 When the setting is configured to be permissive, any non-privileged user can access the following data :
@@ -66,11 +69,18 @@ Administrators may want to disable this feature to prevent users seing this data
   <iframe width="560" height="315" src="https://www.youtube.com/embed/O8qMV-Besw8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
+
 ### Setting set on Yes (restrictive)
 When the setting is configured to be restrictive, there is an error page that prevents group and group resource enumeration.
 <div class="col-sm mt-3 mt-md-0">
   {% include figure.html path="assets/img/MS_vuln_01.png" class="img-fluid rounded z-depth-1" %}
 </div>
+
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/MS_vuln_02.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+***
 
 ## The vulnerability
 ### POC
@@ -78,11 +88,12 @@ To reproduce the issue :
 1. As an administrator, set the <b>Restrict user ability to access groups features in the Access Panel</b> setting on <b>Yes</b>
 2. Authenticate as a non-privileged user
 3. Get a group GUID
-4. Access https://account.activedirectory.windowsazure.com/r#/manageMembership?objectType=Group&objectId=<GUID>
+4. Access [https://account.activedirectory.windowsazure.com/r#/manageMembership?objectType=Group&objectId=<GUID>](https://account.activedirectory.windowsazure.com/r#/manageMembership?objectType=Group&objectId=)
 
 <div class="col-sm mt-3 mt-md-0">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/NgG_SMecn9k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
+
 
 ### Automation
 Here is a probably not optimized piece of code that takes a cookie as input, and generates a CSV with all group resources URLs.
@@ -181,6 +192,8 @@ See the video to look at how to use it easily.
 <div class="col-sm mt-3 mt-md-0">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/vKPkMWrkkf8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
+
+***
 
 ## Remediate and detect
 ### Mitigation
