@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Azure Update Management - Part 4 - Log Analytics agents
-date: 2023-01-02 10:00:00
+title: Azure Update Management - Part 7 - Apply security patches to CentOS!
+date: 2023-02-16 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
 authors:

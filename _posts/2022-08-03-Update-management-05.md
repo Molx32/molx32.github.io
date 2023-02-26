@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Azure Update Management - Part 6 - Monitoring
-date: 2022-03-02 10:00:00
+date: 2023-02-02 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
 authors:
