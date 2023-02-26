@@ -33,6 +33,8 @@ Hello there, the goal of this serie is to describe a real world implementation o
 - [Part 6 - Monitoring](/blog/2021/Update-management-05/)
 - <b>[Part 7 - Security patches on CentOS machines](/blog/2021/Update-management-06/)</b>
 
+# NOT FINISHED !
+
 ## Context
 If you have CentOS machines, you probably faced issues when trying to apply <b>security</b> updates them : a <b>yum update</b> may crash your applications because it does not apply security-only updates, while <b>yum update --security</b> won't update any package because it relies on packages metadata, which are not set for CentOS packages. Alternatively, you could allow only security repositories, but this implies additional maintenance when installing non-security related stuff on your machines.
 
