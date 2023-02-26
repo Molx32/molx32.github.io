@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Azure Update Management - Part 0 - Introduction
-date: 2021-08-01 10:00:00
+date: 2022-08-01 10:00:00
 description: This post is an introduction that describes the business environment
 tags: updatemanagement
 authors:

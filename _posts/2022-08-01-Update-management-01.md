@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Azure Update Management - Part 1 - Architecture
-date: 2021-08-02 10:00:00
+date: 2022-08-02 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
 authors:
