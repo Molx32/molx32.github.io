@@ -40,7 +40,7 @@ In this article, I assume you connected all your virtual machines. What you may 
 
 This is a very poor view, and we sure can do way better! And I actually developed a ready to use monitoring workbook that you need to slightly tweak to meet your needs. Ready to discover that sick workbook? Here is a short video.
 <div class="col-sm mt-3 mt-md-0">
-  <iframe width="560" height="315" src="https://www.youtube.com/embed/qy8Ou9wbWvw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/6asRTPWqYmg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 </div>
 
 ## Deploy
