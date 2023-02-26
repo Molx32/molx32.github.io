@@ -145,4 +145,4 @@ So what do we have to monitor our VMs? Our VMs send the followinf logs, thanks t
 - The <i>UpdateRunProgress</i> table provides update deployment status of a scheduled deployment by machine. It will show the status of update deployments i.e. whether it was successful or not.
 - The <i>UpdateSummary</i> table provides update summary by machine. This is some sort of agregrate of the Update table.
 
-You can find some query examples using these tables in the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/update management/query-logs).
+You can find some query examples using these tables in the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/update-management/query-logs).
