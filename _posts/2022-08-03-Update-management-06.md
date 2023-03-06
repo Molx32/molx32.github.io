@@ -50,6 +50,15 @@ When observing what I just described for the first time, I couldn't believe it! 
 
 ***
 
+## Architecture
+A short word about the architecture : if you took a look at my previous posts, you may remember the architecture split by environment at the subscription level, and split by CSP at the resource group level. As you can see on the scheme below, we will have one script per CSP, because we didn't want to have a single script to handle all of our Azure ARC VMs, especially because we wanted an automation account to have write permissions on itself only, and not on other automation accounts.
+
+<div class="col-sm mt-3 mt-md-0">
+    {% include figure.html path="assets/img/centos_4.png" class="img-fluid rounded z-depth-1" style="float: center" %}
+</div>
+
+***
+
 ## Solution
 Of course, the reason I wrote this post is that I spent some time working on it, and I have a solution! To make it short, the solution is to periodically run a smart script, once a week, that you can deploy in an Azure Runbook. This script will create deployement schedules for each CentOS machine that needs security updates or critical updates. Simple right?
 
@@ -118,7 +127,6 @@ import pytz
 
 In this next piece of code, we load variables values from the Automation Account variable. In order to set these variables in automation accounts, check the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell). Here, variables are the current automation account name, its resource group and its subscription.
 {% highlight python %}
-
 #####################################################################################
 # 0. GET AUTOMATION ACCOUNT VARIABLES
 automation_account_name = automationassets.get_automation_variable("aa_name")
@@ -186,7 +194,9 @@ for subscription in subscriptions_client.subscriptions.list():
 			continue
 {% endhighlight %}
 
-We now have a list of machines to update, and we need to get all available updates for each machine. For this, we send a KQL query to the Log Analytics workspaces that collects updates information : we store this in the <b>df</b> variable.
+
+#### Step 2 - Retrieve all updates
+We now have a list of machines to update, and we need to get all available updates for each machine. For this, we send a KQL query to the Log Analytics workspaces that collects updates information : we store this in the ```df``` variable.
 
 {% highlight python %}
 ###########################################################################
@@ -223,8 +233,9 @@ df = pd.DataFrame(data=data[0].rows, columns=data[0].columns)
 {% endhighlight %}
 
 
-In this last part of the script, we iterate over our machines to update, and we check in our df variable if the current machine needs updates :
-- if it doesn't, then we ignore it and directly go to the next loop iteration.
+#### Step 3 - Deploy or update deployment schedules
+In this last part of the script, we iterate over our machines to update, and we check in our ```df``` variable if the current machine needs updates :
+- if it doesn't, then we ignore it and directly go to the next loop iteration;
 - if it does, we calculate the next schedule when the machine should be updated, based on its <b>patch</b> tag, and then we instanciate the necessary objects that will create the deployment schedules in our automation account.
 {% highlight python %}
 ###########################################
@@ -293,16 +304,16 @@ for centOS in centOSs:
 	print("VERBOSE, new deployment schedule created for CentOS VM : " + centOS.id)
 {% endhighlight %}
 
-## Permissions
-In order for this script to work, the identity you use must have multiple permissions :
-- <b>Virtual Machines contributor</b> role on each subscription or resource group where you have CentOS VMs to update
-- <b>Log Analytics reader</b> role on each subscription or resource group where you have CentOS VMs to update
+#### Permissions
+In order for this script to work, the identity used to run the script must have the following permissions :
+- <b>Virtual Machines contributor</b> role on each subscription or resource group where you have CentOS VMs to update;
+- <b>Log Analytics reader</b> role on Log Analytics workspace that collect update data;
 - <b>Automation contributor</b> on the Automation Account you use for patch management.
 
 If you run the script on Azure, you must assign these permissions using <b>system-assigned managed identities</b>, c.f. [Microsoft documentation](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal-managed-identity).
 
-## Run the script
-Once you ran the script, it will deploy one deployment schedule per VM, as shown below. If you click on the deployment schedule, you will see that in the <b>Include/exclude updates</b>, you will see the explicit list of all updates to be installed on the VM. When configuring a deployment schedule like this, Azure no longer use the <b>yum install --security</b> command, but it uses the <b>yum install <package1> <package2> <packagen></b> command!
+#### Run the script
+Once you ran the script, it will deploy one deployment schedule per VM, as shown below. If you click on the deployment schedule, then go to <b>Include/exclude updates</b>, you will see the explicit list of all updates to be installed on the VM. When configuring a deployment schedule like this, Azure no longer use the ```yum install --security``` command, but it uses the ```yum install <package1> <package2> <packagen>``` command!
 <div class="col-sm mt-3 mt-md-0">
     {% include figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
 </div>
@@ -311,32 +322,259 @@ Once you ran the script, it will deploy one deployment schedule per VM, as shown
     {% include figure.html path="assets/img/centos_3.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
-What I didn't tell you is that those deployment schedules are run only once, because they contains specific packages to update that may not be the same on next week. Once the deployment schedule is executed, you will see that <i>Next run time</i> is set to None. You have two options :
-- You want your deployment schedule to be clean, and remove those unused deployment schedules;
-- You don't care because the next time the same VM will be overwriten with a new set of needed updates.
+### Solution for Azure VMs
+The script behavior is almost the same for Azure ARC VMs, the only thing that changes is the objects properties, because we now work with <i>Microsoft.HybridCompute/machines</i> resource type rather than <i>Microsoft.Compute/virtualMachines</i>. Here is the code.
 
-If you rather want to clean it, here is a small script that you can run as a Runbook in the same automation account.
+#### Step 1 - Iterate over all machines
+As we did for the Azure VM version, we still need to import a lot of Azure dependencies, because our script will use the Azure Python SDK to manage our machines. If you decide to run this code in a runbook, take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/python-3-packages?tabs=py3) to upload Python libraries Additionally, you will find documentation references if you need additional information.
+
 {% highlight python %}
-#!/usr/bin/env python3
+######################################################################################################################################################
+# MS API Docs - Automation account
+# https://docs.microsoft.com/en-us/python/api/azure-mgmt-automation/azure.mgmt.automation.automationclient
+# https://docs.microsoft.com/en-us/python/api/azure-mgmt-automation/azure.mgmt.automation.operations.softwareupdateconfigurationsoperations
+# https://docs.microsoft.com/en-us/python/api/azure-mgmt-automation/azure.mgmt.automation.models.softwareupdateconfiguration
+# https://docs.microsoft.com/en-us/python/api/azure-mgmt-automation/azure.mgmt.automation.models.scheduleproperties
+# https://docs.microsoft.com/en-us/python/api/azure-mgmt-automation/azure.mgmt.automation.models.updateconfiguration
+
+# MS API Docs - Log analytics
+# https://docs.microsoft.com/en-us/python/api/overview/azure/monitor-query-readme?view=azure-python
+# https://jihanjeeth.medium.com/log-retrieval-from-azure-log-analytics-using-python-52e8e8e5e870
+######################################################################################################################################################
+
 # Azure packages
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.automation import AutomationClient
 from azure.mgmt.automation.models import NonAzureQueryProperties, ScheduleCreateOrUpdateParameters, ScheduleFrequency, SoftwareUpdateConfiguration, UpdateConfiguration, ScheduleProperties, LinuxProperties, LinuxUpdateClasses, OperatingSystemType
 from azure.mgmt.loganalytics import LogAnalyticsManagementClient
+from azure.mgmt.hybridcompute import HybridComputeManagementClient
 from azure.loganalytics import LogAnalyticsDataClient
 from azure.loganalytics.models import QueryBody
 from azure.monitor.query import LogsQueryClient, LogsQueryStatus
 from datetime import datetime, timezone, timedelta
 import automationassets
-from automationassets import AutomationAssetNotFound
+# from automationassets import AutomationAssetNotFound
+
+# Various packages
+import pandas as pd
 
 # System packages
-import sys 
+import sys
+import json
+import re
+import pytz
+{% endhighlight %}
+
+
+In this next piece of code, we load variables values from the Automation Account variable. In order to set these variables in automation accounts, check the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell). Here, variables are the current automation account name, its resource group and its subscription.
+{% highlight python %}
+##################################################################################################################
+# 0. GET AUTOMATION ACCOUNT VARIABLES
+automation_account_name = automationassets.get_automation_variable("aa_name")
+resource_group_name = automationassets.get_automation_variable("resource_group_name")
+subscription_id = automationassets.get_automation_variable("subscription_id")
+{% endhighlight %}
+
+Here, we create credentials using the DefaultAzureCredential() function, which will use the automation account managed identity to make the APIs calls. We will see later which permissions should be configured on the automation account. Then, we instanciate different clients to communicate with the Azure API.
+{% highlight python %}
+# Instanciate all clients
+token_credential = DefaultAzureCredential()
+automation_client = AutomationClient(token_credential, subscription_id)
+log_analytics_client = LogAnalyticsManagementClient(token_credential, subscription_id)
+log_analytics_data_client = LogsQueryClient(token_credential)
+hybrid_compute_management_client = HybridComputeManagementClient(token_credential, subscription_id)
+{% endhighlight %}
+
+
+This next piece of code shows two variables that will be used later in the code. ```DAYS``` will be used to find the next available schedule to update the machine. The ```regex``` will be used to evaluate machines tags: as seen earlier, the pattern differs, based on the production or non production environment.
+{% highlight python %}
+DAYS = {
+	"MON":0,
+	"TUE":1,
+	"WED":2,
+	"THU":3,
+	"FRI":4,
+	"SAT":5,
+	"SUN":6
+}
+# Match only non prod machines
+regex = re.compile("^CENTOS-[RQ]-(MON|TUE|WED|THU|FRI|SAT|SUN)-(03|12|22):00$")
+# Match only prod machines
+# regex = re.compile("^CENTOS-[P]-(MON|TUE|WED|THU|FRI|SAT|SUN)-(03|12|22):00$")
+{% endhighlight %}
+
+Here begins the interesting part : in my architecture, all Azure ARC VMs coming from OVH are deployed in an OVH resource group. For this reason, the script iterates over all the machine belonging to a single resource group. In this simple loop, we ensure the patch tag is compliant with what we defined, and we also ensure that the VM is a CentOS VM.
+{% highlight python %}
+###############################################################
+# 1. GET AND SANITIZE ALL CENTOS VMs THAT NEED TO BE PATCHED
+# 	 First, we check that the 'patch' tag is compliant
+# 	 Then, We check that the OS is indeed CentOS
+
+centOSs = []
+for item in hybrid_compute_management_client.machines.list_by_resource_group(resource_group_name):
+	# Check PATCH value
+	if not item.tags or not 'patch' in item.tags.keys():
+		continue
+	if not regex.search(item.tags['patch']):
+		continue
+	
+	# Check OS value
+	if item.properties.os_sku and "CentOS" in item.properties.os_sku:
+		centOSs.append(item)
+	else:
+		continue
+{% endhighlight %}
+
+#### Step 2 - Retrieve all updates
+We now have a list of machines to update, and we need to get all available updates for each machine. For this, we send a KQL query to the Log Analytics workspaces that collects updates information : we store this in the ```df``` variable.
+
+{% highlight python %}
+##############################################################################
+# 2. RETIEVE ALL SECURITY AND CRITICAL UPDATES NEEDED BY ALL LINUX MACHINES
+# 	 All machines that are not in this table :
+# 		a. Do not report to the Log Analytics => To troubleshoot
+# 		b. Or do not need update => Fine
+query = '''Update
+		| where TimeGenerated>ago(5h) and OSType=="Linux"
+		| summarize hint.strategy=partitioned arg_max(TimeGenerated, UpdateState, Classification, BulletinUrl, BulletinID) by ResourceId, Computer, SourceComputerId, Product, ProductArch
+		| where UpdateState=~"Needed"
+		| project-away UpdateState, TimeGenerated
+		| summarize computersCount=dcount(SourceComputerId, 2), ClassificationWeight=max(iff(Classification has "Critical", 4, iff(Classification has "Security", 2, 1))) by ResourceId, Computer, id=strcat(Product, "_", ProductArch), displayName=Product, productArch=ProductArch, classification=Classification, InformationId=BulletinID, InformationUrl=tostring(split(BulletinUrl, ";", 0)[0]), osType=1
+		| sort by ClassificationWeight desc, computersCount desc, displayName asc
+		| extend informationLink=(iff(isnotempty(InformationId) and isnotempty(InformationUrl), toobject(strcat('{ "uri": "', InformationUrl, '", "text": "', InformationId, '", "target": "blank" }')), toobject('')))
+		| project-away ClassificationWeight, InformationId, InformationUrl
+		| where classification has "Security" or classification has "Critical"'''
+workspace_name 			= automation_client.linked_workspace.get(resource_group_name, automation_account_name).id.split('/')[-1]
+workspace_id 			= log_analytics_client.workspaces.get(resource_group_name, workspace_name).customer_id
+workspace 				= automation_client.linked_workspace.get(resource_group_name, automation_account_name)
+
+# SEND REQUEST
+end_time	= datetime.now(pytz.timezone("Europe/Paris"))
+start_time 	= end_time - timedelta(days=1)
+response 	= log_analytics_data_client.query_workspace(workspace_id, query, timespan=(start_time, end_time))
+
+if response.status == LogsQueryStatus.PARTIAL:
+	error = response.partial_error
+	data = response.partial_data
+	print("ERROR, unknown error when requesting Log Analytics")
+elif response.status == LogsQueryStatus.SUCCESS:
+	data = response.tables
+df = pd.DataFrame(data=data[0].rows, columns=data[0].columns)
+{% endhighlight %}
+
+#### Step 3 - Deploy or update deployment schedules
+In this last part of the script, we iterate over our machines to update, and we check in our ```df``` variable if the current machine needs updates :
+- if it doesn’t, then we ignore it and directly go to the next loop iteration.
+- if it does, we calculate the next schedule when the machine should be updated, based on its patch tag, and then we instanciate the necessary objects that will create the deployment schedules in our automation account.
+
+{% highlight python %}
+##############################################################################
+# 3. ITERATE OVER OUR CENTOS :
+#	Step 1 - Get needed updates
+#	Step 2 - Calculate next schedule
+#	Step 3 - Create the deployment schedule
+for centOS in centOSs:
+	# Step 1 - Get needed updates
+	updates = []
+	# The following line filters dataFrame to return all lines for which
+	# the column ResourceId contains centOS.id.
+	# Note : we convert all strings to lower() to avoid any issue
+	updates_df = df[df['ResourceId'].str.lower().str.contains(centOS.id.lower())]
+	for index, row in updates_df.iterrows():
+		updates.append(row[3])
+	if len(updates) == 0:
+		print("This " + centOS.id + " do not need to be patched")
+		continue
+	
+	# Step 2 - Calculate next schedule
+	# Get info from tag, and get current date
+	target_day = DAYS[centOS.tags['patch'].split('-')[2]]
+	target_hour= int(centOS.tags['patch'].split('-')[3].split(':')[0])
+	now = datetime.now()
+
+	# Find how many days until the next update
+	# E.g. if the script runs SUNDAY, and we need to patch WEDNESDAY :
+	#	SUNDAY - WEDNESDAY = 6 - 3 = 3 days
+	# So next occurence will be the current date + 3 days.
+	days_from_now = (target_day - now.weekday()) % 7
+	target_date = now + timedelta(days=days_from_now)
+
+	# Modify our target date with appropriate hours, minutes and seconds
+	target_date = datetime(target_date.year, target_date.month, target_date.day, target_hour, 0, 0)
+
+	# This conditions handles the case where days_from_now = 0
+	if target_date < now:
+		target_date = target_date + timedelta(days=7)
+
+	# Step 3 - Create the deployment schedule
+	schedule_info = ScheduleProperties(
+		start_time 	= target_date,
+		time_zone 	= "Europe/Paris",
+		is_enabled 	= True,
+		frequency 	= ScheduleFrequency.ONE_TIME)
+
+	linux_properties = LinuxProperties(
+		included_package_classifications	= None,
+		included_package_name_masks 		= updates,
+		reboot_setting 						= "Always")
+
+	update_configuration = UpdateConfiguration(
+		operating_system	 		= OperatingSystemType.LINUX,
+		linux	 					= linux_properties,
+		duration 					= timedelta(hours=2),
+		non_azure_computer_names 	= [centOS.name])
+
+	software_update_configuration = SoftwareUpdateConfiguration(
+		update_configuration 	= update_configuration,
+		schedule_info 			= schedule_info)
+
+	software_update_configuration_name = "ari-iaasupdate-we-securityux-" + centOS.tags['patch'] + " => " + centOS.name
+	automation_client.software_update_configurations.create(resource_group_name, automation_account_name, software_update_configuration_name, software_update_configuration)
+	print("VERBOSE, new deployment schedule created for CentOS Azure ARC VM : " + centOS.id)
+{% endhighlight %}
+
+#### Permissions
+In order for this script to work, the identity used to run the script must have the following permissions :
+- <b>Azure Connected Machine Resource Administrator</b> role on each subscription or resource group where you have CentOS VMs to update;
+- <b>Log Analytics reader</b> role on Log Analytics workspace that collect update data;
+- <b>Automation contributor</b> on the Automation Account you use for patch management.
+
+If you run the script on Azure, you must assign these permissions using <b>system-assigned managed identities</b>, c.f. [Microsoft documentation](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal-managed-identity).
+
+#### Run the script
+Once you ran the script, it will deploy one deployment schedule per VM, as shown below. If you click on the deployment schedule, then go to <b>Include/exclude updates</b>, you will see the explicit list of all updates to be installed on the VM. When configuring a deployment schedule like this, Azure no longer use the ```yum install --security``` command, but it uses the ```yum install <package1> <package2> <packagen>``` command!
+<div class="col-sm mt-3 mt-md-0">
+    {% include figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+<div class="col-sm mt-3 mt-md-0">
+    {% include figure.html path="assets/img/centos_3.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+***
+
+### Deployment schedule lifecycle
+What I didn't tell you is that those deployment schedules are run only once, because they contains specific packages to update that may not be the same on next week. Once the deployment schedule is executed, you will see that <i>Next run time</i> is set to <b>None</b>. You have two options.
+
+#### Option 1 - Clean deployment schedules
+In order to clean deployment schedules to remove those that won't execute anymore, you can use that simple script:
+
+{% highlight python %}
+#!/usr/bin/env python3
+# Azure packages
+from azure.identity import DefaultAzureCredential
+from azure.mgmt.automation import AutomationClient
+import automationassets
+from automationassets import AutomationAssetNotFound
+
+# Various pacakges
+import pandas as pd
+
+# System packages
+import sys
 import json
 
-
-##################################################################################################################
-# 0. INITIALIZE API ENDPOINTS
+# Retrieve Automation Account variables
 automation_account_name = automationassets.get_automation_variable("aa_name")
 resource_group_name = automationassets.get_automation_variable("resource_group_name")
 subscription_id = automationassets.get_automation_variable("subscription_id")
@@ -344,18 +582,16 @@ subscription_id = automationassets.get_automation_variable("subscription_id")
 # Instanciate all clients
 token_credential = DefaultAzureCredential()
 automation_client = AutomationClient(token_credential, subscription_id)
-log_analytics_client = LogAnalyticsManagementClient(token_credential, subscription_id)
-log_analytics_data_client = LogsQueryClient(token_credential)
 
+# 1. Iterate over all deployment schedules
+# 	a. Check if deployment schedule name contains "CENTOS" and if there are no next run
+# 	b. If check passed, delete
 deployment_schedules = automation_client.software_update_configurations.list(resource_group_name, automation_account_name)
 for deployment_schedule in deployment_schedules.value:
 	if deployment_schedule.next_run == None and "CENTOS" in deployment_schedule.name:
 		automation_client.software_update_configurations.delete(resource_group_name, automation_account_name, deployment_schedule.name)
 		print("Deleted : " + deployment_schedule.name)
-
 {% endhighlight %}
 
-***
-
-### Solution for Azure VMs
-The script is almost the same because VM type is <i>Microsoft.HybridCompute/machines</i> rather than <i>Microsoft.Compute/virtualMachines</i>. Similarly, permissions are not the same : the <b>Virtual Machines contributor</b> must be replaced with <b>Azure Connected Machine Resource Administrator</b>.
+#### Option 2 - Clean deployment schedules
+The other option is simply to let your deployment schedules as is. Why? Because the next time you will run the CentOS patch script, it will deploy new deployments schedules, that will simply update existing deployment schedules by setting a new set of packages to patch, and by setting a new start time.
