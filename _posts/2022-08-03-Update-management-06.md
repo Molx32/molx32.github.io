@@ -33,10 +33,10 @@ Hello there, the goal of this serie is to describe a real world implementation o
 - [Part 6 - Monitoring](/blog/2021/Update-management-05/)
 - <b>[Part 7 - Security patches on CentOS machines](/blog/2021/Update-management-06/)</b>
 
-# NOT FINISHED !
+***
 
 ## Context
-If you have CentOS machines, you probably faced issues when trying to apply <b>security</b> updates them : a <b>yum update</b> may crash your applications because it does not apply security-only updates, while <b>yum update --security</b> won't update any package because it relies on packages metadata, which are not set for CentOS packages. Alternatively, you could allow only security repositories, but this implies additional maintenance when installing non-security related stuff on your machines.
+If you have CentOS machines, you probably faced issues when trying to apply <b>security</b> updates them : a ```yum update``` may crash your applications because it does not apply security-only updates, while ```yum update --security``` won't update any package because it relies on packages metadata, which are not set for CentOS packages. Alternatively, you could allow only security repositories, but this implies additional maintenance when installing non-security related stuff on your machines.
 
 When using Azure Automation Update solution, the issue remains. if you take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/update-management/overview#logic-for-linux-updates-classification), you'll see that <i>Update Management classifies updates into three categories: <b>Security</b>, <b>Critical</b> or <b>Others</b></i>. This is fine, now you will also read that <i>Unlike other distributions, CentOS does not have classification data available from the package manager. If you have CentOS machines configured to return security data for the following command, Update Management can patch based on classifications.</i> The command to test is shown below. This is a real problem because in order for this command, you need to add metadata to package yourself, or usually pay for a service that does it.
 {% highlight bash %}
@@ -45,32 +45,39 @@ sudo yum -q --security check-update
 
 When observing what I just described for the first time, I couldn't believe it! There are not native nor simple solution to setup security updates on CentOS.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_1.png" class="img-fluid rounded z-depth-1" %}
+    {% include figure.html path="assets/img/centos_1.gif" class="img-fluid rounded z-depth-1" %}
 </div>
 
-So I spent some time working on it, and here it is, I have a solution!
+So I spent some time working on it, and here it is, I have a solution! LET'S GO!
 <div class="col-sm mt-3 mt-md-0">
     {% include figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
-## Solution
-The solution is to periodically run a smart script once a week, that you can deploy in an Azure Runbook. This script will create deployement schedules for each CentOS machine that needs security updates or critical updates. Simple right? Let's dig into it!
+***
 
-Script are available on my Github : 
+## Solution
+The solution is to periodically run a smart script once a week, that you can deploy in an Azure Runbook. This script will create deployement schedules for each CentOS machine that needs security updates or critical updates. Simple right? 
+
+Some things to know : we can't update Azure VMs and Azure ARC VMs the same way. For this reason, I made two scripts :
 - Script for Azure VMs
 - Script for Azure ARC VMs
+You could decide to merge them in a single solution.
 
-### Step 1 - Iterate over all machines
-Whether your machines are Azure VMs or Azure ARC VMs, we need to comply with two criteria :
+Whether your machines are Azure VMs or Azure ARC VMs, we need to comply with two criteria to patch them :
 - The machine must be a CentOS machine;
-- The machine must be tagged with a <b>patch</b> tag.
+- The machine must be tagged with a valid <b>patch</b> tag.
 
 A word about tags : in my case, we defined a tag policy in order for machines to be updated each week a specific schedules. Here is the tag pattern : <b>^CENTOS-[PQR]-(MON|TUE|WED|THU|FRI|SAT|SUN)-(03|12|22):00$</b>.
 - <b>[PQR]</b> is for the environment : P for Production, Q for Qualif, R for Recette. Basically, if we run the script in a production environment, machines containing the <b>P-</b> prefix will be updated, the others being ignored.
 - <b>(MON|TUE|WED|THU|FRI|SAT|SUN)</b> is for the day of the week when the machine must be updated.
 - <b>(03|12|22):00</b> is for the hour when to update the machine.
 
+
+### Solution for Azure VMs
+#### Step 1 - Iterate over all machines
+
 First of all, we need to import a lot of Azure dependencies, because our script will use the Azure Python SDK to manage our machines. If you decide to run this code in a runbook, take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/python-3-packages?tabs=py3) to upload Python libraries Additionally, you will find documentation references if you need additional information.
+
 {% highlight python %}
 #!/usr/bin/env python3
 ################################################################################################################################
@@ -112,6 +119,7 @@ import pytz
 
 In this next piece of code, we load variables values from the Automation Account variable. In order to set these variables in automation accounts, check the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell). Here, variables are the current automation account name, its resource group and its subscription.
 {% highlight python %}
+
 #####################################################################################
 # 0. GET AUTOMATION ACCOUNT VARIABLES
 automation_account_name = automationassets.get_automation_variable("aa_name")
@@ -348,6 +356,7 @@ for deployment_schedule in deployment_schedules.value:
 
 {% endhighlight %}
 
+***
 
 ## What about Azure ARC VMs?
 The script is almost the same because VM type is <i>Microsoft.HybridCompute/machines</i> rather than <i>Microsoft.Compute/virtualMachines</i>. Similarly, permissions are not the same : the <b>Virtual Machines contributor</b> must be replaced with <b>Azure Connected Machine Resource Administrator</b>.
