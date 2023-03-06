@@ -45,33 +45,32 @@ sudo yum -q --security check-update
 
 When observing what I just described for the first time, I couldn't believe it! There are not native nor simple solution to setup security updates on CentOS.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_1.gif" class="img-fluid rounded z-depth-1" %}
-</div>
-
-So I spent some time working on it, and here it is, I have a solution! LET'S GO!
-<div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
+    {% include figure.html path="assets/img/centos_1.gif" class="img-fluid rounded z-depth-1" style="float: center" %}
 </div>
 
 ***
 
 ## Solution
-The solution is to periodically run a smart script once a week, that you can deploy in an Azure Runbook. This script will create deployement schedules for each CentOS machine that needs security updates or critical updates. Simple right? 
+Of course, the reason I wrote this post is that I spent some time working on it, and I have a solution! To make it short, the solution is to periodically run a smart script, once a week, that you can deploy in an Azure Runbook. This script will create deployement schedules for each CentOS machine that needs security updates or critical updates. Simple right?
 
-Some things to know : we can't update Azure VMs and Azure ARC VMs the same way. For this reason, I made two scripts :
-- Script for Azure VMs
-- Script for Azure ARC VMs
-You could decide to merge them in a single solution.
+To be more specific, I actually wrote two very similar scripts : one for Azure VMs, the other for Azure ARC VMs. Why? Because writing a single script didn't match my architecture, but you could merge them in a single script.
 
-Whether your machines are Azure VMs or Azure ARC VMs, we need to comply with two criteria to patch them :
+In any case, the script behavior remains the same ans checks that all VMs match the two following criteria.
 - The machine must be a CentOS machine;
 - The machine must be tagged with a valid <b>patch</b> tag.
+If a VM doesn't comply, it won't be patched.
 
-A word about tags : in my case, we defined a tag policy in order for machines to be updated each week a specific schedules. Here is the tag pattern : <b>^CENTOS-[PQR]-(MON|TUE|WED|THU|FRI|SAT|SUN)-(03|12|22):00$</b>.
-- <b>[PQR]</b> is for the environment : P for Production, Q for Qualif, R for Recette. Basically, if we run the script in a production environment, machines containing the <b>P-</b> prefix will be updated, the others being ignored.
-- <b>(MON|TUE|WED|THU|FRI|SAT|SUN)</b> is for the day of the week when the machine must be updated.
-- <b>(03|12|22):00</b> is for the hour when to update the machine.
+An additional word about tags : in my case, we defined a tag policy in order for machines to be updated each week on a specific schedule. Here is the tag pattern : <b>^CENTOS-[PQR]-(MON|TUE|WED|THU|FRI|SAT|SUN)-(03|12|22):00$</b>.
+- ```[PQR]``` is for the environment : P for Production, Q for Qualif, R for Recette. Basically, if we run the script in a production environment, machines containing the <b>P-</b> prefix will be updated, the others being ignored.
+- ```(MON|TUE|WED|THU|FRI|SAT|SUN)``` is for the day of the week when the machine must be updated.
+- ```(03|12|22):00``` is for the hour when to update the machine.
 
+
+<div class="col-sm mt-3 mt-md-0">
+    {% include figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+***
 
 ### Solution for Azure VMs
 #### Step 1 - Iterate over all machines
@@ -358,5 +357,5 @@ for deployment_schedule in deployment_schedules.value:
 
 ***
 
-## What about Azure ARC VMs?
+### Solution for Azure VMs
 The script is almost the same because VM type is <i>Microsoft.HybridCompute/machines</i> rather than <i>Microsoft.Compute/virtualMachines</i>. Similarly, permissions are not the same : the <b>Virtual Machines contributor</b> must be replaced with <b>Azure Connected Machine Resource Administrator</b>.
