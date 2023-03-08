@@ -23,14 +23,18 @@ toc:
 ---
 Hello there, the goal of this serie is to describe a real world implementation of Azure Update Management. This is a service designed to update any machine in your infrastructure, whether they are hosted on Azure or elsewhere, provided your OSs are technically supported. I'll try to give a comprehensive feedback and drop advices here and there. Have a nice reading.
 
+***
+
 #### Plan
-- [Part 0 - Introduction](/blog/2021/Update management-00/)
-- [Part 1 - Architecture](/blog/2021/Update management-01/)
-- [Part 2 - Azure Policy](/blog/2021/Update management-011/)
-- [Part 3 - Azure ARC](/blog/2021/Update management-02/)
-- [Part 4 - Log Analytics agents](/blog/2021/Update management-03/)
-- [Part 5 - Automation accounts](/blog/2021/Update management-04/)
-- <b>[Part 6 - Monitoring (you're here)](/blog/2021/Update management-05/)</b>
+- [Part 0 - Introduction](/blog/2022/Update-management-00/)
+- [Part 1 - Architecture](/blog/2022/Update-management-01/)
+- [Part 2 - Azure Policy](/blog/2022/Update-management-011/)
+- [Part 3 - Azure ARC](/blog/2022/Update-management-02/)
+- [Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)
+- [Part 5 - Automation accounts](/blog/2022/Update-management-04/)
+- [Part 6 - Monitoring (you're here)](/blog/2022/Update-management-05/)
+- [Part 7 - Security patches on Azure ARC](/blog/2022/Update-management-07/)
+- [Part 8 - Security patches on CentOS machines](/blog/2022/Update-management-06/)
 
 ## Purpose
 In this article, I assume you connected all your virtual machines. What you may want now is monitoring you virtual machines. The usual way to monitor updates is navigate to the automation account, then take a look at your VMs.

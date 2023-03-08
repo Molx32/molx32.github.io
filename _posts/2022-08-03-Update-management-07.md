@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Azure Update Management - Part 4 - Log Analytics agents
-date: 2022-09-02 10:00:00
+title: Azure Update Management - Part 7 - Apply security patches to CentOS!
+date: 2023-02-16 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
 authors:
@@ -30,11 +30,12 @@ Hello there, the goal of this serie is to describe a real world implementation o
 - [Part 1 - Architecture](/blog/2022/Update-management-01/)
 - [Part 2 - Azure Policy](/blog/2022/Update-management-011/)
 - [Part 3 - Azure ARC](/blog/2022/Update-management-02/)
-- [Part 4 - Log Analytics agents (you're here)](/blog/2022/Update-management-03/)
+- [Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)
 - [Part 5 - Automation accounts](/blog/2022/Update-management-04/)
 - [Part 6 - Monitoring](/blog/2022/Update-management-05/)
 - [Part 7 - Security patches on Azure ARC](/blog/2022/Update-management-07/)
-- [Part 8 - Security patches on CentOS machines](/blog/2022/Update-management-06/)
+- [Part 8 - Security patches on CentOS machines (you're here)](/blog/2022/Update-management-06/)
 
-## Microsoft agents
-Before digging into the deployment of the Log Analytics agent
+***
+
+Currently being writen!
