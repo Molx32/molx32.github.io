@@ -36,7 +36,7 @@ provided your OSs are technically supported.</i>
 - [Part 1 - Architecture](/blog/2022/Update-management-01/)
 - [Part 2 - Azure Policy](/blog/2022/Update-management-011/)
 - [Part 3 - Azure ARC](/blog/2022/Update-management-02/)
-- [Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)
+- <b>[Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)</b>
 - [Part 5 - Automation accounts (you're here)](/blog/2023/Update-management-04/)
 - [Part 6 - Monitoring](/blog/2023/Update-management-05/)
 - [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
@@ -52,13 +52,20 @@ In the previous posts, we saw :
 At this point, the Log Analytics agent should be installed on most of your VMs. However, it is important to keep in mind how the Log Analytics agent works, what are the alternative deployment methods, what the limits are, and so on. This is what this post deals with. 
 
 ## Log Analytics workspaces
-What it does
+The Log Analytics service is one of the most used services in Azure : almost all monitoring services rely on it. How does this service work?
+1. It collects and stores data, just like a database. To be more accurate, clients send data to the service, and the service store these data for a defined period of time.
+2. Client can send queries to the Log Analytics service that will send back requested data.
+
+This is as simple as that, and it is very powerfull. A lot of Azure services rely on Log Analytics : Microsoft Sentinel, Microsoft Defender for Cloud, Application Insights, and any monitoring solution that relies on logs, such as... Azure Automation Update, of course!
 Billing
 
 ## Log Analytics agent
 Behavior, etc.
 
 ## Deployment
-Add an extension, etc.
+### Using extensions
+### Using script
+### Using policies
+### 
 
 ## 

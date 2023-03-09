@@ -40,7 +40,7 @@ provided your OSs are technically supported.</i>
 - [Part 5 - Automation accounts](/blog/2023/Update-management-04/)
 - [Part 6 - Monitoring](/blog/2023/Update-management-05/)
 - [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
-- [Part 8 - Security patches on CentOS machines (you're here)](/blog/2023/Update-management-07/)
+- <b>[Part 8 - Security patches on CentOS machines (you're here)](/blog/2023/Update-management-07/)</b>
 
 ***
 

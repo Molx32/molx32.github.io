@@ -34,7 +34,7 @@ provided your OSs are technically supported.</i>
 #### Plan
 - [Part 0 - Introduction](/blog/2022/Update-management-00/)
 - [Part 1 - Architecture](/blog/2022/Update-management-01/)
-- [Part 2 - Azure Policy (you're here)](/blog/2022/Update-management-011/)
+- <b>[Part 2 - Azure Policy (you're here)](/blog/2022/Update-management-011/)</b>
 - [Part 3 - Azure ARC](/blog/2022/Update-management-02/)
 - [Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)
 - [Part 5 - Automation accounts](/blog/2023/Update-management-04/)

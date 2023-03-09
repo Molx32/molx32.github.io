@@ -38,7 +38,7 @@ provided your OSs are technically supported.</i>
 - [Part 3 - Azure ARC](/blog/2022/Update-management-02/)
 - [Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)
 - [Part 5 - Automation accounts](/blog/2023/Update-management-04/)
-- [Part 6 - Monitoring (you're here)](/blog/2023/Update-management-05/)
+- <b>[Part 6 - Monitoring (you're here)](/blog/2023/Update-management-05/)</b>
 - [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
 - [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
 

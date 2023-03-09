@@ -39,9 +39,13 @@ provided your OSs are technically supported.</i>
 - [Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)
 - [Part 5 - Automation accounts](/blog/2023/Update-management-04/)
 - [Part 6 - Monitoring](/blog/2023/Update-management-05/)
-- [Part 7 - Security patches on Azure ARC (you're here)](/blog/2023/Update-management-06/)
+- <b>[Part 7 - Security patches on Azure ARC (you're here)](/blog/2023/Update-management-06/)</b>
 - [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
 
 ***
 
 Currently being writen.
+
+## Context
+As mentioned in the previous posts, the Azure Automation Update solution supports non Azure VMs. These VMs must be onboarded to Azure using Azure ARC thanks to the Azure Connected Machine Agent (don't call it ACMA, you won't find documentation with this acronym). Once deployed, 
+What’s wrong with Azure ARC?
