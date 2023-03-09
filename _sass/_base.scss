@@ -12,6 +12,24 @@ hr {
   border-top: 1px solid var(--global-divider-color);
 }
 
+#custom {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#custom th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}
+
+#custom td, #custom th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
 table {
   td, th {
     color: var(--global-text-color);

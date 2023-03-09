@@ -41,3 +41,24 @@ provided your OSs are technically supported.</i>
 - [Part 6 - Monitoring](/blog/2023/Update-management-05/)
 - [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
 - [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
+
+***
+
+## Context
+In the previous posts, we saw :
+1. How to programmatically install the Log Analytics agent using Azure Policy
+2. How to deploy Azure ARC on non-Azure VMs
+
+At this point, the Log Analytics agent should be installed on most of your VMs. However, it is important to keep in mind how the Log Analytics agent works, what are the alternative deployment methods, what the limits are, and so on. This is what this post deals with. 
+
+## Log Analytics workspaces
+What it does
+Billing
+
+## Log Analytics agent
+Behavior, etc.
+
+## Deployment
+Add an extension, etc.
+
+## 
