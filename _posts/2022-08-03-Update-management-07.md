@@ -23,11 +23,11 @@ toc:
 ---
 <i>Hello there, the goal of this serie is to describe a real world implementation of <b>Azure Update Management</b>.
 This service was designed to update any machine in your infrastructure, whether they are hosted on Azure or elsewhere,
-provided your OSs are technically supported.
+provided your OSs are technically supported.</i>
 
-In order for every reader to understand and find answers to their need, to I'll try to give a comprehensive feedback from my experience, as well as sharing tips about design and architecture, automation, effectivement, troubleshooting issues, and so on!
+<i>In order for every reader to understand and find answers to their need, to I'll try to give a comprehensive feedback from my experience, as well as sharing tips about design and architecture, automation, effectivement, troubleshooting issues, and so on!</i>
 
-Have a nice reading.</i>
+<i>Have a nice reading.</i>
 
 ***
 

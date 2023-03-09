@@ -21,7 +21,13 @@ toc:
   - name: Layouts
   - name: Other Typography?
 ---
-Hello there, the goal of this serie is to describe a real world implementation of Azure Update Management. This is a service designed to update any machine in your infrastructure, whether they are hosted on Azure or elsewhere, provided your OSs are technically supported. I'll try to give a comprehensive feedback and drop advices here and there. Have a nice reading.
+<i>Hello there, the goal of this serie is to describe a real world implementation of <b>Azure Update Management</b>.
+This service was designed to update any machine in your infrastructure, whether they are hosted on Azure or elsewhere,
+provided your OSs are technically supported.</i>
+
+<i>In order for every reader to understand and find answers to their need, to I'll try to give a comprehensive feedback from my experience, as well as sharing tips about design and architecture, automation, effectivement, troubleshooting issues, and so on!</i>
+
+<i>Have a nice reading.</i>
 
 ***
 
@@ -33,8 +39,8 @@ Hello there, the goal of this serie is to describe a real world implementation o
 - [Part 4 - Log Analytics agents (you're here)](/blog/2022/Update-management-03/)
 - [Part 5 - Automation accounts](/blog/2023/Update-management-04/)
 - [Part 6 - Monitoring](/blog/2023/Update-management-05/)
-- [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-07/)
-- [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-06/)
+- [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
+- [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
 
 ## Microsoft agents
 Before digging into the deployment of the Log Analytics agent
