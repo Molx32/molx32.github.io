@@ -31,10 +31,10 @@ Hello there, the goal of this serie is to describe a real world implementation o
 - [Part 2 - Azure Policy](/blog/2022/Update-management-011/)
 - [Part 3 - Azure ARC](/blog/2022/Update-management-02/)
 - [Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)
-- [Part 5 - Automation accounts](/blog/2022/Update-management-04/)
-- [Part 6 - Monitoring](/blog/2022/Update-management-05/)
-- [Part 7 - Security patches on Azure ARC](/blog/2022/Update-management-07/)
-- [Part 8 - Security patches on CentOS machines](/blog/2022/Update-management-06/)
+- [Part 5 - Automation accounts](/blog/2023/Update-management-04/)
+- [Part 6 - Monitoring](/blog/2023/Update-management-05/)
+- [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
+- [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
 
 
 ## <b>Scenario</b>

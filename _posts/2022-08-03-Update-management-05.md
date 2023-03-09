@@ -31,10 +31,10 @@ Hello there, the goal of this serie is to describe a real world implementation o
 - [Part 2 - Azure Policy](/blog/2022/Update-management-011/)
 - [Part 3 - Azure ARC](/blog/2022/Update-management-02/)
 - [Part 4 - Log Analytics agents](/blog/2022/Update-management-03/)
-- [Part 5 - Automation accounts](/blog/2022/Update-management-04/)
-- [Part 6 - Monitoring (you're here)](/blog/2022/Update-management-05/)
-- [Part 7 - Security patches on Azure ARC](/blog/2022/Update-management-07/)
-- [Part 8 - Security patches on CentOS machines](/blog/2022/Update-management-06/)
+- [Part 5 - Automation accounts](/blog/2023/Update-management-04/)
+- [Part 6 - Monitoring (you're here)](/blog/2023/Update-management-05/)
+- [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
+- [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
 
 ## Purpose
 In this article, I assume you connected all your virtual machines. What you may want now is monitoring you virtual machines. The usual way to monitor updates is navigate to the automation account, then take a look at your VMs.
