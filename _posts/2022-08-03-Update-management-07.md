@@ -21,7 +21,13 @@ toc:
   - name: Layouts
   - name: Other Typography?
 ---
-Hello there, the goal of this serie is to describe a real world implementation of Azure Update Management. This is a service designed to update any machine in your infrastructure, whether they are hosted on Azure or elsewhere, provided your OSs are technically supported. I'll try to give a comprehensive feedback and drop advices here and there. Have a nice reading.
+<i>Hello there, the goal of this serie is to describe a real world implementation of <b>Azure Update Management</b>.
+This service was designed to update any machine in your infrastructure, whether they are hosted on Azure or elsewhere,
+provided your OSs are technically supported.
+
+In order for every reader to understand and find answers to their need, to I'll try to give a comprehensive feedback from my experience, as well as sharing tips about design and architecture, automation, effectivement, troubleshooting issues, and so on!
+
+Have a nice reading.</i>
 
 ***
 
