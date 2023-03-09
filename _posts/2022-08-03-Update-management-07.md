@@ -47,8 +47,8 @@ sudo yum -q --security check-update
 {% endhighlight %}
 
 When observing what I just described for the first time, I couldn't believe it! There are not native nor simple solution to setup security updates on CentOS.
-<div class="col-sm mt-3 mt-md-0" style="display: block;margin: auto;">
-    {% include figure.html path="assets/img/centos_1.gif" class="img-fluid rounded z-depth-1" style="float: center" %}
+<div class="col-sm mt-3 mt-md-0">
+    {% include figure.html path="assets/img/centos_1.gif" class="img-fluid rounded z-depth-1" style="style="display: block;margin: auto;" %}
 </div>
 
 ***
