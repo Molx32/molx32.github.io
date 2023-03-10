@@ -44,28 +44,54 @@ provided your OSs are technically supported.</i>
 
 ***
 
+## Introduction
+In the previous post we saw how the basic and simple properties of a Log Analytics workspace. We also saw how to deploy Log Analytics agents with various methods. In this method, you will find all you need to know about Automation Account and their update management feature.
+
 ## Context
-In the previous posts, we saw :
-1. How to programmatically install the Log Analytics agent using Azure Policy
-2. How to deploy Azure ARC on non-Azure VMs
+This part will be very important since it define all the strategy to configure the Automation Accounts. So, if you remember my introduction post, we want to update machines bases on the following rules : 
+- Apply only security and critical patches
+- Apply patches once a week
+- Reboot only if needed
 
-At this point, the Log Analytics agent should be installed on most of your VMs. However, it is important to keep in mind how the Log Analytics agent works, what are the alternative deployment methods, what the limits are, and so on. This is what this post deals with. 
+All of this can be configured in In addition to those rules, we will configure <b>deployment schedules</b>, which are some sort of  automation accounts sub-resources. For each automation account, we will 21 deployement schedule! This is a lot, be let me explain : the goal of this solution is to allow any business application to patched. To make it possible, we need to propose many schedules to comply with all application constraints. So we decided to propose 3 schedule maintenance per day : at 3:00, 12:00, and 22:00 (3*7 = 21 schedules).
 
-## Log Analytics workspaces
-The Log Analytics service is one of the most used services in Azure : almost all monitoring services rely on it. How does this service work?
-1. It collects and stores data, just like a database. To be more accurate, clients send data to the service, and the service store these data for a defined period of time.
-2. Client can send queries to the Log Analytics service that will send back requested data.
+<table id="custom" class="t-border">
+<caption style="text-align:center"><b>Schedules available for VM updates</b></caption>
+  <tr>
+    <th>MON</th>
+    <th>TUE</th>
+    <th>WED</th>
+    <th>THU</th>
+    <th>FRI</th>
+    <th>SAT</th>
+    <th>SUN</th>
+  </tr>
+  <tr>
+    <td>R-MON-03:00</td>
+    <td>R-TUE-03:00</td>
+    <td>R-WED-03:00</td>
+    <td>R-THU-03:00</td>
+    <td>R-FRI-03:00</td>
+    <td>R-SAT-03:00</td>
+    <td>R-SUN-03:00</td>
+  </tr>
+  <tr>
+    <td>R-MON-12:00</td>
+    <td>R-TUE-12:00</td>
+    <td>R-WED-12:00</td>
+    <td>R-THU-12:00</td>
+    <td>R-FRI-12:00</td>
+    <td>R-SAT-12:00</td>
+    <td>R-SUN-12:00</td>
+  </tr>
+  <tr>
+    <td>R-MON-22:00</td>
+    <td>R-TUE-22:00</td>
+    <td>R-WED-22:00</td>
+    <td>R-THU-22:00</td>
+    <td>R-FRI-22:00</td>
+    <td>R-SAT-22:00</td>
+    <td>R-SUN-22:00</td>
+  </tr>
+</table>
 
-This is as simple as that, and it is very powerfull. A lot of Azure services rely on Log Analytics : Microsoft Sentinel, Microsoft Defender for Cloud, Application Insights, and any monitoring solution that relies on logs, such as... Azure Automation Update, of course!
-Billing
-
-## Log Analytics agent
-Behavior, etc.
-
-## Deployment
-### Using extensions
-### Using script
-### Using policies
-### 
-
-## 
