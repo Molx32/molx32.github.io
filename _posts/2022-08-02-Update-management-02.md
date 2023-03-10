@@ -42,10 +42,13 @@ provided your OSs are technically supported.</i>
 - [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
 - [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
 
-In that part, I will describe what is Azure ARC, and how to deploy it.
+## Introduction
+In the previous post, I presented Azure policies that can be very useful for onboarding automation of the Log Analytics agent on both Azure and non Azure VMs. In this post, we will see how to deploy Azure ARC on all your non-Azure VMs.
 
-## Prerequisites
+## General consideration
+### Prerequisites
 All the prerequisites are documented by Microsoft in their [documentation](https://learn.microsoft.com/en-us/azure/azure-arc/servers/prerequisites).
+
 ### Supported OS
 Unfortunately, not all OSs are supported by Azure ARC. According to the Microsoft documentation, here are the supported OSs.
 - Microsoft

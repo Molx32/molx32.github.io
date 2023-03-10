@@ -44,6 +44,9 @@ provided your OSs are technically supported.</i>
 
 ***
 
+## Introduction
+In the previous post, I presented the global architecture and how resources are organized. As mentioned, some services did not appear in the resource orgnization : this is the case for Azure Policy, which te topix of this post.
+
 ## What is Azure Policy
 Azure Policy is a service that allows you to define rules to properly manage your resources. You can imagine a lot a controls to apply, here are a few examples :
 - Enforce a specific set of tags on all resource groups
