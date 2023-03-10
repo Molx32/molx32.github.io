@@ -42,5 +42,172 @@ provided your OSs are technically supported.</i>
 - [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
 - [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
 
-## Microsoft agents
-Before digging into the deployment of the Log Analytics agent
+***
+
+## Introduction
+In the previous post, we saw how to deploy Azure ARC. Now that all our machines are ready to be onboarded on the solution, let's take a closer look at the core architecture, begining with Log Analytics.
+
+## Log Analytics workspaces
+### Useful information
+The Log Analytics service was designed to store logs for a defined period of time (retention). You can retrieve these logs by sending queries to the Log Analytics using a powerful language named Kusto Query Language (KQL). If you have monitoring routines, you can save queries as <b>Saved Searches</b> : this is important for the next part. The last thing that is useful to know in the context of this project is about billing : billing should be always configured on a Pay-As-You-Go basis when first deploying the resource (it can be changed later).
+
+### ARM template
+The Log Analytics workspace looks like this in an ARM object. We have the main object which is the Log Analytics, and we have a child object which is a <b>savedSearches</b>. There are some properties like "feature" that are mandatory but we can ignore, I already told you about the most important ones.
+{% highlight json %}
+{
+  "type": "Microsoft.OperationalInsights/workspaces",
+  "apiVersion": "2020-08-01",
+  "name": "[parameters('workspaceName')]",
+  "location": "westeurope",
+  "properties": {
+      "sku": {
+          "name": "[parameters('sku')]"
+      },
+      "retentionInDays": "[parameters('dataRetention')]",
+      "features": {
+          "searchVersion": 1,
+          "legacy": 0
+      }
+  },
+  "resources": [{
+      "apiVersion": "2020-08-01",
+      "type": "savedSearches",
+      "name": "[variables('saved_search')]",
+      "dependsOn": [
+          "[concat('Microsoft.OperationalInsights/workspaces/', parameters('workspaceName'))]"
+      ],
+      "properties": {
+          "category": "UpdateManagement",
+          "displayName": "[variables('saved_search')]",
+          "functionAlias": null,
+          "functionParameters": null,
+          "query": "Heartbeat | where Computer contains 'a-string-that-cant-be-matched' | distinct Computer",
+          "tags": [{
+              "name": "Group",
+              "value": "Computer"
+          }],
+          "version": 2
+      }
+  }]
+}
+{% endhighlight json %}
+
+## Log Analytics agents
+### About Microsoft agents
+Let's take some time to talk about Microsoft agents, because I know this is often confusing. There is a [Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agents-overview) page that will help you understand all of this. Let's me sum up this in the following table.
+
+#### Windows
+<table id="custom" class="t-border">
+<caption><b>For Windows machines</b></caption>
+  <tr>
+    <th></th>
+    <th>Azure Monitor Agent</th>
+    <th>Log Analytics Agent</th>
+    <th>Diagnostics extension (WAD)</th>
+  </tr>
+  <tr>
+    <td><b>Data collected</b></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Event Logs</td>
+    <td>X</td>
+    <td>X</td>
+    <td>X</td>
+  </tr>
+  <tr>
+    <td>Performance</td>
+    <td>X</td>
+    <td>X</td>
+    <td>X</td>
+  </tr>
+  <tr>
+    <td>File based logs</td>
+    <td>X</td>
+    <td>X</td>
+    <td>X</td>
+  </tr>
+  <tr>
+    <td>IIS logs</td>
+    <td>X</td>
+    <td>X</td>
+    <td>X</td>
+  </tr>
+  <tr>
+    <td>ETW events</td>
+    <td></td>
+    <td></td>
+    <td>X</td>
+  </tr>
+  <tr>
+    <td>.NET app logs</td>
+    <td></td>
+    <td></td>
+    <td>X</td>
+  </tr>
+  <tr>
+    <td>Crash dumps</td>
+    <td></td>
+    <td></td>
+    <td>X</td>
+  </tr>
+  <tr>
+    <td>Agent diagnostics logs</td>
+    <td></td>
+    <td></td>
+    <td>X</td>
+  </tr>
+  <tr>
+    <td><b>Services and features supported</b></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Microsoft Sentinel</td>
+    <td>X</td>
+    <td>X</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>VM Insights</td>
+    <td>X</td>
+    <td>X</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Microsoft Defender for Cloud</td>
+    <td>X</td>
+    <td>X</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Update Management</td>
+    <td>X</td>
+    <td>X</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Change Tracking</td>
+    <td>X</td>
+    <td>X</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>SQL Best Practices Assessment</td>
+    <td>X</td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>Windows Server 2008 R2</td>
+    <td>Ubuntu 14.04 LTS, 16.04 LTS, 18.04 LTS, and 20.04 LTS</td>
+  </tr>
+</table>
+
+### Deployment methods
+#### Extension
+#### Script
+#### Policy

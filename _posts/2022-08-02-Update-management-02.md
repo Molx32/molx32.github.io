@@ -42,6 +42,8 @@ provided your OSs are technically supported.</i>
 - [Part 7 - Security patches on Azure ARC](/blog/2023/Update-management-06/)
 - [Part 8 - Security patches on CentOS machines](/blog/2023/Update-management-07/)
 
+***
+
 ## Introduction
 In the previous post, I presented Azure policies that can be very useful for onboarding automation of the Log Analytics agent on both Azure and non Azure VMs. In this post, we will see how to deploy Azure ARC on all your non-Azure VMs.
 
