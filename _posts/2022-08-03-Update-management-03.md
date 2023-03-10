@@ -291,15 +291,15 @@ There are multiple way to install the Log Analytics agent from the portal. I won
     <th>URL</th>
   </tr>
   <tr>
-    <td>[Azure portal - Bulk onboarding](https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-portal)</td>
+    <td><a href="https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-portal">Azure portal - Bulk onboarding</a></td>
     <td>This method will also enable Update Management for monitoring</td>
   </tr>
   <tr>
-    <td>[Azure portal - From a VM](https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-vm)</td>
+    <td><a href="https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-vm">Azure portal - From a VM</a></td>
     <td>I don't recommend this method, see why at the end of the table.</td>
   </tr>
   <tr>
-    <td>[Azure portal - From an Automation Account](https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-automation-account)</td>
+    <td><a href="https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-automation-account">Azure portal - From an Automation Account</a></td>
     <td>This method will also enable Update Management for monitoring</td>
   </tr>
 </table>
@@ -315,11 +315,11 @@ There are multiple way to install the Log Analytics agent from the portal. I won
     <th>URL</th>
   </tr>
   <tr>
-    <td>[Windows](https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/oms-windows?toc=%2Fazure%2Fazure-monitor%2Ftoc.json)</td>
+    <td><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/oms-windows?toc=%2Fazure%2Fazure-monitor%2Ftoc.json">Windows</a></td>
     <td>Can be automated to deploy at scale</td>
   </tr>
   <tr>
-    <td>[Linux](https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/oms-linux?toc=%2Fazure%2Fazure-monitor%2Ftoc.json)</td>
+    <td><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/oms-linux?toc=%2Fazure%2Fazure-monitor%2Ftoc.json">Linux</a></td>
     <td>Can be automated to deploy at scale</td>
   </tr>
 </table>
@@ -331,7 +331,7 @@ There are multiple way to install the Log Analytics agent from the portal. I won
     <th>URL</th>
   </tr>
   <tr>
-    <td>[Windows](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agent-windows?tabs=setup-wizard)</td>
+    <td><a href="https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agent-windows?tabs=setup-wizard">Windows</a></td>
     <td>Connect on a machine to deploy the agent</td>
   </tr>
   <tr>
