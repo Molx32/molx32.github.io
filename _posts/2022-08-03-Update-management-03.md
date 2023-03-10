@@ -331,7 +331,7 @@ There are multiple way to install the Log Analytics agent from the portal. I won
     <th>URL</th>
   </tr>
   <tr>
-    <td>[Windows](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agent-windows?tabs=setup-wizard)</td>
+    [<td>Windows</td>](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agent-windows?tabs=setup-wizard)
     <td>Connect on a machine to deploy the agent</td>
   </tr>
   <tr>
