@@ -98,112 +98,179 @@ Let's take some time to talk about Microsoft agents, because I know this is ofte
 
 #### Windows
 <table id="custom" class="t-border">
-<caption><b>For Windows machines</b></caption>
+<caption style="text-align:center"><b>For Windows machines</b></caption>
   <tr>
-    <th></th>
-    <th>Azure Monitor Agent</th>
-    <th>Log Analytics Agent</th>
-    <th>Diagnostics extension (WAD)</th>
+    <th style="text-align:center"></th>
+    <th style="text-align:center">Azure Monitor Agent</th>
+    <th style="text-align:center">Log Analytics Agent</th>
+    <th style="text-align:center">Diagnostics extension (WAD)</th>
   </tr>
   <tr>
-    <td><b>Data collected</b></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td style="text-align:center"><b>Data collected</b></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
   </tr>
   <tr>
-    <td>Event Logs</td>
-    <td>X</td>
-    <td>X</td>
-    <td>X</td>
+    <td style="text-align:center">Event Logs</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
   </tr>
   <tr>
-    <td>Performance</td>
-    <td>X</td>
-    <td>X</td>
-    <td>X</td>
+    <td style="text-align:center">Performance</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
   </tr>
   <tr>
-    <td>File based logs</td>
-    <td>X</td>
-    <td>X</td>
-    <td>X</td>
+    <td style="text-align:center">File based logs</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
   </tr>
   <tr>
     <td>IIS logs</td>
-    <td>X</td>
-    <td>X</td>
-    <td>X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
   </tr>
   <tr>
     <td>ETW events</td>
-    <td></td>
-    <td></td>
-    <td>X</td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center">X</td>
   </tr>
   <tr>
     <td>.NET app logs</td>
-    <td></td>
-    <td></td>
-    <td>X</td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center">X</td>
   </tr>
   <tr>
     <td>Crash dumps</td>
-    <td></td>
-    <td></td>
-    <td>X</td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center">X</td>
   </tr>
   <tr>
     <td>Agent diagnostics logs</td>
-    <td></td>
-    <td></td>
-    <td>X</td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center">X</td>
   </tr>
   <tr>
     <td><b>Services and features supported</b></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
   </tr>
   <tr>
     <td>Microsoft Sentinel</td>
-    <td>X</td>
-    <td>X</td>
-    <td></td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
   </tr>
   <tr>
     <td>VM Insights</td>
-    <td>X</td>
-    <td>X</td>
-    <td></td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
   </tr>
   <tr>
     <td>Microsoft Defender for Cloud</td>
-    <td>X</td>
-    <td>X</td>
-    <td></td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
   </tr>
   <tr>
     <td>Update Management</td>
-    <td>X</td>
-    <td>X</td>
-    <td></td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
   </tr>
   <tr>
     <td>Change Tracking</td>
-    <td>X</td>
-    <td>X</td>
-    <td></td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
   </tr>
   <tr>
     <td>SQL Best Practices Assessment</td>
-    <td>X</td>
-    <td></td>
-    <td></td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+  </tr>
+</table>
+
+#### Linux
+<table id="custom" class="t-border">
+<caption style="text-align:center"><b>For Linux machines</b></caption>
+  <tr>
+    <th style="text-align:center"></th>
+    <th style="text-align:center">Azure Monitor Agent</th>
+    <th style="text-align:center">Log Analytics Agent</th>
+    <th style="text-align:center">Diagnostics extension (LAD)</th>
   </tr>
   <tr>
-    <td>Windows Server 2008 R2</td>
-    <td>Ubuntu 14.04 LTS, 16.04 LTS, 18.04 LTS, and 20.04 LTS</td>
+    <td style="text-align:center"><b>Data collected</b></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+  </tr>
+  <tr>
+    <td style="text-align:center">Syslog</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+  </tr>
+  <tr>
+    <td style="text-align:center">Performance</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+  </tr>
+  <tr>
+    <td><b>Services and features supported</b></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
+  </tr>
+  <tr>
+    <td>Microsoft Sentinel</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
+  </tr>
+  <tr>
+    <td>VM Insights</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
+  </tr>
+  <tr>
+    <td>Microsoft Defender for Cloud</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
+  </tr>
+  <tr>
+    <td>Update Management</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
+  </tr>
+  <tr>
+    <td>Change Tracking</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
+  </tr>
+  <tr>
+    <td>SQL Best Practices Assessment</td>
+    <td style="text-align:center">X</td>
+    <td style="text-align:center"></td>
+    <td style="text-align:center"></td>
   </tr>
 </table>
 
