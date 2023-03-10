@@ -106,25 +106,25 @@ Let's take some time to talk about Microsoft agents, because I know this is ofte
     <th style="text-align:center">Diagnostics extension (WAD)</th>
   </tr>
   <tr>
-    <td style="text-align:center"><b>Data collected</b></td>
+    <td><b>Data collected</b></td>
     <td style="text-align:center"></td>
     <td style="text-align:center"></td>
     <td style="text-align:center"></td>
   </tr>
   <tr>
-    <td style="text-align:center">Event Logs</td>
+    <td>Event Logs</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
   </tr>
   <tr>
-    <td style="text-align:center">Performance</td>
+    <td>Performance</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
   </tr>
   <tr>
-    <td style="text-align:center">File based logs</td>
+    <td>File based logs</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
@@ -207,25 +207,25 @@ Let's take some time to talk about Microsoft agents, because I know this is ofte
 <table id="custom" class="t-border">
 <caption style="text-align:center"><b>For Linux machines</b></caption>
   <tr>
-    <th style="text-align:center"></th>
+    <th></th>
     <th style="text-align:center">Azure Monitor Agent</th>
     <th style="text-align:center">Log Analytics Agent</th>
     <th style="text-align:center">Diagnostics extension (LAD)</th>
   </tr>
   <tr>
-    <td style="text-align:center"><b>Data collected</b></td>
+    <td><b>Data collected</b></td>
     <td style="text-align:center"></td>
     <td style="text-align:center"></td>
     <td style="text-align:center"></td>
   </tr>
   <tr>
-    <td style="text-align:center">Syslog</td>
+    <td>Syslog</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
   </tr>
   <tr>
-    <td style="text-align:center">Performance</td>
+    <td>Performance</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
     <td style="text-align:center">X</td>
