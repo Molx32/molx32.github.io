@@ -94,9 +94,13 @@ The Log Analytics workspace looks like this in an ARM object. We have the main o
 
 ## Log Analytics agents
 ### About Microsoft agents
-Let's take some time to talk about Microsoft agents, because I know this is often confusing. There is a [Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agents-overview) page that will help you understand all of this. Let's me sum up this in the following table.
+Let's take some time to talk about Microsoft agents, because I know this is often confusing. There is a [Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agents-overview) page that will help you understand all of this. There are three main agents :
+- Azure Monitoring Agent (AMA) - This is the most recent agent that was developed by Microsoft. For this reason, you'll probably read about this agent since it is going to support most of the Azure services.
+- Log Analytics Agent - This is the historic agent that will be replaced with the AMA. Altough it will reach end of support on August 2024, this is currently the agent to use to enable the Update Management service. Also, keep in mind that there is a new version of the Update Management service that works differently from what I describe in this serie, and that currently prevents to patch machines in a very flexible and dynamic way i.e. we can't patch machines based on their tags.
+- Diagnostics extension (WAD & LAD) - This last agent works with an Azure extension that will collect many information from the system and allow you to monitor them. It could be useful to use this agent rather than the others if you need to monitor only Syslog and Performance (on Linux) for instance.
 
-#### Windows
+<u>Note</u> : LAD stands for something like Linux Azure Diagnostic and WAD for Windows Azure Diagnostic.
+
 <table id="custom" class="t-border">
 <caption style="text-align:center"><b>For Windows machines</b></caption>
   <tr>
@@ -203,7 +207,6 @@ Let's take some time to talk about Microsoft agents, because I know this is ofte
   </tr>
 </table>
 
-#### Linux
 <table id="custom" class="t-border">
 <caption style="text-align:center"><b>For Linux machines</b></caption>
   <tr>
@@ -275,6 +278,64 @@ Let's take some time to talk about Microsoft agents, because I know this is ofte
 </table>
 
 ### Deployment methods
-#### Extension
-#### Script
 #### Policy
+From my point of view, this is the prefered method <i>c.f.</i> my previous posts.
+
+#### Using the Azure portal
+There are multiple way to install the Log Analytics agent from the portal. I won't get into the details of each method because this is well documented by Microsoft. 
+
+<table id="custom" class="t-border">
+<caption style="text-align:center"><b>For Linux machines</b></caption>
+  <tr>
+    <th>Method</th>
+    <th>URL</th>
+  </tr>
+  <tr>
+    <td>[Azure portal - Bulk onboarding](https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-portal)</td>
+    <td>This method will also enable Update Management for monitoring</td>
+  </tr>
+  <tr>
+    <td>[Azure portal - From a VM](https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-vm)</td>
+    <td>I don't recommend this method, see why at the end of the table.</td>
+  </tr>
+  <tr>
+    <td>[Azure portal - From an Automation Account](https://learn.microsoft.com/en-us/azure/automation/update-management/enable-from-automation-account)</td>
+    <td>This method will also enable Update Management for monitoring</td>
+  </tr>
+</table>
+
+<u>Note 1</u> : the <b>Azure portal - From a VM</b> has a side effect at the time I write this article. When clicking on the enable button, it will send a request to Azure and update the Log Analytics workspace, and remove all of its tags. I think the Javascript that builds the request in the portal is not properly coded, so I don't use this method anymore.
+
+<u>Note 2</u> : there are other ways to deploy Log Analytics agents on VMs, but they also enable other related services that we don't need such as VM Insights.
+
+#### Extensions
+<table id="custom" class="t-border">
+  <tr>
+    <th>Method</th>
+    <th>URL</th>
+  </tr>
+  <tr>
+    <td>[Windows](https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/oms-windows?toc=%2Fazure%2Fazure-monitor%2Ftoc.json)</td>
+    <td>Can be automated to deploy at scale</td>
+  </tr>
+  <tr>
+    <td>[Linux](https://learn.microsoft.com/en-us/azure/virtual-machines/extensions/oms-linux?toc=%2Fazure%2Fazure-monitor%2Ftoc.json)</td>
+    <td>Can be automated to deploy at scale</td>
+  </tr>
+</table>
+
+#### Local install
+<table id="custom" class="t-border">
+  <tr>
+    <th>Method</th>
+    <th>URL</th>
+  </tr>
+  <tr>
+    <td>[Windows](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agent-windows?tabs=setup-wizard)</td>
+    <td>Connect on a machine to deploy the agent</td>
+  </tr>
+  <tr>
+    <td>[Linux](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/agent-linux?tabs=wrapper-script)</td>
+    <td>Connect on a machine to deploy the agent</td>
+  </tr>
+</table>
