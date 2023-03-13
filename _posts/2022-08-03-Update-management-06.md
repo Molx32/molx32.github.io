@@ -209,9 +209,9 @@ At the end of this second step we have a list of machines that are eligible to b
 1. Iterate over all deployment schedules
   1. :gear: Flush all machines that were assigned to the current deployment schedule
   2. :arrows_counterclockwise: Iterate over all our connected machines
-    1. :white_check_mark: Check if the machine tag and the deployment schedule match, otherwise continue
-    2. :gear:  Assign the machine to the deployment schedule
-  3. :gear:  Update the deployment schedule
+    - :white_check_mark: Check if the machine tag and the deployment schedule match, otherwise continue
+    - :gear: Assign the machine to the deployment schedule
+  3. :gear: Update the deployment schedule
 
 {% highlight python %}
 ### 2. ITERATE OVER ALL DEPLOYMENT SCHEDULES AND REASSIGN MACHINES ###
@@ -226,52 +226,52 @@ schedule_configurations = automation_client.schedule.list_by_automation_account(
 
 # In this long loop, we iterate over each UpdateConfiguration. 
 for update_configuration in update_configurations:
-    # Local vars
-    schedule = None
+    # Local vars
+    schedule = None
 
-    # In this block of code, we clear the list of VMs that are currently assigned to the deployment schedule.
+    # In this block of code, we clear the list of VMs that are currently assigned to the deployment schedule.
     # We need to do this because, if a VM tag is changed, the machine would appear in two deployments schedules.
-    software_update_configuration_p = automation_client.software_update_configurations.get_by_name(resource_group_name, automation_account_name, update_configuration.name)
-    software_update_configuration_p.update_configuration.non_azure_computer_names.clear()
+    software_update_configuration_p = automation_client.software_update_configurations.get_by_name(resource_group_name, automation_account_name, update_configuration.name)
+    software_update_configuration_p.update_configuration.non_azure_computer_names.clear()
 
     # Here, we check the OS for which the deployment schedule is configured.
-    update_configuration_os = update_configuration.update_configuration.additional_properties.get('operatingSystem')
+    update_configuration_os = update_configuration.update_configuration.additional_properties.get('operatingSystem')
 
     # In this block of code, we decide to ignore two types of deployment schedules :
     #   - MANUAL deployment schedules - Those deployment schedule are created to patch on-demand, they are part of another process
     #   - CENTOS deployment schedules - Those deployment schedule are created to patch CENTOS, they are part of another process
-    if "MANUAL" in update_configuration.name or "CENTOS" in update_configuration.name:
-        continue
+    if "MANUAL" in update_configuration.name or "CENTOS" in update_configuration.name:
+        continue
     
     
-    # Remember line 9 when we retrieved the list of Schedules? We use this list to find the schedule associated to the current 
+    # Remember line 9 when we retrieved the list of Schedules? We use this list to find the schedule associated to the current 
     # deployment schedule, based on name matching. We need to get this schedule to update it with a new start time. If we don't 
     # do this, the deployment schedule will be updated with a schedule that has a start_time in the past, and we will get an error.
     # Thus, we simply need to recalculate the start_time.
-    for schedule_configuration in schedule_configurations:
-        # If update configuration and schedules match, then we found the right schedule
-        if update_configuration.name in schedule_configuration.name:
-            schedule = automation_client.schedule.get(resource_group_name, automation_account_name, schedule_configuration.name)
+    for schedule_configuration in schedule_configurations:
+        # If update configuration and schedules match, then we found the right schedule
+        if update_configuration.name in schedule_configuration.name:
+            schedule = automation_client.schedule.get(resource_group_name, automation_account_name, schedule_configuration.name)
 
 
-    # In this block of code, we iterate over our connected machine to check if we should assign them to the current
+    # In this block of code, we iterate over our connected machine to check if we should assign them to the current
     # deployment schedule by checking OS and tags. If the VM matches our criteria, it is added to the list of 
     # machines that will be assigned to the deployment schedule.
-    for connected_machine in connected_machines:
-        # Get connected machine attributes
-        machine_rg = connected_machine['ResourceGroup']
-        machine_name = connected_machine['Computer']
-        machine_resource = connected_machine['Resource']
-        machine_os = connected_machine['OSType']
-        machine_tag = connected_machine['Tag']
+    for connected_machine in connected_machines:
+        # Get connected machine attributes
+        machine_rg = connected_machine['ResourceGroup']
+        machine_name = connected_machine['Computer']
+        machine_resource = connected_machine['Resource']
+        machine_os = connected_machine['OSType']
+        machine_tag = connected_machine['Tag']
 
-        if machine_tag:
-            if (machine_os in update_configuration_os) and (machine_tag.replace(':','-') in update_configuration.name):
-                if machine_name not in software_update_configuration_p.update_configuration.non_azure_computer_names:
-                    # Add machine to the list
-                    software_update_configuration_p.update_configuration.non_azure_computer_names.append(machine_name)
+        if machine_tag:
+            if (machine_os in update_configuration_os) and (machine_tag.replace(':','-') in update_configuration.name):
+                if machine_name not in software_update_configuration_p.update_configuration.non_azure_computer_names:
+                    # Add machine to the list
+                    software_update_configuration_p.update_configuration.non_azure_computer_names.append(machine_name)
 
-    # In this next block of code, we calculate the new start time for the schedule.
+    # In this next block of code, we calculate the new start time for the schedule.
 	# IMPORTANT : because the runbook runs between 15:00 and 18:00, we must schedule it as follows :
 	#	   - For 03:00 schedules => Schedule it on 'day+1', since 03:00 of the current day is in the past
 	#	   - For 12:00 schedules => Schedule it on 'day+1', since 03:00 of the current day is in the past
@@ -284,28 +284,28 @@ for update_configuration in update_configurations:
 		day = date.day+1
 	software_update_configuration_p.schedule_info.start_time = datetime(date.year, date.month, day, hours.hour, hours.minute, 0)
 	
-    # When creating a deployment schedule, VMs must be assigned to it, otherwise we will get an error at deployment time.
+    # When creating a deployment schedule, VMs must be assigned to it, otherwise we will get an error at deployment time.
     # Here are the different options to assign machines to a deployment schedule :
     #   - Assign machines statically : this is what our script do
     #   - Assign machines dynamically using a query
     # Thus, when we have no machine assigned to a deployment schedule, we need to create a create and assign it a query.
     # The query does not return any VM, it only allows us to deploy our delpoyment schedule without any error.
-    non_azure_query = NonAzureQueryProperties()
-    non_azure_query.function_alias = saved_searche_id
-    non_azure_query.workspace_id = workspace_resource_id
-    if not software_update_configuration_p.update_configuration.targets:
-        print("Error processing this maintenance schdule : " + update_configuration.name)
-        continue
-    software_update_configuration_p.update_configuration.targets.non_azure_queries = [non_azure_query]
+    non_azure_query = NonAzureQueryProperties()
+    non_azure_query.function_alias = saved_searche_id
+    non_azure_query.workspace_id = workspace_resource_id
+    if not software_update_configuration_p.update_configuration.targets:
+        print("Error processing this maintenance schdule : " + update_configuration.name)
+        continue
+    software_update_configuration_p.update_configuration.targets.non_azure_queries = [non_azure_query]
 
     # Finally we update our deployment schedule, and we handle an error that Azure may raise which is related to the number of request we send.
     # If we receive the error, the script will sleep for a random amount of time between 30 and 90 seconds.
-    while 1:
-        try:
-            automation_client.software_update_configurations.create(resource_group_name, automation_account_name, update_configuration.name, software_update_configuration_p)
-            break
-        except HttpResponseError:
-            print ("Exception HttpResponseError (Erreur 429 : too much API calls)")
-            s = random.randint(30, 90)
-            time.sleep(s)
+    while 1:
+        try:
+            automation_client.software_update_configurations.create(resource_group_name, automation_account_name, update_configuration.name, software_update_configuration_p)
+            break
+        except HttpResponseError:
+            print ("Exception HttpResponseError (Erreur 429 : too much API calls)")
+            s = random.randint(30, 90)
+            time.sleep(s)
 {% endhighlight %}
