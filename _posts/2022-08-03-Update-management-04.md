@@ -274,14 +274,16 @@ I recommend to do some testing if you want to get familiar with deployment sched
 ***
 
 ## Deployment
-Of course you won't have to do anything here except running some commands, because I provided all the ARM templates that you need to deploy a small core infrastructure.
-1. Create a resource group
-2. 
+The only thing you need to do for deployment is to create a dedicated resource group where our resources will be deployed. You will need two files :
+- The [core_infrastructure_azure.json](https://raw.githubusercontent.com/Molx32/AzureUpdateManagement/main/arm/core_infrastructure_azure.json) file is a simple ARM template that describe the architecture we're about to deploy.
+- The [core_infrastructure_azure.parameters.json](https://raw.githubusercontent.com/Molx32/AzureUpdateManagement/main/arm/core_infrastructure_azure.parameters.json) file is a parameter file where you can change resources names.
+
+Before running the commands below, make sure you chose an existing resource group or created one.
 
 ```
 az login
-az account set --subscription "67c4c038-b3aa-4157-afab-73f1d00dfe82"
-az deployment group create --name myDeployment --resource-group updtmgmt-rg --template-file  --parameters
+az account set --subscription <subscriptionId>
+az deployment group create --name <anyName> --resource-group <resourceGroupName> --template-file core_infrastructure_azure.json --parameters core_infrastructure_azure.parameters.json
 ```
 
 Here is a sample output for deployment.
@@ -326,3 +328,5 @@ If you take a look at the Linux deployment schedule, you will see the configurat
 <div class="col-sm mt-3 mt-md-0">
   {% include figure.html path="assets/img/automation_account_8.png" class="img-fluid rounded z-depth-1" %}
 </div>
+
+Now that the core infratructure is deployed, we can assign an Azure policy (c.f. Part 2 of the serie) to the subscription scope and enforce Log Analytics agent to report to our newly deployed Log Analytics workspace. Then you can deploy a VM that will be directly onboarded!

@@ -70,16 +70,73 @@ You should end up with something that looks like this. Let's adapt this to make 
 ### Customize general filters
 The goal of this section is to show how to create filters button so that you can customize them. In my case, the update management architecture is made of the of multiple Log Analytics workspaces that collect VMs update data. In order to monitor data only on those Log Analytics workspaces, we tag them with the tag <b>application:update management</b> to that we can filter them. Then we also add the following tags to our log analytics based on their CSP and their environment. This is summed up in the following table.
 
-| Log Analytics name | Second priority | CSP tag | Environment tag | Application tag |
-|-------|--------|---------|-------|--------|---------|
-| ari-loga-azure-001 | Azure | azure | prod | update management |
-| ari-loga-oci-001 | Azure | oci | prod | update management |
-| ari-loga-gcp-001 | Azure | gcp | prod | update management |
-| ari-loga-ovh-001 | Azure | ovh | prod | update management |
-| ari-loga-np-azure-001 | Azure | azure | no prod | update management |
-| ari-loga-np-oci-001 | Azure | oci | no prod | update management |
-| ari-loga-np-gcp-001 | Azure | gcp | no prod | update management |
-| ari-loga-np-ovh-001 | Azure | ovh | no prod | update management |
+
+<table id="custom" class="t-border">
+<caption style="text-align:center"><b>Resource deployed</b></caption>
+  <tr>
+    <th>Log Analytics name</th>
+    <th>Second priority</th>
+    <th>CSP tag</th>
+    <th>Environment tag</th>
+    <th>Application tag</th>
+  </tr>
+  <tr>
+    <td>ari-loga-azure-001</td>
+    <td>Azure</td>
+    <td>azure</td>
+    <td>prod</td>
+    <td>update management</td>
+  </tr>
+  <tr>
+    <td>ari-loga-oci-001</td>
+    <td>Azure</td>
+    <td>oci</td>
+    <td>prod</td>
+    <td>update management</td>
+  </tr>
+  <tr>
+    <td>ari-loga-gcp-001</td>
+    <td>Azure</td>
+    <td>gcp</td>
+    <td>prod</td>
+    <td>update management</td>
+  </tr>
+  <tr>
+    <td>ari-loga-ovh-001</td>
+    <td>Azure</td>
+    <td>ovh</td>
+    <td>prod</td>
+    <td>update management</td>
+  </tr>
+  <tr>
+    <td>ari-loga-np-azure-001</td>
+    <td>Azure</td>
+    <td>azure</td>
+    <td>no prod</td>
+    <td>update management</td>
+  </tr>
+  <tr>
+    <td>ari-loga-np-oci-001</td>
+    <td>Azure</td>
+    <td>oci</td>
+    <td>no prod</td>
+    <td>update management</td>
+  </tr>
+  <tr>
+    <td>ari-loga-np-gcp-001</td>
+    <td>Azure</td>
+    <td>gcp</td>
+    <td>no prod</td>
+    <td>update management</td>
+  </tr>
+  <tr>
+    <td>ari-loga-np-ovh-001</td>
+    <td>Azure</td>
+    <td>ovh</td>
+    <td>no prod</td>
+    <td>update management</td>
+  </tr>
+</table>
 
 Once this has been done, let's create our filter buttons by editing and add <b>Add links/tabs</b>.
 #### Create a first parameter named CSP
@@ -104,8 +161,8 @@ This request selects all Log Analytics workspaces that have the tag <b>applicati
 
 {% highlight kql %}
 where type =~ 'microsoft.operationalinsights/workspaces'
-| where tolower(tostring(tags.application)) == "update management"
-| distinct tostring(tags.environment)
+<td>where tolower(tostring(tags.application)) == "update management"
+<td>distinct tostring(tags.environment)
 {% endhighlight %}
 
 <div class="col-sm mt-3 mt-md-0">
@@ -124,8 +181,8 @@ The selected values in our two previous buttons will make this third and last bu
 This request selects all Log Analytics workspaces that have the tag <b>application:update management</b>, and return all Log Analytics workspaces that have CSP tag and Environment tags that matches the selection we made using the previous buttons.
 {% highlight kql %}
 where type =~ 'microsoft.operationalinsights/workspaces'
-| where tolower(tostring(tags.application)) == "update management"
-| distinct tostring(tags.environment)
+<td>where tolower(tostring(tags.application)) == "update management"
+<td>distinct tostring(tags.environment)
 {% endhighlight %}
 
 <div class="col-sm mt-3 mt-md-0">
