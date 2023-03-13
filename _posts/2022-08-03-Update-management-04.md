@@ -313,4 +313,16 @@ We deployed the three following resources.
   </tr>
 </table>
 
-We can't see deployment schedule here : we can view them from the automation account, so navigate to the resource, and you will see the following.
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/automation_account_6.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+We can't see deployment schedule here : we can view them from the automation account, so navigate to the resource, and you will see two deployment schedules that look the same, expect one is for Windows OS, the other for Linux.
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/automation_account_7.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+If you take a look at the Linux deployment schedule, you will see the configuration we pushed through our ARM template. In the <b>Groups to update</b> setting, we look for machines located in the current subscription and tagged with <b>patch:LINUX-MON-03:00</b> tag.
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/automation_account_8.png" class="img-fluid rounded z-depth-1" %}
+</div>
