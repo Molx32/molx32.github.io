@@ -209,8 +209,8 @@ At the end of this second step we have a list of machines that are eligible to b
 1. Iterate over all deployment schedules
   1. :gear: Flush all machines that were assigned to the current deployment schedule
   2. :arrows_counterclockwise: Iterate over all our connected machines
-    - :white_check_mark: Check if the machine tag and the deployment schedule match, otherwise continue
-    - :gear: Assign the machine to the deployment schedule
+    * :white_check_mark: Check if the machine tag and the deployment schedule match, otherwise continue
+    * :gear: Assign the machine to the deployment schedule
   3. :gear: Update the deployment schedule
 
 {% highlight python %}
