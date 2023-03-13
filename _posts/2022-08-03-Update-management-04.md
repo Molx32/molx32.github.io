@@ -55,6 +55,8 @@ This part will be very important since it define all the strategy to configure t
 
 All of this can be configured in In addition to those rules, we will configure <b>deployment schedules</b>, which are some sort of  automation accounts sub-resources. For each automation account, we will 21 deployement schedule! This is a lot, be let me explain : the goal of this solution is to allow any business application to patched. To make it possible, we need to propose many schedules to comply with all application constraints. So we decided to propose 3 schedule maintenance per day : at 3:00, 12:00, and 22:00 (3*7 = 21 schedules).
 
+My ultimate goal with this is to create a deployment schedule that select the appropriate machines, based on machines tags. Just imagine how simple it would be : if a machine must be updated, I assign a tag to it (the tag <b>MON-03:00</b> for instance), and I know that my deployment schedules will update it. Let's see how to do this!
+
 <table id="custom" class="t-border">
 <caption style="text-align:center"><b>Schedules available for VM updates</b></caption>
   <tr>
@@ -95,6 +97,8 @@ All of this can be configured in In addition to those rules, we will configure <
   </tr>
 </table>
 
+***
+
 ## Automation accounts
 ### Create deployment schedule
 We can create a first deployment schedule to check what it looks like.
@@ -124,12 +128,12 @@ We can create a first deployment schedule to check what it looks like.
   <tr>
     <td>Groups to update</td>
     <td>Dynamic selection of machines to update</td>
-    <td></td>
+    <td>C.f. below</td>
   </tr>
   <tr>
     <td>Machines to update</td>
     <td>Selection of machines to update</td>
-    <td></td>
+    <td>C.f. below</td>
   </tr>
   <tr>
     <td>Update classification</td>
@@ -139,12 +143,12 @@ We can create a first deployment schedule to check what it looks like.
   <tr>
     <td>Include/exclude updates</td>
     <td>You may want to include/exclude specific updates. We can leave this blank.</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>Pre-script + Post script</td>
     <td>You may want to push and execute script before or after updates. We can leave this blank</td>
-    <td></td>
+    <td>-</td>
   </tr>
   <tr>
     <td>Maintenance window</td>
@@ -157,6 +161,11 @@ We can create a first deployment schedule to check what it looks like.
     <td>120</td>
   </tr>
 </table>
+
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/automation_account_1.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
 
 What we observe so far is that we can't merge Linux and Windows in the same deployment schedule, so our deployment schedules will now look like this : 
 <table id="custom" class="t-border">
@@ -233,4 +242,75 @@ What we observe so far is that we can't merge Linux and Windows in the same depl
   </tr>
 </table>
 
-### 
+Let's continue with the settings groups to update and machines to update, which are both settings that allow you to choose which machines should be updated with the current deployment schedule.
+
+#### Machines to update
+When using this feature, we can define a group of machines to target with the current deployment schedule. This group of machines can be created from multiple sources as discussed in the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/computer-groups) :
+- Log query
+- Log search API
+- Active Directory
+- Configuration Manager
+- Windows Server Update Services
+
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/automation_account_2.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+As mentioned in the first part of this post, I want my VMs to be updated if they have a specific tag. Unfortunately, with this setting, we can't update machines based on their tags! So let's take a look at the <b>Groups to update</b> feature then.
+
+#### Groups to update
+As described in the Microsoft documentation, we can filter machines based on their tags, awesome right? So this will be our solution, but our solution has an important limitation : this does not apply to Azure ARC VMs! This is immediately not so awesome... But I have a workaround that I will describe in a future post, so let's continue with Azure VM only for now.
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/automation_account_3.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/automation_account_4.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+
+I recommend to do some testing if you want to get familiar with deployment schedules capabilities. If you want to go straight foreward, let's deploy some stuff now!
+
+***
+
+## Deployment
+Of course you won't have to do anything here except running some commands, because I provided all the ARM templates that you need to deploy a small core infrastructure.
+1. Create a resource group
+2. 
+
+```
+az login
+az account set --subscription "67c4c038-b3aa-4157-afab-73f1d00dfe82"
+az deployment group create --name myDeployment --resource-group updtmgmt-rg --template-file  --parameters
+```
+
+Here is a sample output for deployment.
+<div class="col-sm mt-3 mt-md-0">
+  {% include figure.html path="assets/img/automation_account_5.png" class="img-fluid rounded z-depth-1" %}
+</div>
+
+***
+
+What did we deployed?
+We deployed the three following resources.
+<table id="custom" class="t-border">
+<caption style="text-align:center"><b>Resource deployed</b></caption>
+  <tr>
+    <th>Resource name</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Updates(updtmgmt-la)</td>
+    <td>This is a resource that is deployed on top of a Log Analytics, and that usually provide graphs. To be honest I never reversed engineered this to understand how it works, but I think this enables charts to be displayed within the automation account.</td>
+  </tr>
+  <tr>
+    <td>updtmgmt-aa</td>
+    <td>This is the automation account, which is linked to the Log Analytics workspace</td>
+  </tr>
+  <tr>
+    <td>updtmgmt-la</td>
+    <td>This is the log analytics workspace that collects our update data</td>
+  </tr>
+</table>
+
+We can't see deployment schedule here : we can view them from the automation account, so navigate to the resource, and you will see the following.
