@@ -61,10 +61,10 @@ We want to create a policy definition that <i>enforces all Azure VMs and all Azu
 
 ## Azure Policy deployment
 Our goal is to have something that looks like the scheme below. To explain this, I'll repeat what I described earlier, but with more specific words. We create four policy assignments<i>policy assignments</i>:
-  1. An assignment at the subscription level, that must apply to all Azure VMs, that enforces all Azure VMs to report to ari-loga-azure-001 Log Analytics.
-  2. An assignment at the ari_rg_ovh_001 resource group, that must apply to all OVH Azure ARC VMs Azure VMs, that enforces all OVH Azure ARC VMs to report to ari-loga-ovh-001 Log Analytics.
-  3. An assignment at the ari_rg_oci_001 resource group, that must apply to all OCI Azure ARC VMs Azure VMs, that enforces all OCI Azure ARC VMs to report to ari-loga-oci-001 Log Analytics.
-  4. An assignment at the ari_rg_gcp_001 resource group, that must apply to all GCP Azure ARC VMs Azure VMs, that enforces all GCP Azure ARC VMs to report to ari-loga-gcp-001 Log Analytics.
+  1. An assignment at the subscription level, that must apply to all Azure VMs, that enforces all Azure VMs to report to loga-azure-001 Log Analytics.
+  2. An assignment at the rg_ovh_001 resource group, that must apply to all OVH Azure ARC VMs Azure VMs, that enforces all OVH Azure ARC VMs to report to loga-ovh-001 Log Analytics.
+  3. An assignment at the rg_oci_001 resource group, that must apply to all OCI Azure ARC VMs Azure VMs, that enforces all OCI Azure ARC VMs to report to loga-oci-001 Log Analytics.
+  4. An assignment at the rg_gcp_001 resource group, that must apply to all GCP Azure ARC VMs Azure VMs, that enforces all GCP Azure ARC VMs to report to loga-gcp-001 Log Analytics.
 
 <div class="col-sm mt-3 mt-md-0">
   {% include figure.html path="assets/img/arch_3.png" class="img-fluid rounded z-depth-1" %}
