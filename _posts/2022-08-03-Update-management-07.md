@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Azure Update Management - Part 8 - Security patches on Azure ARC!
+title: Azure Update Management - Part 8 - Security patches on CentOS machines!
 date: 2023-02-16 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
@@ -44,10 +44,13 @@ provided your OSs are technically supported.</i>
 
 ***
 
-## Context
-If you have CentOS machines, you probably faced issues when trying to apply <b>security</b> updates them : a ```yum update``` may crash your applications because it does not apply security-only updates, while ```yum update --security``` won't update any package because it relies on packages metadata, which are not set for CentOS packages. Alternatively, you could allow only security repositories, but this implies additional maintenance when installing non-security related stuff on your machines.
+## Introduction
+In the previous posts, we saw how to dynamically patch both Azure VMs and Azure ARC VMs. However, as mentionned before, there is an issue with CentOS VMs : we can't apply security and critical patches only, which can be a serious problem in a production environment (e.g. service disruption after update). Let's see why we encounter this issue, and of course how to bypass it!
 
-When using Azure Automation Update solution, the issue remains. if you take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/update-management/overview#logic-for-linux-updates-classification), you'll see that <i>Update Management classifies updates into three categories: <b>Security</b>, <b>Critical</b> or <b>Others</b></i>. This is fine, now you will also read that <i>Unlike other distributions, CentOS does not have classification data available from the package manager. If you have CentOS machines configured to return security data for the following command, Update Management can patch based on classifications.</i> The command to test is shown below. This is a real problem because in order for this command, you need to add metadata to package yourself, or usually pay for a service that does it.
+## Context
+If you have CentOS machines, you probably faced issues when trying to apply <b>security</b> updates : a ```yum update``` may crash your applications because it does not apply security-only updates, while ```yum update --security``` won't update any package because it relies on packages metadata, which are not set for CentOS packages. Alternatively, you could allow only security repositories, but this implies additional maintenance when installing non-security related stuff on your machines.
+
+When using Azure Automation Update solution, the issue remains. If you take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/update-management/overview#logic-for-linux-updates-classification), you'll see that <i>Update Management classifies updates into three categories: <b>Security</b>, <b>Critical</b> or <b>Others</b></i>. This is fine, but you will also read that <i>Unlike other distributions, CentOS does not have classification data available from the package manager. If you have CentOS machines configured to return security data for the following command, Update Management can patch based on classifications.</i> The command to test is shown below, and does not return anything by default. This is a real problem because in order for this command to work, you need to add metadata to packages yourself, or usually pay for a service that does it.
 {% highlight bash %}
 sudo yum -q --security check-update
 {% endhighlight %}
@@ -73,7 +76,7 @@ Of course, the reason I wrote this post is that I spent some time working on it,
 
 To be more specific, I actually wrote two very similar scripts : one for Azure VMs, the other for Azure ARC VMs. Why? Because writing a single script didn't match my architecture, but you could merge them in a single script.
 
-In any case, the script behavior remains the same ans checks that all VMs match the two following criteria.
+In any case, the script behavior remains the same and checks that all VMs match the two following criteria.
 - The machine must be a CentOS machine;
 - The machine must be tagged with a valid <b>patch</b> tag.
 If a VM doesn't comply, it won't be patched.
@@ -95,7 +98,7 @@ An additional word about tags : in my case, we defined a tag policy in order for
 ### Solution for Azure ARC VMs
 #### Step 1 - Iterate over all machines
 
-First of all, we need to import a lot of Azure dependencies, because our script will use the Azure Python SDK to manage our machines. If you decide to run this code in a runbook, take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/python-3-packages?tabs=py3) to upload Python libraries Additionally, you will find documentation references if you need additional information.
+First of all, we need to import a lot of Azure dependencies, because our script will use the Azure Python SDK to manage our machines. If you decide to run this code in a runbook, take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/python-3-packages?tabs=py3) to upload Python libraries. Additionally, you will find documentation references if you need additional information.
 
 {% highlight python %}
 #!/usr/bin/env python3
@@ -126,7 +129,7 @@ import automationassets
 from automationassets import AutomationAssetNotFound
 from azure.mgmt.subscription import SubscriptionClient
 
-# Various pacakges
+# Various packages
 import pandas as pd
 
 # System packages
@@ -136,7 +139,7 @@ import re
 import pytz
 {% endhighlight %}
 
-In this next piece of code, we load variables values from the Automation Account variable. In order to set these variables in automation accounts, check the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell). Here, variables are the current automation account name, its resource group and its subscription.
+In this next piece of code, we load values from the Automation Account variables. In order to set these variables in automation accounts, check the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell). Here, variables are the current automation account name, its resource group and its subscription. I guess there may be some dynamic function to retrieve this values from the runbook, but we decided to explicitly declare them in variables.
 {% highlight python %}
 #####################################################################################
 # 0. GET AUTOMATION ACCOUNT VARIABLES
@@ -183,7 +186,6 @@ Ok, here begins the interesting part : we iterate over all susbcriptions, and fo
 centOSs = []
 for subscription in subscriptions_client.subscriptions.list():
 	compute_management_client = ComputeManagementClient(token_credential, subscription.subscription_id)
-	#print("Successfully instanciated using " + str(subscription) + "subscription")
 	for item in compute_management_client.virtual_machines.list_all():
 		# Check PATCH value
 		if not item.tags or not 'patch' in item.tags.keys():
@@ -309,7 +311,6 @@ for centOS in centOSs:
 		schedule_info 			= schedule_info)
 	
 	
-	#software_update_configuration_name = "ari-iaasupdate-we-securityux-CENTOS-" + centOS.name
 	software_update_configuration_name = "ari-iaasupdate-we-securityux-" + centOS.tags['patch'] + " => " + centOS.name
 	automation_client.software_update_configurations.create(resource_group_name, automation_account_name, software_update_configuration_name, software_update_configuration)
 	print("VERBOSE, new deployment schedule created for CentOS VM : " + centOS.id)
@@ -321,7 +322,7 @@ In order for this script to work, the identity used to run the script must have 
 - <b>Log Analytics reader</b> role on Log Analytics workspace that collect update data;
 - <b>Automation contributor</b> on the Automation Account you use for patch management.
 
-If you run the script on Azure, you must assign these permissions using <b>system-assigned managed identities</b>, c.f. [Microsoft documentation](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal-managed-identity).
+If you run the script on Azure, you should assign these permissions using <b>system-assigned managed identities</b>, c.f. [Microsoft documentation](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal-managed-identity).
 
 #### Run the script
 Once you ran the script, it will deploy one deployment schedule per VM, as shown below. If you click on the deployment schedule, then go to <b>Include/exclude updates</b>, you will see the explicit list of all updates to be installed on the VM. When configuring a deployment schedule like this, Azure no longer use the ```yum install --security``` command, but it uses the ```yum install <package1> <package2> <packagen>``` command!
@@ -333,11 +334,13 @@ Once you ran the script, it will deploy one deployment schedule per VM, as shown
     {% include figure.html path="assets/img/centos_3.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
+***
+
 ### Solution for Azure VMs
-The script behavior is almost the same for Azure ARC VMs, the only thing that changes is the objects properties, because we now work with <i>Microsoft.HybridCompute/machines</i> resource type rather than <i>Microsoft.Compute/virtualMachines</i>. Here is the code.
+The script behavior is almost the same for Azure ARC VMs, the only things that change are the objects properties, because we now work with <i>Microsoft.HybridCompute/machines</i> resource type rather than <i>Microsoft.Compute/virtualMachines</i>. Here is the code.
 
 #### Step 1 - Iterate over all machines
-As we did for the Azure VM version, we still need to import a lot of Azure dependencies, because our script will use the Azure Python SDK to manage our machines. If you decide to run this code in a runbook, take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/python-3-packages?tabs=py3) to upload Python libraries Additionally, you will find documentation references if you need additional information.
+As we did for the Azure VM version, we still need to import a lot of Azure dependencies, because our script will use the Azure Python SDK to manage our machines. If you decide to run this code in a runbook, take a look at the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/python-3-packages?tabs=py3) to upload Python libraries accordingly. Additionally, you will find documentation references if you need additional information.
 
 {% highlight python %}
 ######################################################################################################################################################
@@ -377,7 +380,7 @@ import pytz
 {% endhighlight %}
 
 
-In this next piece of code, we load variables values from the Automation Account variable. In order to set these variables in automation accounts, check the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell). Here, variables are the current automation account name, its resource group and its subscription.
+In this next piece of code, we load variables values from the Automation Account variable. In order to set these variables in automation accounts, check the [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/shared-resources/variables?tabs=azure-powershell). Here, variables are the current automation account name, its resource group and its subscription. I guess there may be some dynamic function to retrieve this values from the runbook, but we decided to explicitly declare them in variables.
 {% highlight python %}
 ##################################################################################################################
 # 0. GET AUTOMATION ACCOUNT VARIABLES
@@ -550,7 +553,7 @@ In order for this script to work, the identity used to run the script must have 
 - <b>Log Analytics reader</b> role on Log Analytics workspace that collect update data;
 - <b>Automation contributor</b> on the Automation Account you use for patch management.
 
-If you run the script on Azure, you must assign these permissions using <b>system-assigned managed identities</b>, c.f. [Microsoft documentation](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal-managed-identity).
+If you run the script on Azure, you should assign these permissions using <b>system-assigned managed identities</b>, c.f. [Microsoft documentation](https://learn.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal-managed-identity).
 
 #### Run the script
 Once you ran the script, it will deploy one deployment schedule per VM, as shown below. If you click on the deployment schedule, then go to <b>Include/exclude updates</b>, you will see the explicit list of all updates to be installed on the VM. When configuring a deployment schedule like this, Azure no longer use the ```yum install --security``` command, but it uses the ```yum install <package1> <package2> <packagen>``` command!
@@ -565,7 +568,7 @@ Once you ran the script, it will deploy one deployment schedule per VM, as shown
 ***
 
 ### Deployment schedule lifecycle
-What I didn't tell you is that those deployment schedules are run only once, because they contains specific packages to update that may not be the same on next week. Once the deployment schedule is executed, you will see that <i>Next run time</i> is set to <b>None</b>. You have two options.
+What I didn't tell you is that those deployment schedules are run only once, because they contains specific packages to update that probably won't need to be patched on next week. Once the deployment schedule is executed, you will see that <i>Next run time</i> is set to <b>None</b>. You have two options.
 
 #### Option 1 - Clean deployment schedules
 In order to clean deployment schedules to remove those that won't execute anymore, you can use that simple script:
@@ -606,3 +609,7 @@ for deployment_schedule in deployment_schedules.value:
 
 #### Option 2 - Clean deployment schedules
 The other option is simply to let your deployment schedules as is. Why? Because the next time you will run the CentOS patch script, it will deploy new deployments schedules, that will simply update existing deployment schedules by setting a new set of packages to patch, and by setting a new start time.
+
+***
+
+<i>I hope this will help you patch your CentOS machines and leverage all the Azure Automation Updates capabilities. Thanks for reading!</i>
