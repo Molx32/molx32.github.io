@@ -81,56 +81,56 @@ The goal of this section is to show how to create filters button so that you can
     <th>Application tag</th>
   </tr>
   <tr>
-    <td>ari-loga-azure-001</td>
+    <td>loga-azure-001</td>
     <td>Azure</td>
     <td>azure</td>
     <td>prod</td>
     <td>update management</td>
   </tr>
   <tr>
-    <td>ari-loga-oci-001</td>
+    <td>loga-oci-001</td>
     <td>Azure</td>
     <td>oci</td>
     <td>prod</td>
     <td>update management</td>
   </tr>
   <tr>
-    <td>ari-loga-gcp-001</td>
+    <td>loga-gcp-001</td>
     <td>Azure</td>
     <td>gcp</td>
     <td>prod</td>
     <td>update management</td>
   </tr>
   <tr>
-    <td>ari-loga-ovh-001</td>
+    <td>loga-ovh-001</td>
     <td>Azure</td>
     <td>ovh</td>
     <td>prod</td>
     <td>update management</td>
   </tr>
   <tr>
-    <td>ari-loga-np-azure-001</td>
+    <td>loga-np-azure-001</td>
     <td>Azure</td>
     <td>azure</td>
     <td>no prod</td>
     <td>update management</td>
   </tr>
   <tr>
-    <td>ari-loga-np-oci-001</td>
+    <td>loga-np-oci-001</td>
     <td>Azure</td>
     <td>oci</td>
     <td>no prod</td>
     <td>update management</td>
   </tr>
   <tr>
-    <td>ari-loga-np-gcp-001</td>
+    <td>loga-np-gcp-001</td>
     <td>Azure</td>
     <td>gcp</td>
     <td>no prod</td>
     <td>update management</td>
   </tr>
   <tr>
-    <td>ari-loga-np-ovh-001</td>
+    <td>loga-np-ovh-001</td>
     <td>Azure</td>
     <td>ovh</td>
     <td>no prod</td>
