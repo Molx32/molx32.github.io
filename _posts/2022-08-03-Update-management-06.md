@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Azure Update Management - Part 7 - Apply security patches to CentOS!
+title: Azure Update Management - Part 7 - Security patches on Azure ARC!
 date: 2023-02-16 10:00:00
 description: This post is describes the architecture of the solution
 tags: updatemanagement
