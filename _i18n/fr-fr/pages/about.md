@@ -1,0 +1,6 @@
+Je suis un ingénieur en cybersécurité, et j'aime apprendre de nouvelles choses.
+J'aime automatiser, développer, scripter, documenter et m'investir dans la communauté de la cybersécurité en partageant ce que j'apprends, et en reportant des vulnérabilités.
+
+Mon expérience professionnelle m'a conduit vers le Cloud, et plus particulièrement sur les technologies Microsoft. Grace à mon investissement dans cette communauté (conferences, blog posts, reports de bugs, reports de vulnérabilités, etc.) Microsoft m'a récompensé en me remettant le titre honorifique de MVP, dans les catégories Azure et Sécurité, titre que j'ai renouvellé de 2020 à 2024. J'ai également été certifié CISSP en 2019, et BSCP en 2024.
+
+Afin de faire bénéficier des avantages financiers du titre de MVP, j'ai enseigné à l'université Paul Sabatier (Toulouse, France), afin que les étudiants puissent accéder à des technologies qui sont parfois facturé à des prix inabordables pour les étudiants, alors que ces technologies sont très utilisées dans le milieu professionnel. Le dernier projet proposé consistait à créer une infrastructure surveillée par un SIEM, à attacker cette infrastructure, et bloquer ces attaques.

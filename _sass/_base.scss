@@ -105,6 +105,13 @@ blockquote {
     width: 100%;
   }
 
+  .row {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+  }
+
   .card-title {
     color: var(--global-text-color);
   }
@@ -473,7 +480,8 @@ footer.sticky-bottom {
   }
 
   h2.category {
-    color: var(--global-divider-color);
+    // color: var(--global-divider-color);
+    color: #3f3f42;
     border-bottom: 1px solid var(--global-divider-color);
     padding-top: 0.5rem;
     margin-top: 2rem;
@@ -482,6 +490,27 @@ footer.sticky-bottom {
   }
 }
 
+// Services
+.services {
+  a {
+    text-decoration: none;
+
+    &:hover {
+      .card-title {
+        color: var(--global-theme-color);
+      }
+    }
+  }
+}
+
+  .pentest-box {
+    display: flex;
+    align-items: center;
+  }
+
+  .pentest-box p {
+    margin-left: 10px;
+  }
 
 // Publications
 

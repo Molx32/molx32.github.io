@@ -1,0 +1,48 @@
+titles:
+  about: about
+  services: services
+  blog: blog
+  cv: cv
+  news: news
+  projects: projects
+  publications: publications
+  repositories: repositories
+  teaching: teaching
+  submenus: submenus
+  unk: page not found
+
+descriptions:
+  services: to contact me, send an email at quote@cyber-intruder.com
+  projects: here are the projects I work on
+  cv: cv description
+  about: about description
+  unk: did you get lost?
+
+projects:
+  titles:
+    smsexplorer: SMS Explorer
+  descriptions:
+    smsexplorer: From public SMS to account takeover
+
+services:
+  titles:
+    web: web
+    infrastructure: infrastructure
+    azure: azure
+  descriptions:
+    web: Testing your web applications security
+    infrastructure: Testing your web applications security
+    azure: Testing your web applications security
+
+blog:
+  language_mention: available in english only
+
+cv:
+  general_information:
+    title: General information
+    name: Clément
+    birth: N/A
+    languages: English, French
+
+  studies:
+    title: Education
