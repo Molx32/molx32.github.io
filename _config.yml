@@ -2,7 +2,7 @@
 # Site settings
 # -----------------------------------------------------------------------------
 
-title: blank # the website title (if blank, full name will be used instead)
+title: CyberIntruder # the website title (if blank, full name will be used instead)
 first_name: CyberIntruder - Molx32
 middle_name: 
 last_name: 
@@ -35,7 +35,7 @@ navbar_fixed: true
 footer_fixed: true
 
 # Dimensions
-max_width: 800px
+max_width: 1140px
 
 # TODO: add layout settings (single page vs. multi-page)
 

@@ -22,16 +22,7 @@ projects:
   titles:
     smsexplorer: SMS Explorer
   descriptions:
-    smsexplorer: From public SMS to account takeover
-services:
-  titles:
-    web: web
-    infrastructure: infrastructure
-    azure: azure
-  descriptions:
-    web: Testing your web applications security
-    infrastructure: Testing your web applications security
-    azure: Testing your web applications security
+    smsexplorer: D'un SMS public à la compromission de compte
 
 blog:
   language_mention: disponible uniquement en anglais
@@ -45,3 +36,113 @@ cv:
 
   studies:
     title: Education
+
+home:
+  nav:
+    - title: "Services"
+      section: services
+    - title: "Projets & contributions"
+      section: portfolio
+    - title: "A propos"
+      section: about
+    # - title: "Timeline"
+    #   section: timeline
+    - title: "Equipe"
+      section: team
+    - title: "Contact"
+      section: contact
+    - title: "Blog"
+      url: /
+
+  intro:
+    title: Sécurisez votre environnement
+    text: La sécurité c'est important
+    button: C'est parti
+    buttonlink: "#services"
+
+  services:
+    title: services
+    list:
+    - title: pentest web
+      description: tester la sécurité des applications web
+      subtitle: my service 1 subtitle
+      document: pages/home/services/pentest_cloud.md
+      image: 
+      alt:
+    - title: pentest infra
+      description: tester la sécurité des infrastructures
+      subtitle: my service 1 subtitle
+      document: pages/home/services/pentest_cloud.md
+      image: 
+      alt:
+    - title: pentest azure
+      description: tester la sécurité de azure
+      subtitle: my service 1 subtitle
+      document: pages/home/services/pentest_cloud.md
+      image: 
+      alt:
+    
+  portfolio:
+    title: "Projets & contributions"
+    text: "Lorem ipsum dolor sit amet consectetur."
+    section: portafolio
+    closebutton: "Cerrar Proyecto"
+    projects:
+      - title: "my project 1"
+        subtitle: test
+        image: assets/home/img/portfolio/04-thumbnail.jpg
+        alt: image pas terrible
+        caption:
+          title: caption title
+          subtitle: caption subtitle
+          thumbnail: assets/home/img/portfolio/04-thumbnail.jpg
+      - title: "my project 2"
+        subtitle: test
+        image: assets/home/img/portfolio/04-thumbnail.jpg
+        alt: image pas terrible
+        caption:
+          title: caption title
+          subtitle: caption subtitle
+          thumbnail: assets/home/img/portfolio/04-thumbnail.jpg
+      - title: "my project 3"
+        subtitle: test
+        image: assets/home/img/portfolio/04-thumbnail.jpg
+        alt: image pas terrible
+        caption:
+          title: caption title
+          subtitle: caption subtitle
+          thumbnail: assets/home/img/portfolio/04-thumbnail.jpg
+
+  team:
+    title: Team
+    text: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde. Markdown supported.
+    subtext: subtext
+    people:
+    - name: Clément
+      role: CTO
+      image: assets/img/business/moi.png
+      social:
+        - url: https://www.linkedin.com/in/theclemvp/
+          icon: assets/img/business/social/linkedin.png
+        - url: https://github.com/Molx32
+          icon: assets/img/business/social/github.png
+
+  about:
+    title: A propos
+    text: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde. Markdown supported.
+    body: c'est le body
+
+  contact:
+    title: "Contactez-nous"
+    text: "Lorem ipsum or call 123456789"
+    section: contact
+    name: "Nom*"
+    name-validation: "Saisissez votre nom."
+    email: "Email*"
+    email-validation: "Saisissez une addresse email."
+    phone: "Numéro de téléphone"
+    phone-validation: "Saisissez un numéro de téléphone."
+    message: "Message*"
+    message-validation: "Saisissez un message."
+    subject: "Contact Form Submission"
+    submit: "Envoyer"

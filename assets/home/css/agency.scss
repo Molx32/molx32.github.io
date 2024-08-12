@@ -1,0 +1,43 @@
+---
+---
+@charset "utf-8";
+// Core variables and mixins
+@import "home/base/variables.scss";
+@import "home/base/mixins.scss";
+
+// Custom Fonts
+{% if site.data.style.fonts %}
+  {% for font in site.data.style.fonts %}
+    @mixin {{font.for}}-font {
+      font-family: "{{ font.name }}", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+  {% endfor %}
+{% endif %}
+
+// Custom colors
+$primary: {{ site.data.style.highlight | default: "#fed136" }} !default;
+$white: {{ site.data.style.white | default: "#fff" }} !default;
+$black: {{ site.data.style.black | default: "#000" }} !default;
+
+// Custom Images
+$header-image: "{{ site.data.style.header-image }}";
+$contact-image: "{{ site.data.style.contact-image }}";
+
+// Global CSS
+@import "home/base/page.scss";
+
+// Components
+@import "home/components/buttons.scss";
+@import "home/components/navbar.scss";
+@import "home/components/client-scroll.scss";
+
+// Layout
+@import "home/layout/masthead.scss";
+@import "home/layout/services.scss";
+@import "home/layout/portfolio.scss";
+@import "home/layout/timeline.scss";
+@import "home/layout/team.scss";
+@import "home/layout/contact.scss";
+@import "home/layout/footer.scss";
