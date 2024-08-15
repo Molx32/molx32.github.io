@@ -12,16 +12,25 @@
           <div class="row">
             <div class="col-lg-8 mx-auto">
               <div class="modal-body">
+                
                 <!-- service Details Go Here -->
                 <h2 class="text-uppercase">{{ service.title }}</h2>
                 <p class="item-intro text-muted">{{ service.subtitle }}</p>
                 <img class="img-fluid d-block mx-auto" src="{{ service.image }}" alt="{{ service.alt }}" />
-                <p>{{ service.content }}</p>
-                <p>{% tf service.document %}</p>
-                <button class="btn btn-primary" data-dismiss="modal" type="button">
-                  <i class="fas fa-times"></i>
-                  Close
-                </button>
+                <p style="text-align: justify;">{{ service.description_detailed }}</p>
+
+                <hr>
+                <!-- If this is a pentest service, include methodology -->
+                {% if service.type == 'pentest' %}
+                  {% include home/modals/modal_services_methodology.html %}
+                {% endif %}
+
+                <!-- If this is a pentest service, include methodology -->
+                <!-- This section will be to defined when additional services will be proposed -->
+
+
+                <!-- Close button to close the modal -->
+                <button class="btn btn-primary" data-dismiss="modal" type="button"><i class="fas fa-times"></i>Close</button>
               </div>
             </div>
           </div>

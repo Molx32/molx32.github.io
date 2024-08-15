@@ -15,15 +15,15 @@
 
     {%- for service in site.translations[site.lang].home.services.list -%}
     <div class="col-md-4">
-        <a href="#s{{ forloop.index }}" data-toggle="modal">
+        <a href="#s{{ forloop.index }}" data-toggle="modal" style="text-decoration: none;">
           <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
+            <i class="fas fa-circle fa-stack-2x text-inherit-color"></i>
             <i class="{{ service.icon | default: "fas fa-shopping-cart" }} fa-stack-1x fa-inverse"></i>
           </span>
           <h4 class="service-heading">{{ service.title }}</h4>
         </a>
-        {% if service.description %}
-          <div class="text-muted">{{ service.description }}</div>
+        {% if service.subtitle %}
+          <div class="text-muted">{{ service.subtitle }}</div>
         {% endif %}
       </div>
     {%- endfor %}
@@ -31,5 +31,5 @@
   
   </div>
 </section>
-{% include home/modals/services.html %}
+{% include home/modals/modal_services.html %}
 <!-- End Services -->

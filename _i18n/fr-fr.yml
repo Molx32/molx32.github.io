@@ -17,6 +17,24 @@ descriptions:
   cv: cv description
   about: about description
   unk: vous vous êtes perdu?
+  pentest:
+    methodology:
+      step1: Engage with stakeholders to define the scope, objectives, and critical assets of the infrastructure to be tested.
+      step2: blablabla
+      step3: attaques de ouf en anglais
+      step4: super rapport! Toujours en anglais bien sur
+    test_types:
+      title: Type des tests
+      list:
+      - title: black-box
+        description: Le test en black-box ou boite noire permet de simuler réellement l’activité sans aucune indication fournie par le client. Le testeur devra découvrir lui-même l’ensemble des informations et la cartographie du SI.
+        image: assets/img/services/pentest_blackbox.png
+      - title: grey-box
+        description: Le test en white-box, ou boite blanche est un test au cours duquel de nombreuses informations sont données au testeur, telles que des comptes d’utilisateur ou le code source d’applications. Ce type de test donne une bien meilleure visibilité au testeur, mais ne simule pas une attaque réelle.
+        image: assets/img/services/pentest_greybox.png
+      - title: white-box
+        description: Le test en grey-box, ou boite grise est un test au cours duquel le testeur possède quelques informations, tel qu’un compte utilisateur non privilégié. Cela peut être utile pour atteindre l’objectif du test d’intrusion sans passer par des méthodes de phishing demandant un temps additionnel. C’est le type de test le plus répandu.
+        image: assets/img/services/pentest_whitebox.png
 
 projects:
   titles:
@@ -63,19 +81,22 @@ home:
   services:
     title: services
     list:
-    - title: pentest web
+    - type: pentest
+      title: pentest web
       description: tester la sécurité des applications web
       subtitle: my service 1 subtitle
       document: pages/home/services/pentest_cloud.md
       image: 
       alt:
-    - title: pentest infra
+    - type: pentest
+      title: pentest infra
       description: tester la sécurité des infrastructures
       subtitle: my service 1 subtitle
       document: pages/home/services/pentest_cloud.md
       image: 
       alt:
-    - title: pentest azure
+    - type: pentest
+      title: pentest azure
       description: tester la sécurité de azure
       subtitle: my service 1 subtitle
       document: pages/home/services/pentest_cloud.md
@@ -123,9 +144,9 @@ home:
       image: assets/img/business/moi.png
       social:
         - url: https://www.linkedin.com/in/theclemvp/
-          icon: assets/img/business/social/linkedin.png
+          icon: fab fa-linkedin-in
         - url: https://github.com/Molx32
-          icon: assets/img/business/social/github.png
+          icon: fab fa-github
 
   about:
     title: A propos

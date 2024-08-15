@@ -1,0 +1,26 @@
+<div class=pentest-methodology>
+    <h3>Methodology</h3>
+    
+    <div class="col-sm mt-3 mt-md-0">
+      {% include figure.html path="assets/img/services/pentest_methodology.png" class="img-fluid rounded" %}
+    </div>
+    
+    <div class="pentest-methodology-steps">
+        <ol>
+            <li>{{ site.translations[site.lang].descriptions.pentest.methodology.step1 }}</li>
+            <li>{{ site.translations[site.lang].descriptions.pentest.methodology.step2 }}</li>
+            <li>{{ site.translations[site.lang].descriptions.pentest.methodology.step3 }}</li>
+    </div>
+    
+    
+    <h3>{{ site.translations[site.lang].descriptions.pentest.test_types.title }}</h3>
+    {% for test in site.translations[site.lang].descriptions.pentest.test_types.list %}
+        <div class="pentest-box">
+            <img src="{{ test.image }}" />
+            <p><b>{{ test.title }}</b> - {{ test.description }}</p>
+        </div>
+    {% endfor %}
+    
+    <h3>Delivrables</h3>
+    
+</div>
