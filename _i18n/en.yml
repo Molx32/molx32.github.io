@@ -60,12 +60,12 @@ home:
       section: services
     - title: "Projects & contributions"
       section: portfolio
+    - title: "About"
+      section: team
     # - title: "About"
     #   section: about
     # - title: "Timeline"
     #   section: timeline
-    - title: "About"
-      section: team
     - title: "Contact"
       section: contact
     - title: "Blog"
@@ -134,7 +134,7 @@ home:
           thumbnail: assets/home/img/portfolio/04-thumbnail.jpg
 
   team:
-    title: Team
+    title: About
     text: I am a french cybersecurity engineer, and I like to continuously learn stuff. I like to automate, develop, script, document, and participate to the security community by sharing knowledge and reporting vulnerabilities.
     subtext: 
     people:
@@ -157,14 +157,27 @@ home:
     text: Some achievements
     list:
       - name: Burp Suite Certified Practionner (BSCP)
-        text: this certifications...
-        image: assets/img/business/certifications/burp-suite.jpg
+        date: 2024
+        text: Burp Suite Certified Practitioner demonstrates a deep knowledge of web security vulnerabilities, the correct mindset to exploit them, and of course, the Burp Suite skills needed to carry this out.
+        image: assets/img/business/certifications/burp-suite.svg
       - name: Microsoft Most Valuable Professional (Microsoft MVP)
-        text: this certifications...
-        image: assets/img/business/certifications/burp-suite.jpg
-      - name: CISSP
-        text: this certifications...
-        image: assets/img/business/certifications/burp-suite.jpg
+        date: 2020-2023
+        text: Once a year, the Microsoft recognizes Most Valuable Professionals (MVP) as exceptional community leaders for their technical expertise, leadership, speaking experience, online influence, and commitment to solving real world problems.
+        image: assets/img/business/certifications/mvp.png
+      - name: Certified Information Systems Security Professional (CISSP)
+        date: 2019
+        text: This certification recognizes cybersecurity professionals with the knowledge, skills and abilities to lead an organization’s information security program.
+        image: assets/img/business/certifications/cissp.png
+
+  statistics:
+    title: statistics
+    list:
+    - title: pentests
+      value: 15
+    - title: bugs reported
+      value: 20
+    - title: other stat
+      value: 102
 
   contact:
     title: "Contact Us"
