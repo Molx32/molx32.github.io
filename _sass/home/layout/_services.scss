@@ -4,12 +4,54 @@
   text-transform: none;
 }
 
-.pentest-methodology-steps li {
+.pentest-methodology p {
   text-align: justify;
 }
 
-.pentest-methodology-steps li:not(:last-child) {
-  margin-bottom: 30px;
+.pentest-methodology h5 {
+  font-size: 3.5rem;
+  transform: scaleY(1.1);
+  text-align: left;
+  margin-bottom: 25px;
+  color: $primary;
+}
+
+.pentest-methodology h6 {
+  font-size: 1.5rem;
+  text-align: left;
+  color: $primary;
+}
+
+.pentest-methodology .title-border {
+  border-style: solid;
+  border-color: $primary;
+  border-width: medium;
+}
+
+.pentest-methodology-card-shadow {
+  z-index: 11;
+}
+
+.pentest-methodology-card-shadow:hover {
+  box-shadow: inset 0px 0px 999px 999px rgb(239 239 239 / 80%);
+  transform: scale(1.010);
+  transition: all 0.3s ease-out;
+}
+
+
+
+.test-pentest-box {
+  transition: opacity 0.5s linear;
+}
+
+.test-pentest-box.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.test-pentest-box.visible {
+  visibility: visible;
+  opacity: 1;
 }
 
 .pentest-box {

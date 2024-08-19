@@ -2,12 +2,34 @@
 <section class="page-section" id="contact">
   <div class="container">
     <div class="row">
+      <!-- Title -->
       <div class="col-lg-12 text-center">
-        <h2 class="section-heading text-uppercase">
-          {{ site.translations[site.lang].home.contact.title }}</h2>
+        <h2 class="section-heading text-uppercase">{{ site.translations[site.lang].home.contact.title }}</h2>
         <h3 class="section-subheading text-muted">{{ site.translations[site.lang].home.contact.text }}</h3>
       </div>
     </div>
+
+      <!-- Sale process -->
+      <div class="row">
+        {% for sale in site.translations[site.lang].descriptions.sales %}
+        <div class="col-sm-4">
+          <div class="card1">
+            <!-- <i class="{{ sale.icon }}"></i> -->
+            <h3>{{ sale.title }}</h3>
+            <p>{{ sale.text }}</p>
+            <div class="go-corner" href="#">
+              <div class="go-arrow">{{ sale.num }}</div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Contact form -->
+  <div class="container">
     <div class="row">
       <div class="col-lg-12">
         <form id="contactForm"

@@ -155,7 +155,7 @@ home:
 
   contact:
     title: "Contactez-nous"
-    text: "Lorem ipsum or call 123456789"
+    text: ""
     section: contact
     name: "Nom*"
     name-validation: "Saisissez votre nom."
