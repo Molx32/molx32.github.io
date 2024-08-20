@@ -21,6 +21,7 @@ descriptions:
   # Pentest
   pentest:
     methodology:
+      title: METHODOLOGY
       steps:
         - num: "01"
           title: Pre-engagement
@@ -32,7 +33,7 @@ descriptions:
           title: Report
           text: Finally, during the <b>report and presentation</b> phase, auditors will write a detailed report that will be presented to both technical and non-technical people. This is the opportunity for customers to challenge findings and to better understand what has been found.
     test_types:
-      title: Type des tests
+      title: TYPE OF TESTS
       list:
       - title: black-box
         description: In black-box pentesting, the tester has no prior knowledge of the system being tested. They approach the application or network just like a real attacker would, using only publicly available information to identify and exploit vulnerabilities. This method simulates an external attack, focusing on discovering security gaps from an outsider's perspective.
@@ -86,7 +87,7 @@ home:
       section: portfolio
     - title: "About"
       section: team
-    - title: "CV"
+    - title: "Certifications"
       section: certifications
     - title: "Contact"
       section: contact
@@ -140,6 +141,16 @@ home:
           title: SMS Explorer (OSINT tool)
           subtitle: Project owner
           thumbnail: assets/img/business/projects/fry.jpg
+      - title: "Azure CIS"
+        redirect: https://www.cisecurity.org/cis-benchmarks
+        subtitle: Azure CIS Benchmark v1.2/v1.3
+        text: Blahblahblah
+        image: assets/img/business/projects/cis.svg
+        alt: Shut up and read my message
+        caption:
+          title: Azure CIS
+          subtitle: Contirbutor
+          thumbnail: assets/img/business/projects/cis.svg
 
   team:
     title: About
@@ -162,8 +173,8 @@ home:
 
   cv:
     certifications:
-      title: curriculum vitæ
-      text: Some of the most important experiences and certifications
+      title: certifications
+      text: Some significative certifications
       list:
         - name: Burp Suite Certified Practionner (BSCP)
           date: 2024 - now
@@ -177,6 +188,42 @@ home:
           date: 2019 - 2021
           text: This certification recognizes cybersecurity professionals with the knowledge, skills and abilities to lead an organization’s information security program.
           image: assets/img/business/certifications/cissp.png
+
+    experiences:
+      title: certifications
+      text: Some significative certifications
+      list:
+        - name: Penetration testing 
+          date: 2019 - now
+          text: I conducted several dozen penetration tests on different technologies and in various sectors (commerce, healthcare, industry, etc.). I also assisted a significant number of clients in remediating the identified vulnerabilities.
+          tasks:
+            - text: Azure/M365
+            - text: Web
+            - text: Infrastructure
+        - name: Azure/M365 consultant
+          date: 2019 - now
+          text: I worked for dozens of clients to advise them on the use, configuration, and deployment of Microsoft security solutions. I also utilized these security solutions to identify and counter threats.
+          tasks:
+            - text: Azure/M365 IAM Security
+            - text: Cloud Security Posture Management (CSPM)
+            - text: Microsoft Sentinel
+        - name: Operational Security
+          date: 2021 - 2024
+          text: Integrated in the SecOps team, I worked on architecture and integration of various security solutions (EDR, SOC, Vulnerability Scanners, CSPM, etc.) that I would later use for incident management and remediation.
+          tasks:
+            - text: Architect of cybersecurity solutions
+            - text: Integrator of EDR, SOC, Vulnerability scanning, CSPM solutions
+            - text: Incident management and response
+            - text: Hardening and remediation
+        - name: Teaching at University
+          date: 2020 - 2023
+          text: Focused on cloud security, and more specifically on Microsoft technologies, I taught for three years in the second year of a master's program of the Paul Sabatier University. The courses included security of identities and cloud resources.
+          tasks:
+            - text: Azure/M365 IAM Security
+            - text: Cloud Security Posture Management (CSPM)
+            - text: Microsoft Sentinel
+        
+        
 
   statistics:
     title: statistics
