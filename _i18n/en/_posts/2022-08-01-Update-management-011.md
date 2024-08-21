@@ -67,7 +67,7 @@ Our goal is to have something that looks like the scheme below. To explain this,
   4. An assignment at the rg_gcp_001 resource group, that must apply to all GCP Azure ARC VMs Azure VMs, that enforces all GCP Azure ARC VMs to report to loga-gcp-001 Log Analytics.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/arch_3.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/arch_3.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ### Create the policy definitions

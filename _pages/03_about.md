@@ -1,9 +1,9 @@
 ---
+id: about
 layout: about
 title: titles.about
-permalink: /
+permalink: /about
 subtitle: Who am I ?
-
 profile:
   align: right
   image: bender.jpg

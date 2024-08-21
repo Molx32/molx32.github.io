@@ -334,5 +334,5 @@ sudo azcmagent connect --service-principal-id "$servicePrincipalClientId" --serv
 ## Validation
 You can ensure Azure ARC is deployed by taking a look at the Azure portal.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/azure_arc_01.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/azure_arc_01.png" class="img-fluid rounded z-depth-1" %}
 </div>

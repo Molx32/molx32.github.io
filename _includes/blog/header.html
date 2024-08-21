@@ -6,14 +6,19 @@
         <div class="container">
           {% if page.permalink != '/' -%}
           <a class="navbar-brand title font-weight-lighter" href="{{ site.baseurl | prepend: site.url }}/">
-              {%- if site.title == "blank" -%}<span class="font-weight-bold">{{ site.first_name }}</span> {{ site.middle_name }}  {{ site.last_name }}{%- else -%}{{ site.title }}{%- endif -%}
+              {%- if site.title == "blank" -%}
+                <span class="font-weight-bold">{{ site.first_name }}</span> {{ site.middle_name }}  {{ site.last_name }}
+              {%- else -%}
+                {{ site.title }}
+              {%- endif -%}
           </a>
           {%- elsif site.enable_navbar_social -%}
-          <!-- Social Icons -->
-          <div class="navbar-brand social">
-            {% include social.html %}
-          </div>
+            <!-- Social Icons -->
+            <div class="navbar-brand social">
+              {% include blog/social.html %}
+            </div>
           {% endif %}
+
           <!-- Navbar Toggle -->
           <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -27,7 +32,7 @@
 
               {%- for page in site.pages -%}
                 {% if page.permalink == '/' %}
-                  {% assign about_title = page.title %}
+                  {% assign default_page = site.blog_nav_title %}
                 {% endif %}
               {% endfor %}
 
@@ -69,7 +74,7 @@
                   {%- endif -%}
                 {% endfor -%}
 
-                <!-- Blog -->
+                <!-- Blog / Default page -->
                 <li class="nav-item {% if page.url contains 'blog' %}active{% endif %}">
                   <!-- <a class="nav-link" href="{{ '/blog/' | relative_url }}">{{ site.blog_nav_title }} -->
                   <a class="nav-link" href="{{ '/blog/' | prepend: site.baseurl }}">{{ site.blog_nav_title }}
@@ -81,14 +86,18 @@
               {%- endif %}
 
               <!-- About -->
-              <li class="nav-item {% if page.permalink == '/' %}active{% endif %}">
-                <!-- <a class="nav-link" href="{{ '/' | relative_url }}">{{ about_title }} -->
-                <a class="nav-link" href="{{ '/' | prepend: site.baseurl }}">{% t about_title %}
+              {%- assign about_page = site.pages | where: 'id', 'about' -%}
+              {% for p in about_page %}
+              <li class="nav-item {% if page.permalink == '/about' %}active{% endif %}">
+                <!-- {{ site.lang }} -->
+                <!-- {{ site.titles[site.lang] }} -->
+                <a class="nav-link" href="{{ '/about' | prepend: site.baseurl }}">{% t p.title %}
                   {%- if page.permalink == '/' -%}
                   <span class="sr-only">(current)</span>
                   {%- endif -%}
                 </a>
               </li>
+              {% endfor %}
 
               <!-- Toogle language -->
               <li class="nav-item active">

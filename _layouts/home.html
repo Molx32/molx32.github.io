@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang }}">
-
+  <!-- Include head and navigation header -->
   {% include home/head.html %}
+  {% include home/navheader.html %}
 
+  <!-- Include all other sections and sets a grey background on 1 over 2 section-->
   <body id="page-top">
+    {%- for page in site.translations[site.lang].home.nav -%}
+      {% if page.html_page %}
+        {% assign mod = forloop.index | modulo: 2 %}
+        {% if mod == 1 %}
+          <div class="">{% include {{ page.html_page }} %}</div>
+        {% else %}
+          <div class="bg-light">{% include {{ page.html_page }} %}</div>
+        {% endif %}
+      {% endif %}
+    {% endfor %}
 
-    {% include home/navheader.html %}
-
-    {% include home/services.html %}
-    {% include home/portfolio_grid.html %}
-    {% include home/team.html %}
-    {% include home/certifications.html %}
-    {% include home/stats.html %}
+    <!-- Include contact and footer  -->
     {% include home/contact.html %}
-    
-
     {% include home/footer.html %}
 
     <!-- Bootstrap core JavaScript -->

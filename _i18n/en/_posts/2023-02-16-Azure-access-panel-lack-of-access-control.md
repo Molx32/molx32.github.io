@@ -47,14 +47,14 @@ There are multiple common methods to create a group, and depending on how you do
 The last common method is using the [M365 Admin portal](https://admin.microsoft.com). As shown on the picture below, the default visibility is Public. The truth is administrator should properly configure this, but they sometimes don't, especially when groups were created a few years ago, when security was not one of the biggest concerns for companies.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/MS_vuln_05.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/MS_vuln_05.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 
 ### Why is it interesting for an attacker?
 As shown on the scheme, based on the Azure AD configuration, an attacker could enumerate interesting resources (SharePoint, Yammer, Teams, Outlook group email) and add themselves to public groups without requiring access in order to receive emails sent to the associated email address.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/MS_vuln_04.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/MS_vuln_04.png" class="img-fluid rounded z-depth-1" %}
 </div>  
 
 
@@ -73,12 +73,12 @@ Administrators may want to disable this feature to prevent users seing this data
 #### Behavior when configured on Yes (restrictive)
 When the setting is configured to be restrictive, there is an error page that prevents group and group resource enumeration. The first picture shows Azure AD with the setting set on Yes.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/MS_vuln_01.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/MS_vuln_01.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 This second picture shows the user who can no longer access to the group feature in the Access Panel.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/MS_vuln_02.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/MS_vuln_02.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ***
@@ -214,5 +214,5 @@ Disable-AADIntTenantMsolAccess
 #### Detection
 Altough this can't be mitigated, you can still detect it though Azure AD non-interactive signin logs to the <b>Microsoft App Access Panel</b> application. Just send this to Microsoft Sentinel, and create a detection rule to raise an alert when multiple attempts are performed from the same user in a short timeframe.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/MS_vuln_06.png" class="img-fluid rounded z-depth-1" %}
+    {% include blog/figure.html path="assets/img/MS_vuln_06.png" class="img-fluid rounded z-depth-1" %}
 </div>

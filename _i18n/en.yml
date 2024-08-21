@@ -1,6 +1,5 @@
 titles:
   about: about
-  services: services
   blog: blog
   cv: cv
   news: news
@@ -83,12 +82,19 @@ home:
   nav:
     - title: "Services"
       section: services
-    - title: "Projects & contributions"
-      section: portfolio
-    - title: "About"
-      section: team
+      html_page: home/services.html
     - title: "Certifications"
       section: certifications
+      html_page: home/certifications.html
+    - title: "Contributions"
+      section: portfolio
+      html_page: home/portfolio_grid.html
+    - title: "About"
+      section: team
+      html_page: home/team.html
+    # - title: "Statistics"
+    #   section: statistics
+    #   html_page: home/team.html
     - title: "Contact"
       section: contact
     - title: "Blog"
@@ -124,53 +130,7 @@ home:
       image: assets/img/services/pentest_azure.png
       icon: fas fa-cloud
       alt:
-    
-  portfolio:
-    title: "Projects & contributions"
-    text: "A list of my humble contributions to the cybersecurity community"
-    section: portafolio
-    closebutton: "Cerrar Proyecto"
-    projects:
-      - title: "SMS Explorer"
-        redirect: https://github.com/Molx32/SMSExplorer
-        subtitle: Explore SMSs received on public phone numbers
-        text: Blahblahblah
-        image: assets/img/business/projects/fry.jpg
-        alt: Shut up and read my message
-        caption:
-          title: SMS Explorer (OSINT tool)
-          subtitle: Project owner
-          thumbnail: assets/img/business/projects/fry.jpg
-      - title: "Azure CIS"
-        redirect: https://www.cisecurity.org/cis-benchmarks
-        subtitle: Azure CIS Benchmark v1.2/v1.3
-        text: Blahblahblah
-        image: assets/img/business/projects/cis.svg
-        alt: Shut up and read my message
-        caption:
-          title: Azure CIS
-          subtitle: Contirbutor
-          thumbnail: assets/img/business/projects/cis.svg
-
-  team:
-    title: About
-    text: I am a french cybersecurity engineer, and I like to continuously learn stuff. I like to automate, develop, script, document, and participate to the security community by sharing knowledge and reporting vulnerabilities.
-    subtext: 
-    people:
-    - name: Clément
-      role: CTO
-      image: assets/img/business/moi.png
-      social:
-        - url: https://www.linkedin.com/in/theclemvp/
-          icon: fab fa-linkedin-in
-        - url: https://github.com/Molx32
-          icon: fab fa-github
-
-  about:
-    title: About
-    text: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde. Markdown supported.
-    body: c'est le body
-
+  
   cv:
     certifications:
       title: certifications
@@ -222,7 +182,54 @@ home:
             - text: Azure/M365 IAM Security
             - text: Cloud Security Posture Management (CSPM)
             - text: Microsoft Sentinel
-        
+   
+  portfolio:
+    title: "Projects & contributions"
+    text: "A list of my humble contributions to the cybersecurity community"
+    section: portafolio
+    closebutton: "Cerrar Proyecto"
+    projects:
+      - title: "SMS Explorer"
+        redirect: https://github.com/Molx32/SMSExplorer
+        subtitle: Explore SMSs received on public phone numbers
+        text: Blahblahblah
+        image: assets/img/business/projects/fry.jpg
+        alt: Shut up and read my message
+        caption:
+          title: SMS Explorer
+          subtitle: Project owner
+          thumbnail: assets/img/business/projects/fry.jpg
+      - title: "Azure CIS"
+        redirect: https://www.cisecurity.org/cis-benchmarks
+        subtitle: Azure CIS Benchmark v1.2/v1.3
+        text: Blahblahblah
+        image: assets/img/business/projects/cis.svg
+        alt: Shut up and read my message
+        caption:
+          title: Azure CIS
+          subtitle: Contirbutor
+          thumbnail: assets/img/business/projects/cis.svg
+
+  team:
+    title: About
+    text: I am a french cybersecurity engineer, and I like to continuously learn stuff. I like to automate, develop, script, document, and participate to the security community by sharing knowledge and reporting vulnerabilities.
+    subtext: 
+    people:
+    - name: Clément
+      role: CTO
+      image: assets/img/business/moi.png
+      social:
+        - url: https://www.linkedin.com/in/theclemvp/
+          icon: fab fa-linkedin-in
+        - url: https://github.com/Molx32
+          icon: fab fa-github
+
+  # about:
+  #   title: About
+  #   text: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde. Markdown supported.
+  #   body: c'est le body
+
+     
         
 
   statistics:

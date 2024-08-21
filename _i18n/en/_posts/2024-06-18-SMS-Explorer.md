@@ -45,17 +45,17 @@ There are plenty of such services out there. Using any simple online research su
 #### An example
 Let's take an example real quick and have a look at [https://smstome.com](https://smstome.com). Just select a phone number : congratulation, you can read all messages received.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_intro_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_intro_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_intro_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_intro_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 If you want to do some testing, simply try to register on a web app that requires a phone number, and check if you receive a verification SMS. Actually it might not work, because after some time, those phone numbers are considered malicious or suspicious by carriers and applications. To ensure the service is still available, SMS service providers simply retire old phone numbers and replace them with new ones.
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_intro_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_intro_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 You may notice that some messages seem truncated, and they actually are. I don’t know why, but this is a common issue shared by many SMS services, which maybe need to optimize their data storage, especially for free services.
@@ -100,13 +100,13 @@ Here is a quick summary of the different SMS Services categories.
 
 Before digging those services, here is a scheme representing our study scope. As you can see, I only studied SMS received on [https://receive-smss.com/](https://receive-smss.com/), which is a public and free SMS service. I decided to focus only this data source because it was pretty simple to automate data collection, but also because this web sites received a lot of messages.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_intro_0.png" class="img-fluid rounded imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_intro_0.png" class="img-fluid rounded imgc" style="display: block;margin: auto;" %}
 </div>
 
 #### Exploiting the security issue
 You may wonder why would anyone spend their time reading strangers SMS. Well, let me give an example: while refreshing a "received messages” web page on a PSS to see the message I was waiting for, I took a look at already received messages, and one of them was something like the following: <code>Hi redacted@gmail.com, your new access code is 458953. You can now connect on https://REDACTED.com.</code>.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_intro_1.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_intro_1.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 Since I couldn’t believe it, I quickly configured an anonymization pipeline and accessed the account. The website was a cryptocurrency application that allowed users to access their different wallets. I had access to personal information and to a significative amount of 65 Bitcoins.
@@ -123,7 +123,7 @@ In the end, the domain was created three months ago, and all features were not i
 
 Altough this is a quite simple use case, let's define some kind of attack model. We have two major use cases which are SMSs without URL, and SMSs with URL.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_security_gif_1.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_security_gif_1.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Case 1 - SMS without URL
@@ -167,12 +167,12 @@ Finally, the <b>end user</b> is informed that a real information is expected, an
 In order to get some information about the interest in PSSs, we can use any trend analysis tool. Here are my results for keywords <code>free sms online</code > on [https://semrush.com](https://semrush.com). We can see in the bottom right corner that these keywords belong to a cluster where users seem to look for test or verification phone number. This already give insight about data we will find. Additionally, we can take a specific domain to analyze its traffic and see how it is used, which may be useful in order to select a high traffic PSS for analysis.
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_intro_4.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_intro_4.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 <br>
 After a few week of SMS collection on [https://receive-smss.com/](https://receive-smss.com/), we can observe that the number of messages received on a hourly basis approaches 2000 SMS/h.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_stats_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_stats_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 <br>
 Then, we can observe how phone numbers are used based on their countries. This is only an approximation because phone are periodically retired and replaced by new ones, not necessarily from the same country. What we can see on the following chart is the number of message receive for each country.
@@ -180,20 +180,20 @@ Then, we can observe how phone numbers are used based on their countries. This i
 Then, if we divide this total by the number of phones belonging to that country, we get the mean number of messages received by phone by country, which is in other terms how frequently a phone will receive messages. We can see that Indian phone numbers are the most active with <b>47801</b> total messages received on the <b>7 last days</b>, with only two phone numbers available, while UK received <b>82937</b> with <b>14</b> phone numbers available.
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_stats_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_stats_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_stats_2.1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_stats_2.1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 <br>
 Besides the amount of received message, the most valuable type of SMS are the ones that contain URL. The following chart shows the number of message containing URLs received per hour, which approches <b>49 SMS/h</b>, which which is <b>2.45%</b> of the total <b>2000 SMS/h</b>. Alternatively, if we take a look at the total of messages received over the <b>last 14 days</b>, this is approx. <b>2.49%</b> of messages containing URLs. But don't be fooled, this doesn't mean that <b>2.49%</b> of messages received are interesting : actually most messages containg URL are spams, ads, or are incomplete messages. That's why we need AUTOMATION!
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_stats_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_stats_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_stats_4.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_stats_4.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 <br>
@@ -202,7 +202,7 @@ Besides the amount of received message, the most valuable type of SMS are the on
 ***
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_automation_1_gif.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_automation_1_gif.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ## Automation
@@ -233,7 +233,7 @@ The whole architecture is made of Docker containers. The entry point from the us
 These jobs will be executed by two <b>workers</b>. Finally, we have a database with SMSs, targets, configuration, and so on.
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_automation_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_automation_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ##### Latest release
@@ -546,7 +546,7 @@ Statictics must be added.
 ***
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_1.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_1.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ***
@@ -558,13 +558,13 @@ According to Wikipedia, Venmo is an american company owned by PayPal with approx
 
 When navigating to the URL, no other information than just setting a password. In this case, an attacker could reset the password and then what?
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_venmo_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_venmo_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Impact
 Well, as you can see on the picture, the phone number can be used as the identifier to login into the application.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_venmo_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_venmo_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 This scenario typically involves a <b>race condition</b> for the attacker to compromise the account, because the link may expire, and because the legitimate user may reset their password before the attacker does.
@@ -596,22 +596,22 @@ In the first case, we can just skip the password reset and be logged in as the u
 ###### Redirection - Second case
 In the second case, we must complete the password reset procedure, and then authenticate to the account with the phone number and password just set.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_instagram_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_instagram_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Redirection - Third case
 In the third case, the account is locked, but we can still retrieve the username, either by analysing source code or by clicking on the top right menu icon. This may be used for OSINT and CTI.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_instagram_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_instagram_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_instagram_4.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_instagram_4.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Redirection - Fourth case
 In the fourth case, the URL has expired or was used.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_instagram_5.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_instagram_5.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 <br>
@@ -619,13 +619,13 @@ In the fourth case, the URL has expired or was used.
 ###### Impact
 A common intuition would be that one Instagram account is associated with one phone number. Thus, if a Public SMS Service provides a hundred phone numbers, an attacker could only compromise a maximum of a hundred user accounts. Actually, this is wrong. I observed that for a given phone number, multiple Instagram password reset URLs were received, leading to different user accounts. This seemed irrelevant to me. After some testing, I observed that it is <b>not possible to register</b> a new Instagram account with a phone number <b>when the phone number is already used</b> by an existing account. However, it is possible to <b>edit</b> the contact information to add a phone number.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_instagram_6.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_instagram_6.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 Imagine that Instagram has a user <code>jdoe@email.com</code> registered with <code>+4591457271</code>. If this user triggers a password reset, a text message will be received on the Public SMS Service hosting this phone number, and the account could be stolen. Now, imagine that a new user creates a new account with an email address <code>leoagata@proton.me</code>, and then edit their contact information and set their phone number to <code>+4591457271</code>. The immediate consequence is that this phone number will be removed from <code>jdoe@email.com</code> account. Now, if <code>leoagata@proton.me</code> triggers a password reset, a text message will be received on the Public SMS Service hosting this phone number. This means that we can receive multiple passwords reset URLs from different user accounts on the same phone number. The following example shows two SMSs received in a 10 min timeframe, with two different URLs leading to two different user accounts, received on the same phone number.
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_instagram_7.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_instagram_7.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 In the end, it is not possible to create an Instagram account with those virtual phone number, because all of them are already used. This makes Instagram account compromise possible in a very specific case where a user edits its information to provide one of those virtual phone numbers, then triggers a password reset. This would probably lead to testing accounts compromise only.
@@ -645,15 +645,15 @@ Yes this is Polish, and it means <code>Link to change password https://bdr.page.
 
 Anyways, navigating to the URL would lead this page, inviting user to reset their password, and of course we are able to login with the phone number and password we just set.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_biedronka_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_biedronka_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 Another way to compromise a user account is simply to download the mobile app, and enter the targeted public virtual phone number. Then a message is received on the Public SMS Service hosting that virtual phone number, providing a code. Based on the phone number country <i>e.g.</i> German phone number, the SMS showned on the picture may be cropped, and the last digit must be "bruteforced", which is possible since the number of tries seems to be unlimited.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_biedronka_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_biedronka_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_biedronka_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_biedronka_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 Finally, I took a look at the application and analysed its HTTP traffic to see if the 6 digit code could be bruteforced, and luckily it can't be bruteforced in a reliable.
@@ -661,7 +661,7 @@ Finally, I took a look at the application and analysed its HTTP traffic to see i
 ###### Impact
 When connecting to a user account, there is not much to do. Of course it discloses email address when fullfilled, and maybe credit card information since Biedronka works with a partner called BLIK, but I didn't investigate this.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_biedronka_4.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_biedronka_4.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Responsible disclosure
@@ -690,7 +690,7 @@ Free Ads is a UK application that allows user to publish ads to sell whatever th
 
 This URL redirects to https://my.freeads.co.uk/messages/list/all?c=REDACTED%3D%3D&utm_source=message_reminder&utm_medium=sms&utm_campaign=message and sets a cookie session that allows to be authenticated as a user. Unlike most of these URLs, this one does not expires!
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_freeads_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_freeads_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Impact
@@ -718,12 +718,12 @@ According to Wikipedia, AirIndia is the second-largest airline in India in terms
 
 When navigating to the URL, we are redirected to Qualtrics, a SaaS solution to create various things, including surveys. In order for me to understand how it works, I created a test survey available [here](https://qualtricsxmfx7yt665q.qualtrics.com/jfe/form/SV_57KnpcbkNjHQ6uq) that reads a URL parameter <b>Name</b> and display its value in the first question. Example with a survey for [Molx](https://qualtricsxmfx7yt665q.qualtrics.com/jfe/form/SV_57KnpcbkNjHQ6uq?Name=Molx), or for [Bender](https://qualtricsxmfx7yt665q.qualtrics.com/jfe/form/SV_57KnpcbkNjHQ6uq?Name=Bender).
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_airindia_0.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_airindia_0.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 With AirIndia, the issue is that all surveys include very sensitive data, including PII and also the PNR unique identifier. Or course I double checked this data using services like [https://flightstats.com/](https://flightstats.com/), and all of it was real!
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_airindia_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_airindia_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 The following table shows all information disclosed by AirIndia as URL parameters.
@@ -805,7 +805,7 @@ The following table shows all information disclosed by AirIndia as URL parameter
 
 If you ever travelled by plane, you may understand what an attacker could do right? Here is the answer.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_airindia_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_airindia_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Impact
@@ -830,7 +830,7 @@ A funny name right? The concept is also funny : this is a SaaS app where users u
 ###### Impact
 The impact entirely relies on the messages content. In the following example, the only sensitive infomation are first and last names. However, since this 'report' quotes the conversation, any sensitive information in that conversation could be present.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_textsfrommyex_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_textsfrommyex_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Responsible disclosure
@@ -847,7 +847,7 @@ Stickermule is a website where sticker can be bought. The message received looks
 ###### Impact
 When navigating to the URL, an attacker can access shipment information <i>i.e.</i> first name, last name and physical address and the list of stickers bought. Thus, the user account is not compromised.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_stickermule_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_stickermule_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Responsible disclosure
@@ -863,16 +863,16 @@ In the context of the received message, Abinitio solutions is a subcontractor of
 
 When navigating to the URL we have a bill detail with the customer personal information <i>i.e.</i> first name, last name and address.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_abinitio_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_abinitio_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 When navigating to the provided URL, we are redirected to a payment page.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_abinitio_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_abinitio_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/publicsms_results_abinitio_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/publicsms_results_abinitio_3.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ###### Impact

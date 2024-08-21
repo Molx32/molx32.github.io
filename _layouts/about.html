@@ -23,7 +23,7 @@ layout: default
                 {%- assign profile_image_class = "img-fluid z-depth-1 rounded" -%}
               {% endif %}
 
-              {% include figure.html 
+              {% include blog/figure.html 
               path=profile_image_path 
               class=profile_image_class
               alt=page.profile.image -%}
@@ -42,17 +42,17 @@ layout: default
 
           {% if page.news -%}
           <!-- News -->
-          {%- include news.html %}
+          {%- include blog/news.html %}
           {%- endif %}
           {% if page.selected_papers -%}
             <!-- Selected papers -->
-            {%- include selected_papers.html %}
+            {%- include blog/selected_papers.html %}
           {%- endif %}
           {%- if page.social %}
           <!-- Social -->
           <div class="social">
             <div class="contact-icons">
-            {% include social.html %}
+            {% include blog/social.html %}
             </div>
 
             <div class="contact-note">

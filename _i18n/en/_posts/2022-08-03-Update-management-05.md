@@ -45,7 +45,7 @@ provided your OSs are technically supported.</i>
 ## Purpose
 In this article, I assume you connected all your virtual machines. What you may want now is monitoring you virtual machines. The usual way to monitor updates is navigate to the automation account, then take a look at your VMs.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/updt_mgmt_monitoring_01.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/updt_mgmt_monitoring_01.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 This is a very poor view, and we sure can do way better! And I actually developed a ready to use monitoring workbook that you need to slightly tweak to meet your needs. Ready to discover that sick workbook? Here is a short video.
@@ -62,7 +62,7 @@ To get the same awesome dashboard, just copy the code hosted on my [Github](http
 
 You should end up with something that looks like this. Let's adapt this to make it work.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/updt_mgmt_monitoring_00.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/updt_mgmt_monitoring_00.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 
@@ -147,7 +147,7 @@ This will create a drop down button where we can select the different CSPs where
 4. Set a static JSON and save
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/updt_mgmt_monitoring_021.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/updt_mgmt_monitoring_021.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 #### Create a first parameter named Environment
@@ -166,7 +166,7 @@ where type =~ 'microsoft.operationalinsights/workspaces'
 {% endhighlight %}
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/updt_mgmt_monitoring_022.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/updt_mgmt_monitoring_022.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 #### Create a first parameter named Workspaces
@@ -186,14 +186,14 @@ where type =~ 'microsoft.operationalinsights/workspaces'
 {% endhighlight %}
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/updt_mgmt_monitoring_023.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/updt_mgmt_monitoring_023.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ***
 
 If you didn't change too much things, the result for this first step should look like this.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/updt_mgmt_monitoring_024.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/updt_mgmt_monitoring_024.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 
@@ -202,7 +202,7 @@ In my case, VMs have specific tags to easily know when they are supposed to upda
 
 Based on your needs, you either remove or adapt what is highlighted on the following screenshot.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/updt_mgmt_monitoring_03.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/updt_mgmt_monitoring_03.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 

@@ -54,14 +54,14 @@ So, what’s wrong with Azure ARC? Let’s compare dynamic onboarding between Az
 In that case, as the image shows, we can define up to four criteria on which the deployment schedule will rely to onboard VMs at patching time. Unfortunately, this is only available for Azure VMs.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/patch_arc_1.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/patch_arc_1.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ##### Dynamic onboarding for Azure ARC VM
 As you can see here, Azure ARC VMs can’t be onboarded using the same four criteria. Instead, we need to configure a <b>saved search</b>, which is a simple KQL query saved within the Log Analytics workspace attached to our Automation Account.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/patch_arc_2.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/patch_arc_2.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 If we take a look at the queries [Microsoft documentation](https://learn.microsoft.com/en-us/azure/automation/update-management/configure-groups#define-dynamic-groups-for-non-azure-machines), we can see that saved searches, also known as <b>computer groups</b> rely on tables such as <i>Heartbeat</i>, or <i>Update</i>. The following example shows a request that returns all computers that have the <b>srv</b> string in their name. So this would be interesting to filter on the computer tag rather then its name… but <u>this is not possible : we can’t find any tag column in any table</u> of the Log Analytics workspace. <b>This is what’s wrong this Azure ARC VMs</b>.
@@ -78,18 +78,18 @@ The next section describe our workaround to still dynamically onboard those Azur
 The basic intent is very simple : automate the process of assigning an Azure ARC VM to a deployment schedule. To do it manually, go on a deployment schedule, click on <b>Machines to update</b>, look for the machines to onboard, click on them and save.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/patch_arc_3.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/patch_arc_3.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/patch_arc_4.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/patch_arc_4.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ### Script logic
 The script in run every day between 15:00 and 18:00, week ends included. When a tag is changed on a VMs, schedules will be updated after the script run. There is one script per CSP resource group as shown on the scheme below.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/patch_arc_5.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/patch_arc_5.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 #### Step 0

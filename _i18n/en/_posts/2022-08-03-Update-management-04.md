@@ -163,7 +163,7 @@ We can create a first deployment schedule to check what it looks like.
 </table>
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/automation_account_1.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/automation_account_1.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 
@@ -253,7 +253,7 @@ When using this feature, we can define a group of machines to target with the cu
 - Windows Server Update Services
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/automation_account_2.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/automation_account_2.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 As mentioned in the first part of this post, I want my VMs to be updated if they have a specific tag. Unfortunately, with this setting, we can't update machines based on their tags! So let's take a look at the <b>Groups to update</b> feature then.
@@ -261,11 +261,11 @@ As mentioned in the first part of this post, I want my VMs to be updated if they
 #### Groups to update
 As described in the Microsoft documentation, we can filter machines based on their tags, awesome right? So this will be our solution, but our solution has an important limitation : this does not apply to Azure ARC VMs! This is immediately not so awesome... But I have a workaround that I will describe in a future post, so let's continue with Azure VM only for now.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/automation_account_3.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/automation_account_3.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/automation_account_4.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/automation_account_4.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 
@@ -288,7 +288,7 @@ az deployment group create --name <anyName> --resource-group <resourceGroupName>
 
 Here is a sample output for deployment.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/automation_account_5.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/automation_account_5.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ***
@@ -316,17 +316,17 @@ We deployed the three following resources.
 </table>
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/automation_account_6.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/automation_account_6.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 We can't see deployment schedule here : we can view them from the automation account, so navigate to the resource, and you will see two deployment schedules that look the same, expect one is for Windows OS, the other for Linux.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/automation_account_7.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/automation_account_7.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 If you take a look at the Linux deployment schedule, you will see the configuration we pushed through our ARM template. In the <b>Groups to update</b> setting, we look for machines located in the current subscription and tagged with <b>patch:LINUX-MON-03:00</b> tag.
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/automation_account_8.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/automation_account_8.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 Now that the core infratructure is deployed, we can assign an Azure policy (c.f. Part 2 of the serie) to the subscription scope and enforce Log Analytics agent to report to our newly deployed Log Analytics workspace. Then you can deploy a VM that will be directly onboarded!

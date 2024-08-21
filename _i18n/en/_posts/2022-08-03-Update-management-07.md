@@ -57,7 +57,7 @@ sudo yum -q --security check-update
 
 When observing what I just described for the first time, I couldn't believe it! There are not native nor simple solution to setup security updates on CentOS.
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_1.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+    {% include blog/figure.html path="assets/img/centos_1.gif" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
 </div>
 
 ***
@@ -66,7 +66,7 @@ When observing what I just described for the first time, I couldn't believe it! 
 A short word about the architecture : if you took a look at my previous posts, you may remember the architecture split by environment at the subscription level, and split by CSP at the resource group level. As you can see on the scheme below, we will have one script per CSP, because we didn't want to have a single script to handle all of our Azure ARC VMs, especially because we wanted an automation account to have write permissions on itself only, and not on other automation accounts.
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_4.png" class="img-fluid rounded z-depth-1" style="float: center" %}
+    {% include blog/figure.html path="assets/img/centos_4.png" class="img-fluid rounded z-depth-1" style="float: center" %}
 </div>
 
 ***
@@ -88,7 +88,7 @@ An additional word about tags : in my case, we defined a tag policy in order for
 
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
+    {% include blog/figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 
@@ -327,11 +327,11 @@ If you run the script on Azure, you should assign these permissions using <b>sys
 #### Run the script
 Once you ran the script, it will deploy one deployment schedule per VM, as shown below. If you click on the deployment schedule, then go to <b>Include/exclude updates</b>, you will see the explicit list of all updates to be installed on the VM. When configuring a deployment schedule like this, Azure no longer use the ```yum install --security``` command, but it uses the ```yum install <package1> <package2> <packagen>``` command!
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
+    {% include blog/figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_3.png" class="img-fluid rounded z-depth-1" %}
+    {% include blog/figure.html path="assets/img/centos_3.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ***
@@ -558,11 +558,11 @@ If you run the script on Azure, you should assign these permissions using <b>sys
 #### Run the script
 Once you ran the script, it will deploy one deployment schedule per VM, as shown below. If you click on the deployment schedule, then go to <b>Include/exclude updates</b>, you will see the explicit list of all updates to be installed on the VM. When configuring a deployment schedule like this, Azure no longer use the ```yum install --security``` command, but it uses the ```yum install <package1> <package2> <packagen>``` command!
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
+    {% include blog/figure.html path="assets/img/centos_2.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-    {% include figure.html path="assets/img/centos_3.png" class="img-fluid rounded z-depth-1" %}
+    {% include blog/figure.html path="assets/img/centos_3.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 ***

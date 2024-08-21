@@ -35,6 +35,12 @@
           color: $primary;
         }
       }
+      .separator {
+        border: white;
+        border-style: solid;
+        height: 40px;
+        border-width: thin;
+      }
     }
   }
 }

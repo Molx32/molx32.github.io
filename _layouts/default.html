@@ -4,16 +4,16 @@
   <!-- Head -->
   <head>
   {%- if page.redirect -%}
-    <meta http-equiv="refresh" content="3; url={{ site.baseurl | prepend: site.url }}/" />
+    <meta http-equiv="refresh" content="0; url={{ page.redirect | prepend: site.url }}/" />
   {%- endif -%}
-  {% include head.html %}
+  {% include blog/head.html %}
   </head>
 
   <!-- Body -->
   <body class="{% if site.navbar_fixed %}fixed-top-nav{% endif %} {% unless site.footer_fixed %}sticky-bottom-footer{% endunless %}">
 
     <!-- Header -->
-    {%- include header.html %}
+    {%- include blog/header.html %}
 
     <!-- Content -->
     <div class="container mt-5">
@@ -21,14 +21,14 @@
     </div>
 
     <!-- Footer -->
-    {%- include footer.html %}
+    {%- include blog/footer.html %}
 
     <!-- JavaScripts -->
-    {% include scripts/jquery.html %}
-    {% include scripts/bootstrap.html %}
-    {% include scripts/masonry.html %}
-    {% include scripts/misc.html %}
-    {% include scripts/mathjax.html %}
-    {% include scripts/analytics.html %}
+    {% include blog/scripts/jquery.html %}
+    {% include blog/scripts/bootstrap.html %}
+    {% include blog/scripts/masonry.html %}
+    {% include blog/scripts/misc.html %}
+    {% include blog/scripts/mathjax.html %}
+    {% include blog/scripts/analytics.html %}
   </body>
 </html>

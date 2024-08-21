@@ -55,7 +55,7 @@ Here is the architecture, where you can see four steps.
 2. <b>Reporting with Log Analytics agents</b> - Now that we can manage both Azure and non-Azure VM directly from Azure, we can set up an Azure Policy. Basically, an Azure policy can enforce a pre-defined configuration on our VM. In that case, we enforce the Log Analytics agent to be installed on each VM (both Azure and non-Azure) and report update information to a Log Analytics workspace. Be doing this, any newly created VM will be onboarded on Update Management.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/arch_1.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/arch_1.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 3. <b>Monitoring with workbooks</b> - In order to monitor service health, update status, and some other information, we can create an Azure Workbook, which is a dashboard. The workbook is based on the Log Analytics workspace that will collect all the update information from all VMs.
@@ -73,18 +73,18 @@ Our first consideration was to integrate this properly with the existing archite
 We didn't implement this, because we also wanted to consider CSPs.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/arch_11.png" class="img-fluid rounded z-depth-1 imgc" %}
+  {% include blog/figure.html path="assets/img/arch_11.png" class="img-fluid rounded z-depth-1 imgc" %}
 </div>
 
 #### Design consideration - CSP
 A second design consideration was our CSPs. Imagine onboarding hundreds of VMs into Azure using Azure ARC : you don't want extra maintenance effort on Azure. For this reasons, we wanted to be able to manage those VMs easily by regrouping all OVH machines in the same resource group, and doing the same with OCI and GCP. Of course, we couldn't do it for Azure VMs because we already had many projects and resources with Azure VMs everywhere, so this ease of management only applies to Azure ARC. So this gives the following scheme.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/arch_12.png" class="img-fluid rounded z-depth-1 imgc" %}
+  {% include blog/figure.html path="assets/img/arch_12.png" class="img-fluid rounded z-depth-1 imgc" %}
 </div>
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/arch_13.png" class="img-fluid rounded z-depth-1 imgc" %}
+  {% include blog/figure.html path="assets/img/arch_13.png" class="img-fluid rounded z-depth-1 imgc" %}
 </div>
 
 <u>Notes</u> :
@@ -105,7 +105,7 @@ If you split your resources in many resource groups (e.g. one resource group per
 So in my case, the final architecture looks like this. It is important to note that Automation Account configuration is slightly different to handle Azure ARC machines : I will discuss these technical details in the next parts of the serie. Additionally, you can see that some services are missing : they will also be discussed in the next posts.
 
 <div class="col-sm mt-3 mt-md-0">
-  {% include figure.html path="assets/img/arch_2.png" class="img-fluid rounded z-depth-1" %}
+  {% include blog/figure.html path="assets/img/arch_2.png" class="img-fluid rounded z-depth-1" %}
 </div>
 
 <u>Note</u> : I won't post the same picture for non production environment since this is the same, expect for resource groups and resources names.
