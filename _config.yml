@@ -3,7 +3,7 @@
 # -----------------------------------------------------------------------------
 
 title: CyberIntruder # the website title (if blank, full name will be used instead)
-logo: assets/img/business/logo3.svg
+logo: /assets/img/business/logo3.svg
 first_name: CyberIntruder - Molx32
 middle_name: 
 last_name: 
@@ -112,11 +112,6 @@ disqus_shortname: al-folio # put your disqus shortname
 # -----------------------------------------------------------------------------
 
 collections:
-  news:
-    defaults:
-      layout: post
-    output: true
-    permalink: /news/:path/
   projects:
     output: true
     permalink: /projects/:path/

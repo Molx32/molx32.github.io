@@ -1,7 +1,7 @@
 ---
 id: about
 layout: about
-title: titles.about
+title: blog.titles.about
 permalink: /about
 subtitle: Who am I ?
 profile:

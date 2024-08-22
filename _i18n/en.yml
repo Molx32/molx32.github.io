@@ -1,136 +1,102 @@
-titles:
-  about: about
-  blog: blog
-  cv: cv
-  news: news
-  projects: projects
-  publications: publications
-  repositories: repositories
-  teaching: teaching
-  submenus: submenus
-  unk: page not found
-
-descriptions:
-  services: to contact me, send an email at quote@cyber-intruder.com
-  projects: here are the projects I work on
-  cv: cv description
-  about: about description
-  unk: did you get lost?
-
-  # Pentest
-  pentest:
-    methodology:
-      title: METHODOLOGY
-      steps:
-        - num: "01"
-          title: Pre-engagement
-          text: The <b>pre-engagement</b> phase is a discussion with stakeholders to define the scope, objectives, and critical assets of the infrastructure to be tested. At the end of this first step, stakeholders must sign the <b>Penetration Test Agreement (PTA)</b> that will allow technical tests to start.
-        - num: "02"
-          title: Pentest
-          text: During the <b>test phase</b>, the targeted resources will be subjected to attacks.
-        - num: "03"
-          title: Report
-          text: Finally, during the <b>report and presentation</b> phase, auditors will write a detailed report that will be presented to both technical and non-technical people. This is the opportunity for customers to challenge findings and to better understand what has been found.
-    test_types:
-      title: TYPE OF TESTS
-      list:
-      - title: black-box
-        description: In black-box pentesting, the tester has no prior knowledge of the system being tested. They approach the application or network just like a real attacker would, using only publicly available information to identify and exploit vulnerabilities. This method simulates an external attack, focusing on discovering security gaps from an outsider's perspective.
-        image: assets/img/services/pentest_blackbox.png
-      - title: grey-box
-        description: Grey-box pentesting involves providing the tester with limited knowledge of the system, such as access credentials or information about the application's architecture. This approach strikes a balance between black-box and white-box testing, allowing the tester to focus on specific areas while still simulating an attacker's perspective. It helps identify vulnerabilities that could be exploited by someone with partial insider knowledge.
-        image: assets/img/services/pentest_greybox.png
-      - title: white-box
-        description: In white-box pentesting, the tester has full access to detailed information about the system, including source code, architecture diagrams, and internal documentation. This thorough approach allows for an in-depth assessment of the system's security, identifying vulnerabilities at a granular level. White-box testing is ideal for uncovering complex issues that may not be apparent from the outside.
-        image: assets/img/services/pentest_whitebox.png
-
-  # Sales
-  sales:
-    - num: 01
-      title: Reach out
-      text: Get in touch with us to discuss your needs. Get in touch
-      icon: fas fa-envelope
-    - num: 02
-      title: Schedule a meeting
-      text: We'll arrange a convenient time to explore your requirements.
-      icon: fas fa-handshake
-    - num: 03
-      title: Receive a quote
-      text: We provide a customized quote tailored to your project.
-      icon: fas fa-file-invoice
-
-projects:
-  titles:
-    smsexplorer: SMS Explorer
-  descriptions:
-    smsexplorer: From public SMS to account takeover
-
 blog:
   language_mention: available in english only
+  titles:
+    about: about
+    projects: projects
+    unk: page not found
 
-cv:
-  general_information:
-    title: General information
-    name: Clément
-    birth: N/A
-    languages: English, French
+  descriptions:
+    about: about description
+    projects: here are the projects I work on
+    unk: did you get lost?
 
-  studies:
-    title: Education
+  projects:
+    titles:
+      smsexplorer: SMS Explorer
+    descriptions:
+      smsexplorer: From public SMS to account takeover
 
 home:
+  # This is the menu list
   nav:
-    - title: "Services"
+    - title: Services
       section: services
       html_page: home/services.html
-    - title: "Certifications"
+    - title: Certifications
       section: certifications
       html_page: home/certifications.html
-    - title: "Contributions"
+    - title: Contributions
       section: portfolio
       html_page: home/portfolio_grid.html
-    - title: "About"
+    - title: About
       section: team
       html_page: home/team.html
     # - title: "Statistics"
     #   section: statistics
-    #   html_page: home/team.html
+    #   html_page: home/stats.html
     - title: "Contact"
       section: contact
     - title: "Blog"
       url: /
 
   intro:
-    title: "Make your web apps secure"
-    text: A cyberintruder among hackers
+    title: Make your environment secure
+    text: Let us break-in before hackers do
     button: Let's go!
     buttonlink: "#services"
   
   services:
     title: services
+    description: our pentesting services
     list:
     - type: pentest
       title: Web Application Pentesting
       subtitle: Uncover and fix vulnerabilities in your web apps
       description_detailed: <b>Web pentesting</b>, or <b>web application penetration testing</b>, is a simulated cyberattack on your website or web application to identify security vulnerabilities before hackers can exploit them.<br><br>For example, during a web pentest, an expert might check if your website can be tricked into revealing sensitive data like customer information or if someone can gain access using a weak password. They might also see if there are ways for unauthorized users to view or modify parts of your website that should be protected.<br><br>After the test, you'll receive a <b>detailed report</b> that highlights all the vulnerabilities identified, along with recommendations on how to fix them. This helps ensure your web application is secure, protecting your business and your customers from potential threats.
-      image: assets/img/services/pentest_web.jpg
+      image: /assets/img/services/pentest_web.jpg
       icon: fab fa-html5
       alt:
     - type: pentest
       title: Active Directory & Infrastructure Pentesting
-      subtitle: Strengthen your network against attacks
+      subtitle: Strengthen your network and infrastructure against attacks
       description_detailed: An <b>infrastructure pentest</b>, like an Active Directory (AD) pentest, is a simulated attack on your organization’s IT infrastructure to find security weaknesses before cybercriminals do. This type of testing focuses on your internal networks, servers, and critical systems like Active Directory, which manages user access and permissions.<br><br>For example, during an AD pentest, an expert might check if unauthorized users can access sensitive areas of your network by exploiting weak passwords or misconfigured permissions. They may also test how easily an attacker could move through your network if they gain access, ensuring that each layer of your infrastructure is properly secured.<br><br>After the test, you’ll receive a detailed report highlighting all the vulnerabilities found and how to fix them. This helps you strengthen your IT infrastructure, protecting your organization’s data and maintaining the integrity of your operations.
-      image: assets/img/services/pentest_infra.png
+      image: /assets/img/services/pentest_infra.png
       icon: fas fa-server
       alt:
     - type: pentest
       title: Azure/M365 Cloud Pentesting
       subtitle: Secure your Azure/M365 environment from cyber threats
       description_detailed: An <b>Azure/M365 cloud pentest</b> is a simulated attack on your Azure cloud environment to identify security vulnerabilities before they can be exploited by cybercriminals. While Azure’s security is managed by Microsoft, misconfigurations on your end can still lead to dangerous vulnerabilities. This type of testing focuses on your cloud infrastructure, including virtual machines, storage, databases, and identity management systems like Microsoft Entra ID (Azure Active Directory).<br><br>For example, during an Azure pentest, an expert might check if unauthorized users can gain access to your cloud resources by exploiting weak access controls or misconfigured security settings. They may also test how easily an attacker could move within your cloud environment if they gain access, ensuring that your cloud architecture is properly secured.<br><br>After the test, you’ll receive a detailed report highlighting all the vulnerabilities found and recommendations on how to fix them. This helps you strengthen your Azure cloud security, protecting your data and ensuring compliance with industry standards.
-      image: assets/img/services/pentest_azure.png
+      image: /assets/img/services/pentest_azure.png
       icon: fas fa-cloud
       alt:
-  
+
+    pentest:
+      methodology:
+        title: METHODOLOGY
+        steps:
+          - num: "01"
+            title: Pre-engagement
+            text: The <b>pre-engagement</b> phase is a discussion with stakeholders to define the scope, objectives, and critical assets of the infrastructure to be tested. At the end of this first step, stakeholders must sign the <b>Penetration Test Agreement (PTA)</b> that will allow technical tests to start.
+          - num: "02"
+            title: Pentest
+            text: During the <b>testing phase</b>, the targeted resources will be subjected to attacks. We maintain regular communication throughout the testing process to keep you informed of our progress and any critical vulnerabilities that could be fixed before the tests are completed.
+          - num: "03"
+            title: Report
+            text: Finally, during the <b>report and presentation</b> phase, auditors will write a detailed report that will be presented to both technical and non-technical people. This is the opportunity for customers to review findings and to better understand what has been found.
+      test_types:
+        title: TYPE OF TESTS
+        list:
+        - title: black-box
+          description: In black-box pentesting, the tester has no prior knowledge of the system being tested. They approach the application or network just like a real attacker would, using only publicly available information to identify and exploit vulnerabilities. This method simulates an external attack, focusing on discovering security gaps from an outsider's perspective.
+          image: /assets/img/services/pentest_blackbox.png
+        - title: grey-box
+          description: Grey-box pentesting involves providing the tester with limited knowledge of the system, such as access credentials or information about the application's architecture. This approach strikes a balance between black-box and white-box testing, allowing the tester to focus on specific areas while still simulating an attacker's perspective. It helps identify vulnerabilities that could be exploited by someone with partial insider knowledge.
+          image: /assets/img/services/pentest_greybox.png
+        - title: white-box
+          description: In white-box pentesting, the tester has full access to detailed information about the system, including source code, architecture diagrams, and internal documentation. This thorough approach allows for an in-depth assessment of the system's security, identifying vulnerabilities at a granular level. White-box testing is ideal for uncovering complex issues that may not be apparent from the outside.
+          image: /assets/img/services/pentest_whitebox.png
+
   cv:
     certifications:
       title: certifications
@@ -139,76 +105,75 @@ home:
         - name: Burp Suite Certified Practionner (BSCP)
           date: 2024 - now
           text: Burp Suite Certified Practitioner demonstrates a deep knowledge of web security vulnerabilities, the correct mindset to exploit them, and of course, the Burp Suite skills needed to carry this out.
-          image: assets/img/business/certifications/burp-suite.svg
+          image: /assets/img/business/certifications/burp-suite.svg
         - name: Microsoft Most Valuable Professional (Microsoft MVP)
           date: 2020 - 2023
           text: Once a year, the Microsoft recognizes Most Valuable Professionals (MVP) as exceptional community leaders for their technical expertise, leadership, speaking experience, online influence, and commitment to solving real world problems.
-          image: assets/img/business/certifications/mvp.png
+          image: /assets/img/business/certifications/mvp.png
         - name: Certified Information Systems Security Professional (CISSP)
           date: 2019 - 2021
           text: This certification recognizes cybersecurity professionals with the knowledge, skills and abilities to lead an organization’s information security program.
-          image: assets/img/business/certifications/cissp.png
+          image: /assets/img/business/certifications/cissp.png
 
-    experiences:
-      title: certifications
-      text: Some significative certifications
-      list:
-        - name: Penetration testing 
-          date: 2019 - now
-          text: I conducted several dozen penetration tests on different technologies and in various sectors (commerce, healthcare, industry, etc.). I also assisted a significant number of clients in remediating the identified vulnerabilities.
-          tasks:
-            - text: Azure/M365
-            - text: Web
-            - text: Infrastructure
-        - name: Azure/M365 consultant
-          date: 2019 - now
-          text: I worked for dozens of clients to advise them on the use, configuration, and deployment of Microsoft security solutions. I also utilized these security solutions to identify and counter threats.
-          tasks:
-            - text: Azure/M365 IAM Security
-            - text: Cloud Security Posture Management (CSPM)
-            - text: Microsoft Sentinel
-        - name: Operational Security
-          date: 2021 - 2024
-          text: Integrated in the SecOps team, I worked on architecture and integration of various security solutions (EDR, SOC, Vulnerability Scanners, CSPM, etc.) that I would later use for incident management and remediation.
-          tasks:
-            - text: Architect of cybersecurity solutions
-            - text: Integrator of EDR, SOC, Vulnerability scanning, CSPM solutions
-            - text: Incident management and response
-            - text: Hardening and remediation
-        - name: Teaching at University
-          date: 2020 - 2023
-          text: Focused on cloud security, and more specifically on Microsoft technologies, I taught for three years in the second year of a master's program of the Paul Sabatier University. The courses included security of identities and cloud resources.
-          tasks:
-            - text: Azure/M365 IAM Security
-            - text: Cloud Security Posture Management (CSPM)
-            - text: Microsoft Sentinel
+    # experiences:
+    #   title: certifications
+    #   text: Some significative certifications
+    #   list:
+    #     - name: Penetration testing 
+    #       date: 2019 - now
+    #       text: I conducted several dozen penetration tests on different technologies and in various sectors (commerce, healthcare, industry, etc.). I also assisted a significant number of clients in remediating the identified vulnerabilities.
+    #       tasks:
+    #         - text: Azure/M365
+    #         - text: Web
+    #         - text: Infrastructure
+    #     - name: Azure/M365 consultant
+    #       date: 2019 - now
+    #       text: I worked for dozens of clients to advise them on the use, configuration, and deployment of Microsoft security solutions. I also utilized these security solutions to identify and counter threats.
+    #       tasks:
+    #         - text: Azure/M365 IAM Security
+    #         - text: Cloud Security Posture Management (CSPM)
+    #         - text: Microsoft Sentinel
+    #     - name: Operational Security
+    #       date: 2021 - 2024
+    #       text: Integrated in the SecOps team, I worked on architecture and integration of various security solutions (EDR, SOC, Vulnerability Scanners, CSPM, etc.) that I would later use for incident management and remediation.
+    #       tasks:
+    #         - text: Architect of cybersecurity solutions
+    #         - text: Integrator of EDR, SOC, Vulnerability scanning, CSPM solutions
+    #         - text: Incident management and response
+    #         - text: Hardening and remediation
+    #     - name: Teaching at University
+    #       date: 2020 - 2023
+    #       text: Focused on cloud security, and more specifically on Microsoft technologies, I taught for three years in the second year of a master's program of the Paul Sabatier University. The courses included security of identities and cloud resources.
+    #       tasks:
+    #         - text: Azure/M365 IAM Security
+    #         - text: Cloud Security Posture Management (CSPM)
+    #         - text: Microsoft Sentinel
    
   portfolio:
     title: "Projects & contributions"
     text: "A list of my humble contributions to the cybersecurity community"
-    section: portafolio
-    closebutton: "Cerrar Proyecto"
+    closebutton: "Close"
     projects:
       - title: "SMS Explorer"
         redirect: https://github.com/Molx32/SMSExplorer
         subtitle: Explore SMSs received on public phone numbers
         text: Blahblahblah
-        image: assets/img/business/projects/fry.jpg
+        image: /assets/img/business/projects/fry.jpg
         alt: Shut up and read my message
         caption:
           title: SMS Explorer
           subtitle: Project owner
-          thumbnail: assets/img/business/projects/fry.jpg
-      - title: "Azure CIS"
-        redirect: https://www.cisecurity.org/cis-benchmarks
+          thumbnail: /assets/img/business/projects/fry.jpg
+      - title: "Azure CIS Benchmark"
+        redirect: https://www.cisecurity.org/benchmark/azure
         subtitle: Azure CIS Benchmark v1.2/v1.3
         text: Blahblahblah
-        image: assets/img/business/projects/cis.svg
+        image: /assets/img/business/projects/cis.svg
         alt: Shut up and read my message
         caption:
-          title: Azure CIS
+          title: Azure CIS Benchmark
           subtitle: Contirbutor
-          thumbnail: assets/img/business/projects/cis.svg
+          thumbnail: /assets/img/business/projects/cis.svg
 
   team:
     title: About
@@ -216,21 +181,13 @@ home:
     subtext: 
     people:
     - name: Clément
-      role: CTO
-      image: assets/img/business/moi.png
+      role: Cybersecurity engineer
+      image: /assets/img/business/moi.png
       social:
         - url: https://www.linkedin.com/in/theclemvp/
           icon: fab fa-linkedin-in
         - url: https://github.com/Molx32
           icon: fab fa-github
-
-  # about:
-  #   title: About
-  #   text: Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut eaque, laboriosam veritatis, quos non quis ad perspiciatis, totam corporis ea, alias ut unde. Markdown supported.
-  #   body: c'est le body
-
-     
-        
 
   statistics:
     title: statistics
@@ -243,6 +200,20 @@ home:
       value: 102
 
   contact:
+    # Sales
+    sales:
+      - num: 01
+        title: Reach out
+        text: Get in touch with us to discuss your needs.
+        icon: fas fa-envelope
+      - num: 02
+        title: Schedule a meeting
+        text: We'll arrange a convenient time to explore your requirements.
+        icon: fas fa-handshake
+      - num: 03
+        title: Receive a quote
+        text: We provide a customized quote tailored to your project.
+        icon: fas fa-file-invoice
     title: "Contact Us"
     text: ""
     section: contact
@@ -258,3 +229,16 @@ home:
     submit: "Send Message"
     callback_url: TODO
 
+  privacy:
+    title: Privacy policy
+    text: This Privacy Policy describes how your personal information is collected, used, and shared when you visit 
+    pii:
+      title: PERSONAL INFORMATION WE COLLECT
+      text: '<p><b>Google Analytics</b></p><p>When you visit the Site, we automatically receive information about your device from your browser, such as your IP address. As you browse the Site, we also collect information about how you interact with the Site. We refer to this automatically-collected information as “Device Information”.</p><p>We collect Device Information using cookies. “Cookies” are data files that are placed on your device. For more information about cookies and how to disable them, visit <a href="http://www.allaboutcookies.org">http://www.allaboutcookies.org</a>.</p><p>We do this using : <a href="https://www.google.com/intl/en/policies/privacy/">Google Analytics</a></p><p>You can opt-out of Google Analytics <a href="https://tools.google.com/dlpage/gaoptout">here</a>.</p>'
+      nopii: <p>We do not collect any data about you or use any cookies.</p>
+    change:
+      title: CHANGES
+      text: We may update this privacy policy from time to time for personal, operational, legal, or regulatory reasons.
+    contact:
+      title: CONTACT
+      text: For more information about our privacy practices or if you have questions, please contact us by email at

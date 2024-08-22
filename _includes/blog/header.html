@@ -89,8 +89,6 @@
               {%- assign about_page = site.pages | where: 'id', 'about' -%}
               {% for p in about_page %}
               <li class="nav-item {% if page.permalink == '/about' %}active{% endif %}">
-                <!-- {{ site.lang }} -->
-                <!-- {{ site.titles[site.lang] }} -->
                 <a class="nav-link" href="{{ '/about' | prepend: site.baseurl }}">{% t p.title %}
                   {%- if page.permalink == '/' -%}
                   <span class="sr-only">(current)</span>

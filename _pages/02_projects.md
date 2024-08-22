@@ -1,8 +1,8 @@
 ---
 layout: page
-title: titles.projects
+title: blog.titles.projects
 permalink: /projects/
-description: descriptions.projects
+description: blog.descriptions.projects
 nav: true
 nav_order: 2
 # display_categories: [work, fun]

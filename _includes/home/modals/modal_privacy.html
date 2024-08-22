@@ -1,0 +1,36 @@
+<!-- Privacy Modals -->
+<div id="privacy" class="portfolio-modal modal fade" tabindex="-1" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl"></div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="col-lg-8 mx-auto">
+                    <div class="modal-body">
+                        <div class="col-lg-12 text-center">
+                            <h2 class="section-heading text-uppercase">{{ site.translations[site.lang].home.privacy.title }}</h2>
+                        </div>
+                        <p>{{ site.translations[site.lang].home.privacy.text }} {{ site.title }}.</p>
+                        <br>
+                        <h3>{{ site.translations[site.lang].home.privacy.pii.title }}</h3>
+                        {% if site.google_analytics %}
+                            {{ site.translations[site.lang].home.privacy.pii.text }}
+                        {% else %}
+                            {{ site.translations[site.lang].home.privacy.pii.nopii }}
+                        {% endif %}
+                        
+                        <h3>{{ site.translations[site.lang].home.privacy.changes.title }}</h3>
+                        {{ site.translations[site.lang].home.privacy.changes.text }}
+                        
+                        <h3>{{ site.translations[site.lang].home.privacy.contact.title }}</h3>
+                        {{ site.translations[site.lang].home.privacy.contact.text }} <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Portfolio Modals -->
