@@ -1,13 +1,11 @@
 ---
 layout: post
-title: SMS Explorer - An misknown blah
-date: 2025-06-15 10:00:00
-description: This research 
+title: The hidden risks of public SMS services - How your messages are being exposed
+date: 2024-09-20 10:00:00
+description: This article explores the security risks posed by Public SMS Services, where shared virtual phone numbers allow users to read each other's messages. Through real-world examples, it highlights the potential for data exposure and unauthorized access to sensitive information, underscoring the dangers of using these services for verification and authentication. 
 tags: SMSExplorer
 authors:
   - name: Molx32
-
-bibliography: 2022-08-01-Update-management.bib
 
 toc:
   - name: Equations
@@ -29,6 +27,7 @@ toc:
 - [Introduction](#introduction)
 - [Automation](#automation)
 - [Results](#results)
+- [Conclusion](#conclusion)
 
 ***
 
@@ -138,7 +137,7 @@ Now, if a malicious <code>User B</code> spends their time watching SMSs on the P
 
 ###### Case 2 - SMS with URL
 In this second case, <code>User A</code> gets a virtual phone number from a PSS, they use this phone number to register on a web application that will store all user-related data into its database.
-At some point, the application will be triggered to send a SMS, for example <code>Hey John DOE, you have a new match, send them a message : https://findselfesteem.com/messages?token=eyf652s4fz6e621sdf65z4szdfzrgzd62x1fz6ver5g1</code>. The SMS will be sent to the phone number associated to <code>User A</code> and thus sent to the PSS.
+At some point, the application will be triggered to send a SMS, for example <code>Hey John DOE, you have a new match, send them a message : https://findamatch.com/messages?token=eyf652s4fz6e621sdf65z4szdfzrgzd62x1fz6ver5g1</code>. The SMS will be sent to the phone number associated to <code>User A</code> and thus sent to the PSS.
 
 Now, if a malicious <code>User B</code> spends their time to watch SMSs on the PSS, they could navigate to the URL, and either reset a password, or directly compromise <code>User A</code> account, and have an indirect read/write access to <code>User A</code> information.
 
@@ -156,7 +155,7 @@ If you see a message containing personal information, this may not be [GDPR](htt
 </i>
 
 From the <b>PSS point of view</b>, data is simply received and displayed as is. We can compare it to a forum where users can post anything they want, but here users are actually <b>senders</b>.
-From the <b>senders</b> point of view, the <b>end user</b> is supposed to provide real information. Based on that assumption, the sender will trust the provided phone number.
+From the <b>senders</b> point of view, the <b>end user</b> is supposed to provide real information. Based on that assumption, the sender will trust the provided phone number and assume it is private.
 Finally, the <b>end user</b> is informed that a real information is expected, and that PSS will publish SMS associated to the app. The problem is that the end user doesn't know when SMS will be sent (except for password reset and verification), and what the content will be.
 
 ##### Electronic Communications Privacy Act
@@ -265,11 +264,11 @@ Again, as mentioned before, data collection is limited in multiple ways :
 - Other security controls, that may be related to users agents, locations, and so on.
 - Sometimes, URLs can be accessed only from the corresponding mobile application. In some cases, the HTTP response prevents access and does not provide any useful data. In some other cases, this behavior may be bypassed by changing the user agent.
 
-##### Quick demo
+<!-- ##### Quick demo
 Long story short, here is a demo.
 <div class="col-sm mt-3 mt-md-0">
   <iframe width="560" height="315" src="https://www.youtube.com/embed/6asRTPWqYmg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-</div>
+</div> -->
 
 ***
 
@@ -354,13 +353,14 @@ While this scenario is not as critical as the previous ones, it gives the opport
 This scenario is very rare and not very sensitive. The only example is the enumeration of subdomains, where the URL is not accessible <i>i.e.</i> does not lead to account compromise from the public Internet. For example :
 > <i>Hello admin, click on the URL to reset your password : [https://internal.and.sensitive.domain.com/0123456789abcdefgh](https://internal.and.sensitive.domain.com/0123456789abcdefgh)</i>
 
+###### Scams
+Among all messages, many are scams that look like this.
+> <i>Your shipment could not be delivered because the transport fee was not paid. Click here to pay.</i> 
+
 ###### Missed opportunities
 Missed opportunities are almost exclusively use cases where the whole URL can't be read, because it is too long. For example :
 > <i>Hi, how are you? Did you ask for a password reset? Here is your URL, don't share it! [https://superlongandweirddomainnamerightquestionmark.com/?reset=A](https://superlongandweirddomainnamerightquestionmark.com/?reset=A) </i>
 
-###### Scams
-Among all messages, many are scams that look like this.
-> <i>Your shipment could not be delivered because the transport fee was not paid. Click here to pay.</i> 
 
 ### Statistics
 Statictics must be added.
@@ -372,16 +372,19 @@ Statictics must be added.
   <tr>
     <th>Target</th>
     <th>#</th>
-    <th>Password reset URLs</th>
+    <th>Password reset</th>
     <th>Bypass access control</th>
     <th>Data exposure</th>
     <th>Data discovery</th>
+    <th>Scams identification</th>
     <th>Missed opportunities</th>
   </tr>
+  <!-- PASSWORD RESET -->
   <tr>
     <td><a href="#venmo">Venmo</a></td>
-    <td style="text-align:center">11</td>
+    <td style="text-align:center">N/A</td>
     <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
@@ -395,43 +398,40 @@ Statictics must be added.
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
   </tr>
   <tr>
     <td><a href="#biedronka">Biedronka</a></td>
-    <td style="text-align:center">11</td>
+    <td style="text-align:center">N/A</td>
     <td style="text-align:center">✅</td>
     <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
   </tr>
+  <!-- LACK OF ACCESS CONTROL -->
   <tr>
     <td><a href="#job-logic">Job logic</a></td>
-    <td style="text-align:center">11</td>
+    <td style="text-align:center">N/A</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
     <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
   </tr>
   <tr>
     <td><a href="#free-ads">Free ads</a></td>
-    <td style="text-align:center">11</td>
+    <td style="text-align:center">N/A</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
   </tr>
-  <tr>
-    <td><a href="#payfone">Payfone</a></td>
-    <td style="text-align:center">11</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">❌</td>
-    <td style="text-align:center">❌</td>
-  </tr>
+  <!-- DATA EXPOSURE -->
   <tr>
     <td><a href="#airindia">AirIndia</a></td>
     <td style="text-align:center">1500/month</td>
@@ -440,105 +440,150 @@ Statictics must be added.
     <td style="text-align:center">✅</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+  </tr>
+  <tr>
+    <td><a href="#elilly">e.lilly</a></td>
+    <td style="text-align:center">75/month</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
   </tr>
   <tr>
     <td><a href="#texts-from-my-ex">Texts from my ex</a></td>
-    <td style="text-align:center">11</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">N/A</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
-  </tr>
-  <tr>
-    <td><a href="#validahealth">Validahealth</a></td>
-    <td style="text-align:center">11</td>
     <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
   </tr>
   <tr>
     <td><a href="#stickermule">Stickermule</a></td>
-    <td style="text-align:center">11</td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+  </tr>
+  <!-- <tr>
+    <td><a href="#seur">Seur</a></td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+  </tr>
+  <tr>
+    <td><a href="#medvidi">Medvidi.us</a></td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
   </tr>
   <tr>
     <td><a href="#wallester">Wallester</a></td>
-    <td style="text-align:center">11</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
-  </tr>
-  <tr>
+    <td style="text-align:center">❌</td>
+  </tr> -->
+  <!-- <tr>
     <td><a href="bankinter">Bankinter</a></td>
-    <td style="text-align:center">11</td>
+    <td style="text-align:center">N/A</td>
     <td style="text-align:center">✅</td>
     <td style="text-align:center">✅</td>
     <td style="text-align:center">✅</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
-  </tr>
+  </tr> -->
   <tr>
     <td><a href="#abinitio-solutions">Abinitio Solutions</a></td>
-    <td style="text-align:center">11</td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
   </tr>
+  <!-- <tr>
+    <td><a href="#booksy">cdl.booksy.com</a></td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+  </tr> -->
+  <!-- DATA DISCOVERY -->
   <tr>
     <td><a href="#communidad-madrid">Communidad Madrid</a></td>
-    <td style="text-align:center">11</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
     <td style="text-align:center">✅</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
   </tr>
+  <!-- SCAM -->
   <tr>
     <td><a href="#ups-scam">UPS Scam</a></td>
-    <td style="text-align:center">11</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">N/A</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">✅</td>
+    <td style="text-align:center">❌</td>
+  </tr>
+
+  <!-- MISSED OPPORTUNITIES  -->
+  <tr>
+    <td><a href="#payfone">Payfone</a></td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">✅</td>
+  </tr>
+  <tr>
+    <td><a href="#validahealth">Validahealth</a></td>
+    <td style="text-align:center">N/A</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">❌</td>
+    <td style="text-align:center">✅</td>
   </tr>
   <tr>
     <td><a href="#experian">Experian</a></td>
-    <td style="text-align:center">11</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
+    <td style="text-align:center">N/A</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
-  </tr>
-  <tr>
-    <td><a href="#booksy">cdl.booksy.com</a></td>
-    <td style="text-align:center">11</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
     <td style="text-align:center">❌</td>
     <td style="text-align:center">❌</td>
-  </tr>
-  <tr>
-    <td><a href="#elilly">e.lilly</a></td>
-    <td style="text-align:center">11</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
-    <td style="text-align:center">✅</td>
     <td style="text-align:center">❌</td>
-    <td style="text-align:center">❌</td>
+    <td style="text-align:center">✅</td>
   </tr>
   
 </table>
@@ -703,15 +748,6 @@ This URL gives full access to the user account, and enables an attacker to read/
 
 ***
 
-##### Free ads
-###### Impact
-###### Responsible disclosure
-TODO
-
-<a href="#real-world-examples">Back to the table ⬆️</a>
-
-***
-
 ##### AirIndia
 According to Wikipedia, AirIndia is the second-largest airline in India in terms of passengers carried, after IndiGo, as of July 2023. The text message received for Air India was the following.
 - <code>Thank you for flying with us. Please take a few moments to share your thoughts. To rate your experience, click: https://nps.airindia.in/rEDaCt3d -Air</code>.
@@ -823,6 +859,29 @@ A curious thing is that the survey is meant to get get a feedback about reservat
 
 ***
 
+##### e.lilly
+According to Wikipedia, Eli Lilly and Company is an American pharmaceutical company headquartered in Indianapolis, Indiana, with offices in 18 countries. Its products are sold in approximately 125 countries. People who sign up on [https://zepbound.lilly.com](https://zepbound.lilly.com) need to register a phone number. Then, the following messages are sent.
+<div class="col-sm mt-3 mt-md-0">
+    {% include blog/figure.html path="assets/img/publicsms_results_elilly_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+</div>
+
+First URL By navigating to the first URL (1/2), I was redirected to the following web page, allowing to access personal information such as : email address, first name, last name, signature (by accessing the signed HIPAA document).
+<div class="col-sm mt-3 mt-md-0">
+    {% include blog/figure.html path="assets/img/publicsms_results_elilly_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+</div>
+By navigating to the second URL (2/2), I was redirected to a web page allowing me to download my wallet on Apple Wallet or Google Pay. I connected to my Google account and saved the savings card.
+
+###### Impact
+PII disclosure.
+
+###### Responsible disclosure
+16/07/2024 - Issue reported
+04/09/2024 - Evaluated as not applicable
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+***
+
 ##### Texts from my ex
 A funny name right? The concept is also funny : this is a SaaS app where users upload a part of their conversation (WhatsApp, Messenger and so on) with their crush or ex, and an AI evaluates how compatible the two persons are. Unfortunately, I got rid of the message, so I can't tell how it looks like, but I have a URL example :
 - <code>https://textsfrommyex.com/analysis/65bdREDACTED3655</code>
@@ -856,6 +915,42 @@ When navigating to the URL, an attacker can access shipment information <i>i.e.<
 <a href="#real-world-examples">Back to the table ⬆️</a>
 
 ***
+<!-- 
+##### Seur
+
+
+###### Impact
+
+
+###### Responsible disclosure
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+***
+
+##### Medvidi.us
+
+
+###### Impact
+
+
+###### Responsible disclosure
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+***
+
+##### Wallester
+
+
+###### Impact
+
+
+###### Responsible disclosure
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+*** -->
 
 ##### Abinitio solutions
 In the context of the received message, Abinitio solutions is a subcontractor of the Spanish Naturgy Iberia energy provider. In the following message, the user is required to pay their bills.
@@ -883,7 +978,105 @@ TODO
 
 <a href="#real-world-examples">Back to the table ⬆️</a>
 
+<!-- ***
+
+##### Booksy
+
+
+###### Impact
+
+
+###### Responsible disclosure
+
+<a href="#real-world-examples">Back to the table ⬆️</a> -->
+
 ***
 
+##### Communidad madrid
+This is one of the few cases where I could discover data about the target itself. The message received looked like this.
+- <code>Codigo de activacion para Y5****67J: 746656. Valide su identidad y confirme su codigo en: https://registroidentifica.val.communidad.madrid/#/activacion</code>
+- <code>Codigo de activacion para 71****17M: 340352. Valide su identidad y confirme su codigo en: https://intranet.val.communidad.madrid/#/activacion</code>
 
-### 3.2.2. Missed opportunities
+This gives the opportunity to discover additional scope about the <code>communidad.madrid</code> domain.
+
+###### Impact
+Subdomain discovery.
+
+###### Responsible disclosure
+Not reported.
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+***
+
+##### UPS Scam
+Not many things to say about this : this is a typical scam reproducing the UPS website, hosted at [https://zpr.io/NDcExv3zuFmX](https://zpr.io/NDcExv3zuFmX).
+<div class="col-sm mt-3 mt-md-0">
+    {% include blog/figure.html path="assets/img/publicsms_results_ups_1.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+</div>
+
+<div class="col-sm mt-3 mt-md-0">
+    {% include blog/figure.html path="assets/img/publicsms_results_ups_2.png" class="img-fluid rounded z-depth-1 imgc" style="display: block;margin: auto;" %}
+</div>
+
+###### Impact
+N/A
+
+###### Responsible disclosure
+N/A
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+
+***
+
+##### Payfone
+This is a missed opportunity because the URL is truncated. The URL looked like this :
+- <code>https://device.staging.payfone.com:4443/fortified/2015/06/01/continueAuth?vfp=some-truncated-random-string</code>
+
+###### Impact
+N/A
+
+###### Responsible disclosure
+N/A
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+***
+
+##### Validahealth
+This is a missed opportunity because the URL is truncated. The message looked like this :
+- <code>Here you can find an access code for Valida Health. Code : 4203, link to the confirmation page : https://validahealth.io/myresults/confirm/230649ae-3918</code>
+
+###### Impact
+N/A
+
+###### Responsible disclosure
+N/A
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+***
+
+##### Experian
+This is a missed opportunity because the URL is truncated. The URL looked like this :
+- <code>https://usa.experian.com/registration/v?r=some-random-string</code>
+
+###### Impact
+N/A
+
+###### Responsible disclosure
+N/A
+
+<a href="#real-world-examples">Back to the table ⬆️</a>
+
+***
+
+## Conclusion
+Based on the sample of results we saw, there are two main outcomes I would like to highlight.
+
+First, by assuming that phone numbers are private, companies allow themselves to send sensitive information by SMS e.g. URL to access a user account. Of course password reset is a specific case that requires the phone number to be trusted, but this is quite difficult to exploit because of race conditions and additional limit rate protection that can be set up (c.f. the Instagram case). Otherwise, companies may set up a blacklisting system to prevent users to register with PSS phone numbers : this is quite easy to implement.
+
+Second, when registering on an application with a PSS phone number, <b>we have no way to know what SMS will be sent</b>. Thus, I would recommend the use of such phone number for testing purposes, and to avoid associating real data to whatever account was created with the phone number.
+
+<i>Thanks for reading</i>
