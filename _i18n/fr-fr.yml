@@ -52,50 +52,50 @@ home:
     - type: pentest
       title: Web Application Pentesting
       subtitle: Découvrez et corrigez les vulnérabilités de vos applications web
-      description_detailed: Le <b>pentesting web</b>, ou <b>test d'intrusion des applications web</b>, est une simulation de cyber-attaque sur votre site web ou application web pour identifier les vulnérabilités de sécurité avant que des hackers ne puissent les exploiter.<br>Par exemple, lors d'un pentest web, un expert pourrait vérifier si votre site web peut être manipulé pour révéler des données sensibles comme des informations sur les clients ou si quelqu'un peut accéder à votre site en utilisant un mot de passe faible. Ils pourraient également vérifier s'il existe des moyens pour des utilisateurs non autorisés de visualiser ou de modifier des parties de votre site web qui devraient être protégées.<br>Après le test, vous recevrez un <b>rapport détaillé</b> qui met en évidence toutes les vulnérabilités identifiées, accompagné de recommandations sur la manière de les corriger. Cela aide à assurer que votre application web est sécurisée, protégeant ainsi votre entreprise et vos clients contre les menaces potentielles.
+      description_detailed: Le <b>pentesting web</b>, ou <b>test d'intrusion des applications web</b>, est une simulation de cyber-attaque sur votre site web ou application web pour identifier les vulnérabilités de sécurité avant que des hackers ne puissent les exploiter.<br><br>Par exemple, lors d'un pentest web, un expert pourrait vérifier si votre site web peut être manipulé pour révéler des données sensibles comme des informations sur les clients ou si quelqu'un peut accéder à votre site en utilisant un mot de passe faible. Ils pourraient également vérifier s'il existe des moyens pour des utilisateurs non autorisés de visualiser ou de modifier des parties de votre site web qui devraient être protégées.<br>Après le test, vous recevrez un <b>rapport détaillé</b> qui met en évidence toutes les vulnérabilités identifiées, accompagné de recommandations sur la manière de les corriger. Cela aide à assurer que votre application web est sécurisée, protégeant ainsi votre entreprise et vos clients contre les menaces potentielles.
       image: /assets/img/services/pentest_web.jpg
       icon: fab fa-html5
       alt:
     - type: pentest
       title: Active Directory & Network Pentesting
       subtitle: Renforcer la sécurité de votre réseau et de votre infrastructure
-      description_detailed: Un <b>pentest d'infrastructure</b>, comme un pentest Active Directory (AD), est une simulation d'attaque sur l'infrastructure informatique de votre organisation pour identifier les vulnérabilités de sécurité avant que les cybercriminels ne les découvrent. Ce type de test se concentre sur vos réseaux internes, serveurs et systèmes critiques tels qu'Active Directory, qui gère l'accès des utilisateurs et les permissions.<br>Par exemple, lors d'un pentest AD, un expert pourrait vérifier si des utilisateurs non autorisés peuvent accéder à des zones sensibles de votre réseau en exploitant des mots de passe faibles ou des permissions mal configurées. Ils pourraient également tester la facilité avec laquelle un attaquant pourrait se déplacer à travers votre réseau s'il parvient à y accéder, s'assurant que chaque couche de votre infrastructure est correctement sécurisée.<br>Après le test, vous recevrez un <b>rapport détaillé</b> mettant en évidence toutes les vulnérabilités trouvées et la manière de les corriger. Cela vous aide à renforcer votre infrastructure informatique, à protéger les données de votre organisation et à maintenir l'intégrité de vos opérations.
+      description_detailed: Un <b>pentest d'infrastructure</b>, comme un pentest Active Directory (AD), est une simulation d'attaque sur l'infrastructure informatique de votre organisation pour identifier les vulnérabilités de sécurité avant que les cybercriminels ne les découvrent. Ce type de test se concentre sur vos réseaux internes, serveurs et systèmes critiques tels qu'Active Directory, qui gère l'accès des utilisateurs et les permissions.<br><br>Par exemple, lors d'un pentest AD, un expert pourrait vérifier si des utilisateurs non autorisés peuvent accéder à des zones sensibles de votre réseau en exploitant des mots de passe faibles ou des permissions mal configurées. Ils pourraient également tester la facilité avec laquelle un attaquant pourrait se déplacer à travers votre réseau s'il parvient à y accéder, s'assurant que chaque couche de votre infrastructure est correctement sécurisée.<br><br>Après le test, vous recevrez un <b>rapport détaillé</b> mettant en évidence toutes les vulnérabilités trouvées et la manière de les corriger. Cela vous aide à renforcer votre infrastructure informatique, à protéger les données de votre organisation et à maintenir l'intégrité de vos opérations.
       image: /assets/img/services/pentest_infra.png
       icon: fas fa-server
       alt:
     - type: pentest
       title: Azure/M365 Cloud Pentesting
-      subtitle: Secure your Azure/M365 environment from cyber threats
-      description_detailed: Un <b>pentest cloud Azure/M365</b> est une simulation d'attaque sur votre environnement cloud Azure pour identifier les vulnérabilités de sécurité avant qu'elles ne soient exploitées par des cybercriminels. Bien que la sécurité d'Azure soit gérée par Microsoft, des erreurs de configuration de votre côté peuvent toujours entraîner des vulnérabilités dangereuses. Ce type de test se concentre sur votre infrastructure cloud, y compris les machines virtuelles, le stockage, les bases de données et les systèmes de gestion des identités comme Microsoft Entra ID (Azure Active Directory).<br>Par exemple, lors d'un pentest Azure, un expert pourrait vérifier si des utilisateurs non autorisés peuvent accéder à vos ressources cloud en exploitant des contrôles d'accès faibles ou des paramètres de sécurité mal configurés. Ils pourraient également tester la facilité avec laquelle un attaquant pourrait se déplacer au sein de votre environnement cloud s'il parvient à y accéder, s'assurant que votre architecture cloud est correctement sécurisée.<br>Après le test, vous recevrez un rapport détaillé mettant en évidence toutes les vulnérabilités trouvées et des recommandations pour les corriger. Cela vous aide à renforcer la sécurité de votre cloud Azure, à protéger vos données et à assurer la conformité avec les normes de l'industrie.
+      subtitle: Sécurisez votre environnement Azure/M365 environment contre les cyber-menaces
+      description_detailed: Un <b>pentest cloud Azure/M365</b> est une simulation d'attaque sur votre environnement cloud Azure pour identifier les vulnérabilités de sécurité avant qu'elles ne soient exploitées par des cybercriminels. Bien que la sécurité d'Azure soit gérée par Microsoft, des erreurs de configuration de votre côté peuvent toujours entraîner des vulnérabilités dangereuses. Ce type de test se concentre sur votre infrastructure cloud, y compris les machines virtuelles, le stockage, les bases de données et les systèmes de gestion des identités comme Microsoft Entra ID (Azure Active Directory).<br><br>Par exemple, lors d'un pentest Azure, un expert pourrait vérifier si des utilisateurs non autorisés peuvent accéder à vos ressources cloud en exploitant des contrôles d'accès faibles ou des paramètres de sécurité mal configurés. Ils pourraient également tester la facilité avec laquelle un attaquant pourrait se déplacer au sein de votre environnement cloud s'il parvient à y accéder, s'assurant que votre architecture cloud est correctement sécurisée.<br><br>Après le test, vous recevrez un rapport détaillé mettant en évidence toutes les vulnérabilités trouvées et des recommandations pour les corriger. Cela vous aide à renforcer la sécurité de votre cloud Azure, à protéger vos données et à assurer la conformité avec les normes de l'industrie.
       image: /assets/img/services/pentest_azure.png
       icon: fas fa-cloud
       alt:
 
-  pentest:
-    methodology:
-      title: METHODOLOGIE
-      steps:
-        - num: "01"
-          title: Pré-engagement
-          text: La phase de <b>pré-engagement</b> est une discussion avec les parties prenantes pour définir le périmètre, les objectifs et les actifs critiques de l'infrastructure à tester. À la fin de cette première étape, les parties prenantes doivent signer <b>l'accord de test de pénétration (PTA)</b> qui permettra de démarrer les tests techniques.
-        - num: "02"
-          title: Tests
-          text: Durant la <b>phase de tests</b>, les ressources ciblées seront soumises à des attaques. Nous maintenons des échanges réguliers au cours des tests pour vous informer de notre avancée et d'éventuelles vulnérabilités critiques qui pourraient être corrigée avant la fin des tests.
-        - num: "03"
-          title: Report
-          text: Enfin, durant la <b>phase de rapport et présentation</b>, les auditeurs rédigeront un rapport détaillé qui sera présenté à la fois aux personnes techniques et non techniques. C'est l'occasion pour les clients de review les résultats et de mieux comprendre ce qui a été découvert.
-    test_types:
-      title: TYPE OF TESTS
-      list:
-      - title: black-box
-        description: Dans le test d'intrusion en boîte noire, le testeur n’a aucune connaissance préalable du système testé. Il aborde l’application ou le réseau comme le ferait un véritable attaquant, en utilisant uniquement les informations disponibles publiquement pour identifier et exploiter les vulnérabilités. Cette méthode simule une attaque, en se concentrant sur la découverte des failles de sécurité d'un point de vue externe.
-        image: /assets/img/services/pentest_blackbox.png
-      - title: grey-box
-        description: Le pentesting en boîte grise consiste à fournir au testeur des connaissances limitées sur le système ciblé, comme des identifiants ou des informations sur l'architecture de l'application. Cette approche trouve un équilibre entre les tests en boîte noire et en boîte blanche, permettant au testeur de se concentrer sur des zones spécifiques tout en simulant le point de vue d'un attaquant. Cela aide à identifier les vulnérabilités qui pourraient être exploitées par quelqu'un ayant une connaissance partielle interne.
-        image: /assets/img/services/pentest_greybox.png
-      - title: white-box
-        description: Dans le pentesting en boîte blanche, le testeur a un accès complet à des informations détaillées sur le système, y compris le code source, les diagrammes d'architecture et la documentation interne. Cette approche approfondie permet une évaluation détaillée de la sécurité du système, en identifiant les vulnérabilités à un niveau granulaire. Les tests en boîte blanche sont idéaux pour découvrir des problèmes complexes qui pourraient ne pas être apparents de l'extérieur.
-        image: /assets/img/services/pentest_whitebox.png
+    pentest:
+      methodology:
+        title: METHODOLOGIE
+        steps:
+          - num: "01"
+            title: Pré-engagement
+            text: La phase de <b>pré-engagement</b> est une discussion avec les parties prenantes pour définir le périmètre, les objectifs et les actifs critiques de l'infrastructure à tester. À la fin de cette première étape, les parties prenantes doivent signer <b>l'accord de test de pénétration (PTA)</b> qui permettra de démarrer les tests techniques.
+          - num: "02"
+            title: Tests
+            text: Durant la <b>phase de tests</b>, les ressources ciblées seront soumises à des attaques. Nous maintenons des échanges réguliers au cours des tests pour vous informer de notre avancée et d'éventuelles vulnérabilités critiques qui pourraient être corrigée avant la fin des tests.
+          - num: "03"
+            title: Report
+            text: Enfin, durant la <b>phase de rapport et présentation</b>, les auditeurs rédigeront un rapport détaillé qui sera présenté à la fois aux personnes techniques et non techniques. C'est l'occasion pour les clients de review les résultats et de mieux comprendre ce qui a été découvert.
+      test_types:
+        title: TYPE DE TESTS
+        list:
+        - title: black-box
+          description: Dans le test d'intrusion en boîte noire, le testeur n’a aucune connaissance préalable du système testé. Il aborde l’application ou le réseau comme le ferait un véritable attaquant, en utilisant uniquement les informations disponibles publiquement pour identifier et exploiter les vulnérabilités. Cette méthode simule une attaque, en se concentrant sur la découverte des failles de sécurité d'un point de vue externe.
+          image: /assets/img/services/pentest_blackbox.png
+        - title: grey-box
+          description: Le pentesting en boîte grise consiste à fournir au testeur des connaissances limitées sur le système ciblé, comme des identifiants ou des informations sur l'architecture de l'application. Cette approche trouve un équilibre entre les tests en boîte noire et en boîte blanche, permettant au testeur de se concentrer sur des zones spécifiques tout en simulant le point de vue d'un attaquant. Cela aide à identifier les vulnérabilités qui pourraient être exploitées par quelqu'un ayant une connaissance partielle interne.
+          image: /assets/img/services/pentest_greybox.png
+        - title: white-box
+          description: Dans le pentesting en boîte blanche, le testeur a un accès complet à des informations détaillées sur le système, y compris le code source, les diagrammes d'architecture et la documentation interne. Cette approche approfondie permet une évaluation détaillée de la sécurité du système, en identifiant les vulnérabilités à un niveau granulaire. Les tests en boîte blanche sont idéaux pour découvrir des problèmes complexes qui pourraient ne pas être apparents de l'extérieur.
+          image: /assets/img/services/pentest_whitebox.png
 
   cv:
     certifications:
