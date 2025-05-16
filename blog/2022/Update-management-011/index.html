@@ -1,0 +1,385 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> CyberIntruder | Blog </title> <meta name="author" content="CyberIntruder - Molx32 "/> <meta name="description" content="This post describes how to implement Azure policies"/> <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"/> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous"> <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="none" id="highlight_theme_light"/> <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚛️</text></svg>"> <link rel="stylesheet" href="/assets/css/main.css"> <link rel="canonical" href="https://cyber-intruder.com/blog/2022/Update-management-011/"> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark"/> <script src="/assets/js/theme.js"></script> <script src="/assets/js/dark_mode.js"></script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="https://cyber-intruder.com/">CyberIntruder</a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/projects/">projects</a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a> </li> <li class="nav-item "> <a class="nav-link" href="/about">about</a> </li> <li class="nav-item active"> <a class="nav-link" href="/fr-fr/blog/2022/Update-management-011/"> FR-FR </a> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <i class="fas fa-moon"></i> <i class="fas fa-sun"></i> </button> </li> </ul> </div> </div> </nav> </header> <div class="container mt-5"> <div class="post"> <header class="post-header"> <h1 class="post-title">Azure Update Management - Part 2 - Azure Policy</h1> <p class="post-meta">August 2, 2022</p> <p class="post-tags"> <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>   ·   <a href="/blog/tag/updatemanagement"> <i class="fas fa-hashtag fa-sm"></i> updatemanagement</a>   </p> </header> <article class="post-content"> <p><i>Hello there, the goal of this serie is to describe a real world implementation of <b>Azure Update Management</b>. This service was designed to update any machine in your infrastructure, whether they are hosted on Azure or elsewhere, provided your OSs are technically supported.</i></p> <p><i>In order for every reader to understand and find answers to their need, to I’ll try to give a comprehensive feedback from my experience, as well as sharing tips about design and architecture, automation, effectivement, troubleshooting issues, and so on!</i></p> <p><i>Have a nice reading.</i></p> <hr> <h4 id="plan">Plan</h4> <ul> <li><a href="/blog/2022/Update-management-00/">Part 0 - Introduction</a></li> <li><a href="/blog/2022/Update-management-01/">Part 1 - Architecture</a></li> <li><b><a href="/blog/2022/Update-management-011/">Part 2 - Azure Policy (you’re here)</a></b></li> <li><a href="/blog/2022/Update-management-02/">Part 3 - Azure ARC</a></li> <li><a href="/blog/2022/Update-management-03/">Part 4 - Log Analytics agents</a></li> <li><a href="/blog/2023/Update-management-04/">Part 5 - Automation accounts</a></li> <li><a href="/blog/2023/Update-management-05/">Part 6 - Monitoring</a></li> <li><a href="/blog/2023/Update-management-06/">Part 7 - Security patches on Azure ARC</a></li> <li><a href="/blog/2023/Update-management-07/">Part 8 - Security patches on CentOS machines</a></li> </ul> <hr> <h2 id="introduction">Introduction</h2> <p>In the previous post, I presented the global architecture and how resources are organized. As mentioned, some services did not appear in the resource orgnization : this is the case for Azure Policy, which te topix of this post.</p> <h2 id="what-is-azure-policy">What is Azure Policy</h2> <p>Azure Policy is a service that allows you to define rules to properly manage your resources. You can imagine a lot a controls to apply, here are a few examples :</p> <ul> <li>Enforce a specific set of tags on all resource groups</li> <li>Prevent users from deploying VM with an expensive SKU</li> <li>Prevent deployment of Storage Account with public access</li> </ul> <p>Technically, these rules are called <i>policy definitions</i>. Once a policy definition is created, nothing happen : you need to assign the policy definition to a specific scope. For instance, if I want to enforce a specific set of tags on all resource groups, I may first assign this policy definition to my “Non production” subscription first, before assigning it to my “Production” subscription.</p> <p>What is our goal? We want to create a policy definition that <i>enforces all Azure VMs and all Azure ARC VMs to be onboarded on Azure Automation Update</i>. To be more specific and technical, what we want to is <i>enforce Log Analytics agents to be installed on all Azure VMs and all Azure ARC VMs to be</i>. Let’s discuss this in the next section.</p> <h2 id="azure-policy-deployment">Azure Policy deployment</h2> <p>Our goal is to have something that looks like the scheme below. To explain this, I’ll repeat what I described earlier, but with more specific words. We create four policy assignments<i>policy assignments</i>:</p> <ol> <li>An assignment at the subscription level, that must apply to all Azure VMs, that enforces all Azure VMs to report to loga-azure-001 Log Analytics.</li> <li>An assignment at the rg_ovh_001 resource group, that must apply to all OVH Azure ARC VMs Azure VMs, that enforces all OVH Azure ARC VMs to report to loga-ovh-001 Log Analytics.</li> <li>An assignment at the rg_oci_001 resource group, that must apply to all OCI Azure ARC VMs Azure VMs, that enforces all OCI Azure ARC VMs to report to loga-oci-001 Log Analytics.</li> <li>An assignment at the rg_gcp_001 resource group, that must apply to all GCP Azure ARC VMs Azure VMs, that enforces all GCP Azure ARC VMs to report to loga-gcp-001 Log Analytics.</li> </ol> <div class="col-sm mt-3 mt-md-0"> <figure> <picture> <source class="responsive-img-srcset" media="(max-width: 480px)" srcset="/assets/img/arch_3-480.webp"></source> <source class="responsive-img-srcset" media="(max-width: 800px)" srcset="/assets/img/arch_3-800.webp"></source> <source class="responsive-img-srcset" media="(max-width: 1400px)" srcset="/assets/img/arch_3-1400.webp"></source> <img src="/assets/img/arch_3.png" class="img-fluid rounded z-depth-1" width="auto" height="auto" onerror="this.onerror=null; $('.responsive-img-srcset').remove();"> </picture> </figure> </div> <h3 id="create-the-policy-definitions">Create the policy definitions</h3> <p>We actually need to create multiple policy definitions. Before sharing the policies to implement, let’s take a look at the policy definition code. This first part shows two parameters :</p> <ul> <li> <b>policyRule</b> - It defines in which conditions the policy will be applied. In that case, the policy will be applied to resources with <i>Microsoft.HybridCompute/machines</i> type (i.e. Azure ARC resources), and to resources which run Linux.</li> </ul> <figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
+    </span><span class="nl">"if"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"type"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.HybridCompute/machines"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.HybridCompute/machines/osName"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"linux"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span></code></pre></figure> <p>This second part describes the effect to apply when resources match the conditions aforementioned.</p> <ul> <li> <b>effect</b> : this setting is parametrized. This means we can set the value when assigning the policy. The effect we will choose is DeployIfNotExists, which will deploy the agent on the machine when not detected.</li> <li> <b>existenceConditions</b> : this setting is used to say that if resources already have the agent installed, then we do nothing. So it is important to ensure that machines have no agent installed before deployment (you can check this in extensions).</li> </ul> <figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="w">    </span><span class="nl">"then"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"effect"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[parameters('effect')]"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.HybridCompute/machines/extensions"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"roleDefinitionIds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="s2">"/providers/Microsoft.Authorization/roleDefinitions/92aaf0da-9dab-42b6-94a3-d43ce8d16293"</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nl">"existenceCondition"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.HybridCompute/machines/extensions/type"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OmsAgentForLinux"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.HybridCompute/machines/extensions/publisher"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.EnterpriseCloud.Monitoring"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.HybridCompute/machines/extensions/provisioningState"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Succeeded"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+          </span><span class="p">]</span><span class="w">
+        </span><span class="p">},</span></code></pre></figure> <p>Finally, this last part describes what will be deployed. To make it short, the agent is deployed as an Azure VM Extension, and will be automatically configured with the appropriate Log Analytics workspace thanks to parameters defined at deployment time.</p> <figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="w">        </span><span class="nl">"deployment"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"incremental"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"template"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"$schema"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"contentVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0.0"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"vmName"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="nl">"logAnalytics"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+              </span><span class="p">},</span><span class="w">
+              </span><span class="nl">"variables"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"vmExtensionName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OMSAgentForLinux"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"vmExtensionPublisher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.EnterpriseCloud.Monitoring"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"vmExtensionType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OmsAgentForLinux"</span><span class="w">
+              </span><span class="p">},</span><span class="w">
+              </span><span class="nl">"resources"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[concat(parameters('vmName'), '/', variables('vmExtensionName'))]"</span><span class="p">,</span><span class="w">
+                  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.HybridCompute/machines/extensions"</span><span class="p">,</span><span class="w">
+                  </span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[parameters('location')]"</span><span class="p">,</span><span class="w">
+                  </span><span class="nl">"apiVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-12-12"</span><span class="p">,</span><span class="w">
+                  </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"publisher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[variables('vmExtensionPublisher')]"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[variables('vmExtensionType')]"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"settings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="nl">"workspaceId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[reference(parameters('logAnalytics'), '2015-03-20').customerId]"</span><span class="p">,</span><span class="w">
+                      </span><span class="nl">"stopOnMultipleConnections"</span><span class="p">:</span><span class="w"> </span><span class="s2">"true"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="nl">"protectedSettings"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                      </span><span class="nl">"workspaceKey"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[listKeys(parameters('logAnalytics'), '2015-03-20').primarySharedKey]"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+              </span><span class="p">],</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span></code></pre></figure> <h4 id="policy-definition-for-azure-arc-windows-vms">Policy definition for Azure ARC Windows VMs</h4> <p>You’ll find the necessary files below :</p> <ul> <li><a href="https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_arc_windows.rules.json" target="_blank" rel="noopener noreferrer">policy_arc_windows.rules.json</a></li> <li><a href="https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_arc_windows.param.json" target="_blank" rel="noopener noreferrer">policy_arc_windows.param.json</a></li> </ul> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">text</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Windows VMs"</span>
+az policy definition create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--display-name</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--description</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--rules</span> policy_arc_windows.rules.json <span class="nt">--params</span> policy_arc_windows.param.json <span class="nt">--mode</span> Indexed</code></pre></figure> <h4 id="policy-definition-for-azure-arc-linux-vms">Policy definition for Azure ARC Linux VMs</h4> <p>You’ll find the necessary files below :</p> <ul> <li><a href="https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_arc_linux.rules.json" target="_blank" rel="noopener noreferrer">policy_arc_windows.rules.json</a></li> <li><a href="https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_arc_linux.param.json" target="_blank" rel="noopener noreferrer">policy_arc_windows.param.json</a></li> </ul> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">text</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Linux VMs"</span>
+az policy definition create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--display-name</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--description</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--rules</span> policy_arc_linux.rules.json <span class="nt">--params</span> policy_arc_linux.param.json <span class="nt">--mode</span> Indexed</code></pre></figure> <h4 id="policy-definition-for-azure-windows-vms">Policy definition for Azure Windows VMs</h4> <p>You’ll find the necessary files below :</p> <ul> <li><a href="https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_windows.rules.json" target="_blank" rel="noopener noreferrer">policy_arc_windows.rules.json</a></li> <li><a href="https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_windows.param.json" target="_blank" rel="noopener noreferrer">policy_arc_windows.param.json</a></li> </ul> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">text</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure Windows VMs"</span>
+az policy definition create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--display-name</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--description</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--rules</span> policy_windows.rules.json <span class="nt">--params</span> policy_windows.param.json <span class="nt">--mode</span> Indexed</code></pre></figure> <h4 id="policy-definition-for-azure-linux-vms">Policy definition for Azure Linux VMs</h4> <p>You’ll find the necessary files below :</p> <ul> <li><a href="https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_linux.rules.json" target="_blank" rel="noopener noreferrer">policy_arc_windows.rules.json</a></li> <li><a href="https://github.com/Molx32/AzureUpdateManagement/blob/main/policies/policy_linux.param.json" target="_blank" rel="noopener noreferrer">policy_arc_windows.param.json</a></li> </ul> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">text</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure Linux VMs"</span>
+az policy definition create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--display-name</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--description</span> <span class="s2">"</span><span class="nv">$text</span><span class="s2">"</span> <span class="nt">--rules</span> policy_linux.rules.json <span class="nt">--params</span> policy_linux.param.json <span class="nt">--mode</span> Indexed</code></pre></figure> <h3 id="assign-policies">Assign policies</h3> <p>We can now assign our policies to different scopes. According to the scheme, we first need to assign the following policies at the subscription level :</p> <ul> <li><b>Enforce Log Analytics agent install on Azure Windows VMs</b></li> <li><b>Enforce Log Analytics agent install on Azure Linux VMs</b></li> </ul> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">policy</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure Windows VMs"</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Update management onboarding for Azure Windows VMs"</span>
+az policy assignment create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="nt">--scope</span> <span class="s1">'/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'</span> <span class="nt">--policy</span> <span class="s2">"</span><span class="nv">$policy</span><span class="s2">"</span>
+
+<span class="nv">policy</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure Linux VMs"</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Update management onboarding for Azure Linux VMs"</span>
+az policy assignment create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="nt">--scope</span> <span class="s1">'/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'</span> <span class="nt">--policy</span> <span class="s2">"</span><span class="nv">$policy</span><span class="s2">"</span></code></pre></figure> <p>Then, we can assign policies on OVH, OCI and GCP resource groups.</p> <ul> <li><b>Enforce Log Analytics agent install on Azure ARC Windows VMs</b></li> <li><b>Enforce Log Analytics agent install on Azure ARC Linux VMs</b></li> </ul> <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># For Windows machines
+</span>
+<span class="nv">policy</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Windows VMs"</span>
+<span class="c"># OVH
+</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Windows VMs - OVH"</span>
+az policy assignment create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="nt">--scope</span> <span class="s1">'/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'</span> <span class="nt">--policy</span> <span class="s2">"</span><span class="nv">$policy</span><span class="s2">"</span>
+<span class="c"># OCI
+</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Windows VMs - OCI"</span>
+az policy assignment create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="nt">--scope</span> <span class="s1">'/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'</span> <span class="nt">--policy</span> <span class="s2">"</span><span class="nv">$policy</span><span class="s2">"</span>
+<span class="c"># GCP
+</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Windows VMs - GCP"</span>
+az policy assignment create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="nt">--scope</span> <span class="s1">'/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'</span> <span class="nt">--policy</span> <span class="s2">"</span><span class="nv">$policy</span><span class="s2">"</span>
+
+<span class="c"># For Linux machines
+</span>
+<span class="nv">policy</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Linux VMs"</span>
+<span class="c"># OVH
+</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Linux VMs - OVH"</span>
+az policy assignment create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="nt">--scope</span> <span class="s1">'/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myGroup'</span> <span class="nt">--policy</span> <span class="s2">"</span><span class="nv">$policy</span><span class="s2">"</span>
+<span class="c"># OCI
+</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Linux VMs - OCI"</span>
+az policy assignment create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="nt">--scope</span> <span class="s1">'/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myGroup'</span> <span class="nt">--policy</span> <span class="s2">"</span><span class="nv">$policy</span><span class="s2">"</span>
+<span class="c"># GCP
+</span>
+<span class="nv">name</span><span class="o">=</span><span class="s2">"Enforce Log Analytics agent install on Azure ARC Linux VMs - GCP"</span>
+az policy assignment create <span class="nt">--name</span> <span class="s2">"</span><span class="nv">$name</span><span class="s2">"</span> <span class="nt">--scope</span> <span class="s1">'/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myGroup'</span> <span class="nt">--policy</span> <span class="s2">"</span><span class="nv">$policy</span><span class="s2">"</span></code></pre></figure> <h3 id="limits">Limits</h3> <p>If you take a look at the Windows policy, you’ll notice that the policy is more complex, and that all supported Windows OS are explicitly described in the policy <b>if</b> statement. Altough this policy should work in most cases, it does not work if you use custom OS, and here is why : when using custom OS, the OS property in the VM object is referenced as <b>storageProfile.imageReference.id</b>, as you can see in the sample.</p> <figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"vmId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"hardwareProfile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"vmSize"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Standard_F4s_v2"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"additionalCapabilities"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"ultraSSDEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"storageProfile"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"imageReference"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rg_iac_001/providers/Microsoft.Compute/galleries/sig_iac_001/images/iac-Windows2019-Template/versions/0.0.2"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"exactVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.0.2"</span><span class="w">
+            </span><span class="p">},</span></code></pre></figure> <p>That being said, let’s now take a look at the policy : you can see that the policy never evaluates the property <b>storageProfile.imageReference.id</b>. Thus, VMs with custom OSs won’t be evaluated by the policy, and the Log Analytics agent won’t be onboarded. To make this work, you need to tweak the policy.</p> <figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="nl">"if"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"type"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/virtualMachines"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageId"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"in"</span><span class="p">:</span><span class="w"> </span><span class="s2">"[parameters('listOfImageIdToInclude')]"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imagePublisher"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RedHat"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"in"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"RHEL"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"RHEL-SAP-HANA"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6.*"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7*"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8*"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imagePublisher"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUSE"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                        </span><span class="nl">"in"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                            </span><span class="s2">"SLES"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"SLES-HPC"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"SLES-HPC-Priority"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"SLES-SAP"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"SLES-SAP-BYOS"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"SLES-Priority"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"SLES-BYOS"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"SLES-SAPCAL"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"SLES-Standard"</span><span class="w">
+                        </span><span class="p">]</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                            </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12*"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"15*"</span><span class="w">
+                            </span><span class="p">}</span><span class="w">
+                        </span><span class="p">]</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                            </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sles-12-sp*"</span><span class="w">
+                            </span><span class="p">},</span><span class="w">
+                            </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sles-15-sp*"</span><span class="w">
+                            </span><span class="p">}</span><span class="w">
+                        </span><span class="p">]</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                        </span><span class="nl">"in"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                            </span><span class="s2">"gen1"</span><span class="p">,</span><span class="w">
+                            </span><span class="s2">"gen2"</span><span class="w">
+                        </span><span class="p">]</span><span class="w">
+                        </span><span class="p">}</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imagePublisher"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Canonical"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"in"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"UbuntuServer"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"0001-com-ubuntu-server-focal"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"14.04*LTS"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16.04*LTS"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16_04*lts-gen2"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"18.04*LTS"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"18_04*lts-gen2"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20_04*lts"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20_04*lts-gen2"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imagePublisher"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"credativ"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Debian"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8*"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9*"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imagePublisher"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Oracle"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Oracle-Linux"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6.*"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7.*"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imagePublisher"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OpenLogic"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"in"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"CentOS"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"Centos-LVM"</span><span class="p">,</span><span class="w">
+                    </span><span class="s2">"CentOS-SRIOV"</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"anyOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6.*"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7*"</span><span class="w">
+                    </span><span class="p">},</span><span class="w">
+                    </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8*"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"allOf"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imagePublisher"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cloudera"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageOffer"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"equals"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cloudera-centos-os"</span><span class="w">
+                </span><span class="p">},</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Microsoft.Compute/imageSKU"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"like"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7*"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">]</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span></code></pre></figure> </article> </div> </div> <footer class="fixed-bottom"> <div class="container mt-0"> © Copyright 2025 CyberIntruder - Molx32 . </div> </footer> <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@4/imagesloaded.pkgd.min.js"></script> <script defer src="/assets/js/masonry.js" type="text/javascript"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js"></script> <script defer src="/assets/js/common.js"></script> <script type="text/javascript">window.MathJax={tex:{tags:"ams"}};</script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script> <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=G-MFVVRMM3DK"></script> <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-MFVVRMM3DK");</script> </body> </html>
