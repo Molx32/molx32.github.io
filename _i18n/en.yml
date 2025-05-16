@@ -169,11 +169,21 @@ home:
         subtitle: Azure CIS Benchmark v1.2/v1.3
         text: Blahblahblah
         image: /assets/img/business/projects/cis.svg
-        alt: Shut up and read my message
+        alt: Azure CIS Benchmark
         caption:
           title: Azure CIS Benchmark
-          subtitle: Contirbutor
+          subtitle: Contributor
           thumbnail: /assets/img/business/projects/cis.svg
+      - title: "Toulouse Hacking Convention 2025"
+        redirect: https://www.youtube.com/live/EVXIwnp26uk?si=S_E5bdtYlXrtCMEx
+        subtitle: THCon 2025 - Day 2/2 (Video)
+        text: Blahblahblah
+        image: /assets/img/business/projects/thcon2.svg
+        alt: Blahblahblah
+        caption:
+          title: Toulouse Hacking Convention 2025
+          subtitle: Speaker
+          thumbnail: /assets/img/business/projects/thcon2.svg
 
   team:
     title: About
